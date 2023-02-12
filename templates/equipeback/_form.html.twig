@@ -1,0 +1,55 @@
+<div class="col-12 grid-margin stretch-card">
+    <div class="card">
+        <div class="card-body">
+        <h4 class="card-title"></h4>
+        <p class="card-description"> <br></p>
+{{ form_start(form, {attr: {novalidate: 'novalidate'}}) }}
+  <h1>Equipe</h1>
+    <div class="form-group">
+        <div class="form-group">
+        {{ form_label(form.nom_equipe,"Nom de l equipe") }}
+        {{ form_widget(form.nom_equipe,{'attr': {'class': 'form-control'}})}}
+        {{ form_errors(form.nom_equipe) }}
+        </div>
+<div class="form-group">
+        <div class="form-group">
+        {{ form_label(form.description_equipe,"description de l'equipe") }}
+        {{ form_widget(form.description_equipe,{'attr': {'class': 'form-control'}})}}
+        {{ form_errors(form.description_equipe) }}
+        </div>
+
+        <div class="form-group">
+        <div class="form-group">
+        {{ form_label(form.nb_joueurs,"nombres de joueurs") }}
+        {{ form_widget(form.nb_joueurs,{'attr': {'class': 'form-control'}})}}
+        {{ form_errors(form.nb_joueurs) }}
+        </div>
+
+        <div class="form-group">
+        <div class="form-group">
+        {{ form_label(form.logo_equipe,"logo de l equipe") }}
+        {{ form_widget(form.logo_equipe,{'attr': {'class': 'form-control'}})}}
+        {{ form_errors(form.logo_equipe) }}
+        </div>
+
+        <div class="form-group">
+        <div class="form-group">
+        {{ form_label(form.site_web,"site web") }}
+        {{ form_widget(form.site_web,{'attr': {'class': 'form-control'}})}}
+        {{ form_errors(form.site_web) }}
+        </div>
+
+    
+
+     <button class="btn btn-primary mr-2">{{ button_label|default('Save') }}</button>
+        <a href="{{ path('app_equipeback_index') }}">{{ button_label|default('Retour') }}</a>
+{{ form_end(form) }}
+
+  </div>
+    </div>
+</div>
+
+
+
+
+

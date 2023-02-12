@@ -1,0 +1,72 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}New Sponsor{% endblock %}
+
+{% block body %}
+    <h1>Create new Sponsor</h1>
+<center><div class="leave-comment-wrap">
+{{ form_start(form) }}
+<div class="row">
+								<div class="col-md-12">
+									<div class="item">
+<label>
+											<span>Nom sponsor
+												<i>*</i>
+											</span>
+											{{ form_widget(form.nom_sponsor) }}
+											 {{ form_errors(form.nom_sponsor) }}
+										</label>
+	</div>
+								</div>
+
+							<div class="col-md-12">
+									<div class="item">	
+										<label>
+											<span>description du sponsor
+												<i>*</i>
+											</span>
+											{{ form_widget(form.description_sponsor) }}
+										</label>
+											</div>
+								</div>
+
+							<div class="col-md-12">
+									<div class="item">	
+<label>
+											<span>logo sponsor
+                                            <i>*</i>
+                                            </span>
+											{{ form_widget(form.logo_sponsor) }}
+										</label>
+	</div>
+								</div>
+<div class="col-md-12">
+									<div class="item">
+
+										<label>
+											<span>SITE WEB
+												<i>*</i>
+											</span>
+											{{ form_widget(form.site_webs) }}
+											 {{ form_errors(form.site_webs) }}
+											
+										</label>
+
+							</div>
+								</div>
+
+
+
+<div class="col-md-12">
+									<div class="item">
+
+</div>
+								</div>
+										
+
+    {{ include('sponsor/_form.html.twig') }}
+
+    <a href="{{ path('app_sponsor_index') }}">back to list</a>
+
+    {{form_end(form)}}
+{% endblock %}

@@ -1,0 +1,51 @@
+<div class="col-12 grid-margin stretch-card">
+    <div class="card">
+        <div class="card-body">
+        <h4 class="card-title"></h4>
+        <p class="card-description"> <br></p>
+{{ form_start(form, {attr: {novalidate: 'novalidate'}}) }}
+  <h1>Sponsor</h1>
+
+<div class="form-group">
+        <div class="form-group">
+        {{ form_label(form.nom_sponsor,"Nom du sponsor") }}
+        {{ form_widget(form.nom_sponsor,{'attr': {'class': 'form-control'}})}}
+        {{ form_errors(form.nom_sponsor) }}
+        </div>
+ 
+ <div class="form-group">
+        <div class="form-group">
+        {{ form_label(form.description_sponsor,"description du sponsor") }}
+        {{ form_widget(form.description_sponsor,{'attr': {'class': 'form-control'}})}}
+        {{ form_errors(form.description_sponsor) }}
+        </div>
+
+        <div class="form-group">
+        <div class="form-group">
+        {{ form_label(form.logo_sponsor,"logo sponsor") }}
+        {{ form_widget(form.logo_sponsor,{'attr': {'class': 'form-control'}})}}
+        {{ form_errors(form.logo_sponsor) }}
+        </div>
+
+        <div class="form-group">
+        <div class="form-group">
+        {{ form_label(form.site_webs,"SITE WEB") }}
+        {{ form_widget(form.site_webs,{'attr': {'class': 'form-control'}})}}
+        {{ form_errors(form.site_webs) }}
+        </div>
+
+        <div class="form-group">
+        <div class="form-group">
+        {{ form_label(form.id_equipe,"id_equipe") }}
+        {{ form_widget(form.id_equipe,{'attr': {'class': 'form-control'}})}}
+        {{ form_errors(form.id_equipe) }}
+        </div>
+
+   <button class="btn btn-primary mr-2">{{ button_label|default('Save') }}</button>
+        <a href="{{ path('app_sponsorback_index') }}">Retour</a>
+{{ form_end(form) }}
+
+  </div>
+    </div>
+</div>
+

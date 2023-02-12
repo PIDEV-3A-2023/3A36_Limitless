@@ -1,0 +1,71 @@
+{% extends 'back.html.twig' %}
+
+{% block title %}Equipe index{% endblock %}
+
+{% block body %}
+   <div class="main-panel">
+          <div class="content-wrapper">
+            <div class="page-header">
+              <h3 class="page-title"> Basic Tables </h3>
+              <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                  <li class="breadcrumb-item"><a href="#">Tables</a></li>
+                  <li class="breadcrumb-item active" aria-current="page">Basic tables</li>
+                </ol>
+              </nav>
+            </div>
+            <div class="row">
+              <div class="col-lg-6 grid-margin stretch-card">
+                <div class="card">
+                  <div class="card-body">
+                    <h4 class="card-title">Basic Table</h4>
+                    <p class="card-description"> Add class <code>.table</code>
+                    </p>
+                    <div class="table-responsive">
+                      <table class="table">
+                        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Nom_equipe</th>
+                <th>Description_equipe</th>
+                <th>Nb_joueurs</th>
+                <th>Logo_equipe</th>
+                <th>Site_web</th>
+                <th>actions</th>
+            </tr>
+
+
+        </thead>
+        <tbody>
+
+
+
+        {% for equipe in equipes %}
+
+            <tr>
+                <td>{{ equipe.id }}</td>
+                <td>{{ equipe.nomEquipe }}</td>
+                <td>{{ equipe.descriptionEquipe }}</td>
+                <td>{{ equipe.nbJoueurs }}</td>
+                <td>{{ equipe.logoEquipe }}</td>
+                <td>{{ equipe.siteWeb }}</td>
+                <td>
+                    <a href="{{ path('app_equipeback_show', {'id': equipe.id}) }}">show</a>
+                    <a href="{{ path('app_equipeback_edit', {'id': equipe.id}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="7">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+        
+                    </div>
+                  </div>
+                </div>
+              </div>
+    <a href="{{ path('app_equipeback_new') }}">Create new</a>
+{% endblock %}
+

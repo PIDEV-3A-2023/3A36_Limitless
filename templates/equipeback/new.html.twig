@@ -1,0 +1,19 @@
+{% extends 'back.html.twig' %}
+
+{% block title %}New Equipe{% endblock %}
+
+{% block body %}
+{{ form_start(form) }}
+
+   
+    {{ include('equipeback/_form.html.twig') }}
+
+    <a href="{{ path('app_equipeback_index') }}">back to list</a>
+    {{form_end(form)}}
+{% endblock %}
+
+
+
+
+
+  
