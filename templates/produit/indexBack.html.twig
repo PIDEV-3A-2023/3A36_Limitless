@@ -1,0 +1,53 @@
+{% extends 'back.html.twig' %}
+
+{% block title %}Produit{% endblock %}
+
+{% block body %}
+    <h1>PRODUITS</h1>
+<div style="height: 500px;width:800px; overflow: auto;">
+    <table class="table table-striped table-bordered table-hover">
+        <thead>
+            <tr>
+                <th class="h3 text-primary">ID</th>
+                <th class="h3 text-primary">CATEGORIE</th>
+                <th class="h3 text-primary">NOM</th>
+                <th class="h3 text-primary">QUANTITE</th>
+                <th class="h3 text-primary">PRIX</th>
+                <th class="h3 text-primary">IMAGE</th>
+                <th class="h3 text-primary">ACTIONS</th>
+              
+            </tr>
+        </thead>
+        <tbody>
+        {% for produit in produits %}
+            <tr>
+                <td>{{ produit.id }}</td>
+                <td>{{ produit.categorieProduit.nom }}</td>
+                <td>{{ produit.nom }}</td>
+                <td>{{ produit.quantite }}</td>
+                <td>{{ produit.prix }}</td>
+                <td>{{ produit.image }}</td>
+                <td><a href="{{ path('app_produit_delete', {'id': produit.id}) }}"><button class="btn btn-primary">{{ button_label|default('Details') }}</button></a></td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="9">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+   </div>
+
+    <a href="{{ path('app_produit_new') }}"><button class="btn btn-primary">{{ button_label|default('Nouveau') }}</button></a>
+
+ 
+<script>
+$(document).ready(function() {
+  $("tbody tr").hover(function() {
+    $(this).addClass("bg-warning");
+  }, function() {
+    $(this).removeClass("bg-warning");
+  });
+});
+</script>  
+{% endblock %}

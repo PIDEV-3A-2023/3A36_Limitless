@@ -1,0 +1,47 @@
+{% extends 'back.html.twig' %}
+
+{% block title %}CategorieProduit index{% endblock %}
+
+{% block body %}
+    <h1>CategorieProduit index</h1>
+<div style="height: 500px;width:800px; overflow: auto;">
+    <table class="table">
+        <thead>
+            <tr>
+                <th  class="h3 text-primary">Id</th>
+                <th  class="h3 text-primary">Nom</th>
+                <th  class="h3 text-primary">actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for categorie_produit in categorie_produits %}
+
+            <tr>
+                <td>{{ categorie_produit.id }}</td>
+                <td>{{ categorie_produit.nom }}</td>
+                <td>
+                    <a href="{{ path('app_categorie_produit_show', {'id': categorie_produit.id}) }}">show</a>
+                    <a href="{{ path('app_categorie_produit_edit', {'id': categorie_produit.id}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="3">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+    </div>
+
+    <a href="{{ path('app_categorie_produit_new') }}">Create new</a>
+
+    <script>
+$(document).ready(function() {
+  $("tbody tr").hover(function() {
+    $(this).addClass("bg-warning");
+  }, function() {
+    $(this).removeClass("bg-warning");
+  });
+});
+</script>  
+{% endblock %}

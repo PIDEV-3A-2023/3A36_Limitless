@@ -1,0 +1,74 @@
+
+{{ form_start(form,{'attr': {'class':'form-horizontal','novalidate':'novalidate'}})}}
+   <br>
+   <br>
+   <br> 
+    <div class="form-group">
+    {{form_label(form.nom)}}
+    {{ form_widget(form.nom) }}
+    {{form_errors(form.nom)}}
+ </div>  
+    <button class="btn btn-primary">{{ button_label|default('Save') }}</button>
+{{ form_end(form) }}
+<a href="{{ path('app_categorie_showCategorieProduit') }}"><button class="btn btn-primary1">back tolist</button></a>
+<style>
+.product-form {
+  width: 500px;
+  margin: 0 auto;
+  padding: 20px;
+  background-color: #f7f7f7;
+  border-radius: 10px;
+}
+
+.form-group1 {
+  margin-bottom: 20px;
+}
+
+label {
+  font-weight: bold;
+}
+
+input[type="text"],
+input[type="number"] {
+  width: 100%;
+  padding: 10px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  transition: border 0.3s ease;
+}
+
+input[type="text"]:focus,
+input[type="number"]:focus {
+  border: 2px solid #337ab7;
+}
+
+input[type="file"] {
+  width: 100%;
+}
+
+.btn-primary {
+  background-color: #337ab7;
+  color: #fff;
+  padding: 10px 20px;
+  border-radius: 5px;
+  border: 0;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+.btn-primary1 {
+  background-color: #337ab7;
+  color: #fff;
+  padding: 15px 25px;
+  border-radius: 5px;
+  border: 0;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  position: relative;
+  left: 380px;
+}
+
+.btn-primary:hover {
+  background-color: #286090;
+  opacity: 0.8;
+}
+<style>
