@@ -15,6 +15,13 @@
     </div>
 </div>
 <div class="form-group1">
+    {{form_label(form.description)}}
+    {{ form_widget(form.description) }}
+     <div class="error">
+    {{form_errors(form.description)}}
+    </div>
+ </div>  
+<div class="form-group1">
     {{form_label(form.prix)}}
     {{ form_widget(form.prix) }}
      <div class="error">

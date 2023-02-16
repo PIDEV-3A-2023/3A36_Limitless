@@ -11,10 +11,10 @@
                 <div class="info">
                     <div class="wrap">
                         <ul class="breadcrumbs">
-                            <li><a href="index-2.html">Main</a>/</li>
-                            <li>Category</li>
+                            <li><a href="index-2.html">Boutique</a>/</li>
+                            <li>Produits</li>
                         </ul>
-                        <h1>Category</h1>
+                        <h1>BOUTIQUE</h1>
                     </div>
                 </div>
             </div>  
@@ -31,28 +31,15 @@
                 <div class="sidebar col-xs-6 col-sm-6 col-md-3 sidebar-offcanvas" id="sidebar">
                     <div class="sidebar-menu-wrap">
                         <h6>Categories</h6>
-                        <ul class="categories-list">
+                        <u      l class="categories-list">
+                        {%for categorie  in categories%}
                             <li>
-                                <a href="#"><span class="count">4</span>News</a>
+                          <a href="{{path('app_showProduitByCategory',{'id':categorie.id})}}"><span class="count">4</span>{{categorie.nom}}</a>
                             </li>
-                            <li class="dropdown">
-                                <a href="#" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true"><span class="count">22</span>Competitions & Reviews</a>
-                                <ul class="dropdown-menu">
-                                    <li><a href="#"><span class="count">12</span>News</a></li>
-                                    <li><a href="#"><span class="count">10</span>Competitions & Reviews</a></li>
-                                    <li><a href="#"><span class="count">9</span>Interviews</a></li>
-                                    <li><a href="#"><span class="count">8</span>Highlights</a></li>
-                                    <li><a href="#"><span class="count">7</span>Other</a></li>  
-                                </ul>
-                            </li>
-                            <li>
-                                <a href="#"><span class="count">4</span>Interviews</a>
-                            </li>
-                            <li>
-                                <a href="#"><span class="count">4</span>Highlights</a>
-                            </li>
-                            <li>
-                                <a href="#"><span class="count">4</span>Other</a>
+                        {%endfor%}
+                        <br>
+                        <li>
+                          <a href="{{path('app_produit_index')}}"><span class="count">4</span>Tous nos Produits</a>
                             </li>
                         </ul>
                     </div>
@@ -66,7 +53,7 @@
                             <div class="ui-slider">
                             </div>
                         </div>
-                        <div class="filter-items-wrap">
+                        <!--<div class="filter-items-wrap">
                             <div class="filter-title">Sport</div>
                             <div class="filter-item">
                                 <ul>
@@ -264,7 +251,7 @@
                                     </li>
                                 </ul>   
                             </div>  
-                        </div>
+                        </div>-->
                     </div>
 
                 </div>
@@ -272,7 +259,7 @@
                     <p class="hidden-md hidden-lg">
                         <button type="button" class="btn sidebar-btn" data-toggle="offcanvas" title="Toggle sidebar">sidebar</button>
                     </p>
-                    <h6>Men's clothing</h6>
+                    <h6>Nos Produits</h6>
                     <div class="row">
                         {%for produit in produits%}
                             <div class="col-md-4 col-sm-6">
@@ -284,10 +271,12 @@
                                     </a>
                                     <div class="info">
                                         <span class="name">{{produit.nom}}</span>
-                                        <span class="price">£ {{produit.prix}}</span>    
+                                        <span class="price">DNT {{produit.prix}}</span>    
                                         <div class="btn-wrap">
                                             <button class="btn small">add to cart</button>
+                                            <a href="{{path('app_produit_details',{'id':produit.id})}}">
                                             <button class="btn small">Details</button>
+                                            </a>
                                         </div>
                                     </div>
 
@@ -304,7 +293,7 @@
             </div>
         </div>
 
-        <div class="store-banner position-relative">
+       <!-- <div class="store-banner position-relative">
         <div class="store-banner-info">
             <div class="container">
                 <div class="row">
@@ -314,11 +303,11 @@
                     </div>  
                 </div>
             </div>
-        </div>
+        </div>-->
     </div>
 
         <!--MAIN SPONSOR SLIDER BEGIN-->
-<div class="main-sponsor-slider-background">
+<!--<div class="main-sponsor-slider-background">
 <div id="main-sponsor-slider" class="carousel slide main-sponsor-slider" data-ride="carousel">
     <div class="carousel-inner" role="listbox">
         <div class="item active">
@@ -351,7 +340,7 @@
                 </div>
             </div>  
         </div>
-        <!-- Controls -->
+        
         <a class="nav-arrow left-arrow" href="#main-sponsor-slider" role="button" data-slide="prev">
                 <i class="fa fa-angle-left" aria-hidden="true"></i>
                 <span class="sr-only">Previous</span>
@@ -363,9 +352,9 @@
     </div>  
 </div>
 </div>
-<!--MAIN SPONSOR SLIDER END-->
 
-    </div>
+
+    </div>-->
 
     <!--STORE WRAP END-->
 

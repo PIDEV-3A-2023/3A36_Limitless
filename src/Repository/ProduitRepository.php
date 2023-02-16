@@ -39,6 +39,25 @@ class ProduitRepository extends ServiceEntityRepository
         }
     }
 
+    public function findProduitByDate(): array
+   {
+       return $this->createQueryBuilder('p')          
+            ->orderBy('p.dateProduit', 'DESC')
+            ->getQuery()
+            ->getResult()
+        ;
+    }
+    public function findProduitByCategorie($id):array
+    {
+        return $this->createQueryBuilder('p')
+        ->join('p.categorieProduit','c')
+        ->addSelect('c')
+        ->where('c.id=:id')
+        ->setParameter('id',$id)
+        ->getQuery()
+        ->getResult();
+    }
+
 //    /**
 //     * @return Produit[] Returns an array of Produit objects
 //     */

@@ -3,14 +3,14 @@
 {% block title %}CategorieProduit index{% endblock %}
 
 {% block body %}
-    <h1>CategorieProduit index</h1>
+    <h1>CategorieProduit</h1>
 <div style="height: 500px;width:800px; overflow: auto;">
-    <table class="table">
+    <table class="table table-striped table-bordered table-hover">
         <thead>
             <tr>
-                <th  class="h3 text-primary">Id</th>
-                <th  class="h3 text-primary">Nom</th>
-                <th  class="h3 text-primary">actions</th>
+                <th  class="h3 text-primary">ID</th>
+                <th  class="h3 text-primary">NOM</th>
+                <th  class="h3 text-primary">ACTIONS</th>
             </tr>
         </thead>
         <tbody>
@@ -20,8 +20,8 @@
                 <td>{{ categorie_produit.id }}</td>
                 <td>{{ categorie_produit.nom }}</td>
                 <td>
-                    <a href="{{ path('app_categorie_produit_show', {'id': categorie_produit.id}) }}">show</a>
-                    <a href="{{ path('app_categorie_produit_edit', {'id': categorie_produit.id}) }}">edit</a>
+                    <a href="{{ path('app_categorie_produit_show', {'id': categorie_produit.id}) }}"><button class="btn btn-primary">{{ button_label|default('show') }}</button></a>
+                    <a href="{{ path('app_categorie_produit_edit', {'id': categorie_produit.id}) }}"><button class="btn btn-primary">{{ button_label|default('edit') }}</button></a>
                 </td>
             </tr>
         {% else %}
@@ -33,7 +33,7 @@
     </table>
     </div>
 
-    <a href="{{ path('app_categorie_produit_new') }}">Create new</a>
+    <a href="{{ path('app_categorie_produit_new') }}"><button class="btn btn-primary">{{ button_label|default('New') }}</button></a>
 
     <script>
 $(document).ready(function() {

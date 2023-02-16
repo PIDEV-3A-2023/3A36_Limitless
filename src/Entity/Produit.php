@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use App\Repository\ProduitRepository;
 use App\Entity\CategorieProduit;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -14,26 +15,53 @@ class Produit
     #[ORM\GeneratedValue]
     #[ORM\Column]
     private ?int $id = null;
+   /* public function __construct()
+    {
+        $this->dateProduit=new \DateTime();
+    }*/
 
     #[ORM\Column(length: 255)]
     #[Assert\NotBlank(message:"Le nom est obligatoire")]
     private ?string $nom = null;
 
     #[Assert\GreaterThan(value:0,message:"La quantite doit être positive")]
+    #[Assert\NotBlank(message:"La quantité est obligatoire")]
     #[ORM\Column]
     private ?int $quantite = null;
 
-    #[Assert\GreaterThan(value:0,message:"Le prix doit être positif")]
+    //#[Assert\GreaterThan(value:0,message:"Le prix doit être positif")]
+    #[Assert\NotBlank(message:"Le prix est obligatoire")]
+    #[Assert\Regex(pattern:'/^[0-9]+([.,][0-9]+)?$/',message:"Le prix ne peut être qu'un nombre.")]
     #[ORM\Column]
-    private ?float $prix = null;
+    private ?string $prix = null;
 
 
-    
+    #[Assert\NotBlank(message:"Vous devez insérer une image")]
+    #[Assert\File(
+            maxSize:'1024k',
+            mimeTypes:[
+                'image/jpeg',
+                'image/png',
+            ],
+            mimeTypesMessage:'Please upload a valid image (JPEG or PNG).',
+            maxSizeMessage:'Le fichier est trop volumineux ({{ size }} {{ suffix }}). La taille maximum doit-être {{ limit }} {{ suffix }}.'
+        )]
+
     #[ORM\Column(length: 255)]
     private ?string $image = null;
 
     #[ORM\ManyToOne(inversedBy: 'produit')]
     private ?CategorieProduit $categorieProduit = null;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $refer = null;
+
+    #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
+    private ?\DateTimeInterface $dateProduit = null;
+
+    #[Assert\NotBlank(message:"La description est obligatoire")]
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $description = null;
 
     public function getId(): ?int
     {
@@ -64,12 +92,12 @@ class Produit
         return $this;
     }
 
-    public function getPrix(): ?float
+    public function getPrix(): ?string
     {
         return $this->prix;
     }
 
-    public function setPrix(float $prix): self
+    public function setPrix(string $prix): self
     {
         $this->prix = $prix;
 
@@ -96,6 +124,42 @@ class Produit
     public function setCategorieProduit(?CategorieProduit $categorieProduit): self
     {
         $this->categorieProduit = $categorieProduit;
+
+        return $this;
+    }
+
+    public function getRefer(): ?string
+    {
+        return $this->refer;
+    }
+
+    public function setRefer(?string $refer): self
+    {
+        $this->refer = $refer;
+
+        return $this;
+    }
+
+    public function getDateProduit(): ?\DateTimeInterface
+    {
+        return $this->dateProduit;
+    }
+
+    public function setDateProduit(?\DateTimeInterface $dateProduit): self
+    {
+        $this->dateProduit = $dateProduit;
+
+        return $this;
+    }
+
+    public function getDescription(): ?string
+    {
+        return $this->description;
+    }
+
+    public function setDescription(?string $description): self
+    {
+        $this->description = $description;
 
         return $this;
     }

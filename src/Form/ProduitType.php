@@ -14,41 +14,23 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Validator\Constraints\File;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 class ProduitType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('nom',TextType::class,['constraints'=>new NotBlank(['message'=>'Peut pas etre vide'])])
-            ->add('quantite', IntegerType::class, [
-            'constraints' => [
-                new GreaterThan([
-                'value' => 0,
-                'message' => 'Valeur négative non autorisée'
-        ])
-    ]
-])
-           ->add('prix', TextType::class, [
-            'constraints' => [
-                new GreaterThan([
-                'value' => 0,
-                'message' => 'Valeur négative non autorisée'
-        ])
-    ]
-])
-            ->add('image', FileType::class, [
-    'constraints' => [new NotBlank(['message'=>'Vous devez insérer une image']),
-        new File([
-            'maxSize' => '1024k',
-            'mimeTypes' => [
-                'image/jpeg',
-                'image/png',
-            ],
-            'mimeTypesMessage' => 'Please upload a valid image (JPEG or PNG).',
-            'maxSizeMessage' => 'Le fichier est trop volumineux ({{ size }} {{ suffix }}). La taille maximum doit-être {{ limit }} {{ suffix }}.'
-        ])
-    ]
-])
+            ->add('nom',TextType::class)
+
+            ->add('description',TextareaType::class, [
+             'attr' => ['rows' => 5, 'cols' => 30]])
+
+            ->add('quantite', IntegerType::class)
+
+            ->add('prix', IntegerType::class)
+
+            ->add('image', FileType::class,['data_class'=>null])
+
             ->add('categorieProduit',EntityType::class,['class'=>CategorieProduit::class,'choice_label'=>'nom',])
         ;
 
@@ -61,3 +43,6 @@ class ProduitType extends AbstractType
         ]);
     }
 }
+
+
+//array('data_class' => null)

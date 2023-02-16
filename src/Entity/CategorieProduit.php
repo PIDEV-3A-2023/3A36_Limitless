@@ -6,6 +6,7 @@ use App\Repository\CategorieProduitRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: CategorieProduitRepository::class)]
 class CategorieProduit
@@ -15,6 +16,7 @@ class CategorieProduit
     #[ORM\Column]
     private ?int $id = null;
 
+    #[Assert\NotBlank(message:"Le nom est obligatoire")]
     #[ORM\Column(length: 255)]
     private ?string $nom = null;
 
