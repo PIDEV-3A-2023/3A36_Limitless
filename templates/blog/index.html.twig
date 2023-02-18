@@ -1,0 +1,76 @@
+{% extends 'base.html.twig' %}
+{% block title  %} Blogs {% endblock %}
+{% block body %}
+<link href="{{asset('css-min/soccer.min.css')}}" rel="stylesheet" type="text/css" />
+
+
+<!--BREADCRUMBS END-->
+
+    <!--CONTENT BEGIN-->
+
+    <div class="content">
+        <div class="container">
+            <div class="row row-offcanvas row-offcanvas-left">
+
+<!--SIDEBAR BEGIN-->
+<section class="sidebar col-xs-6 col-md-3 sidebar-offcanvas" id="sidebar">
+    <br><br>
+    <div class="sidebar-menu-wrap">
+    <div class="sidebar-search-wrap">
+        <h6>Rechercher</h6>
+        <div class="wrap">
+            <input type="text">
+            <button><i class="fa fa-search" aria-hidden="true"></i></button>
+        </div>
+    </div>
+    <br><br>
+    <div class="sidebar-tags-wrap">
+        <div class="tags">
+            <a href="{{path('app_blog_create')}}" class="booking">Creer un Blog</a>
+        </div>
+    </div>
+</section>	
+<!--SIEDBAR END-->
+
+
+<!--NEWS LIST BEGIN-->
+
+<div class="news-list col-xs-12 col-md-9">
+
+{% for blog in blog %}
+{% if blog.etat == 2 %}
+    <div class="item img-top">
+        <div class="img-wrap">
+            <a href="{{ path('app_blog_show', {'id': blog.id}) }}"><img src="{{ asset('blogImages/' ~ blog.imageBlog) }}"></a>
+        </div>
+        <div class="info">
+            <a href="{{ path('app_blog_show', {'id': blog.id}) }}" class="name">{{ blog.titre }}</a>
+            <div class="wrap">
+                <a>{{ blog.dateCreation|date("m/d/Y") }}</a> Par <a href="news-single.html">Mason Carrington</a>
+            </div>
+            <div class="clear"></div>
+        </div>
+    </div>
+{% endif %}
+{% endfor %} 
+
+
+    <div class="pagination-wrap">
+        <ul class="pagination">
+            <li><a href="#"><i class="fa fa-chevron-left" aria-hidden="true"></i></a></li>
+            <li><a href="#">1</a></li>
+            <li class="active"><a href="#">2</a></li>
+            <li><a href="#">3</a></li>
+            <li><a href="#">4</a></li>
+            <li><a href="#">5</a></li>
+            <li><a href="#"><i class="fa fa-chevron-right" aria-hidden="true"></i></a></li>
+        </ul>
+    </div>
+</div>
+<!--NEWS LIST END-->
+            </div>
+        </div>
+    </div>
+    <!--CONTENT END-->
+
+{% endblock %}

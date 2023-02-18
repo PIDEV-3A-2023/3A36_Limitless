@@ -1,0 +1,161 @@
+ {% extends 'back.html.twig' %} 
+{% block title  %} Blogs Backend {% endblock %}
+{% block body %}
+<div class="main-panel">
+    <div class="content-wrapper">
+        <div class="page-header">
+            <h3 class="page-title"> Blogs </h3>
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="#">Tables</a></li>
+                </ol>
+            </nav>
+        </div>
+    
+        <div class="col-lg-12 grid-margin stretch-card">
+            <div class="card">
+                <div class="card-body">
+                    <h4 class="card-title">Table de Blogs</h4>
+                        <div class="d-flex justify-content-end mt-3 mb-3">
+                            <a href="{{path('app_blog_backend_create')}}" class="btn btn-success">Ajout</a>
+                        </div>
+                    <div class="table-responsive">
+                        <table class="table table-striped">
+                        <thead>
+                            <tr>
+                            <th>Id Blog</th>
+                            <th>Titre</th>
+                            <th>Contenu</th>
+                            <th>Date Creation</th>
+                            <th>Date Modification</th>
+                            <th>Image Blog</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+                            </tr>
+                        </thead>
+                        {% for blog in blog %}
+                        <tbody>
+                            <tr>
+                            <td>{{ blog.id }}</td>
+                            <td>{{ blog.titre|slice(0, 25)}}</td>
+                            <td>{{ blog.contenu|slice(0, 25) }}</td>
+                            <td>{{ blog.dateCreation|date("m/d/Y") }}</td>
+                            <td>{{ blog.dateModification|date("m/d/Y") }}</td>
+                            <td>{{ blog.imageBlog|slice(0, 25) }}</td>
+
+                            {% if blog.etat == 0 %}
+                            <td><label class="badge badge-warning">En attente</label></td>
+                            {% elseif blog.etat == 1 %}
+                            <td><label class="badge badge-danger">Réfuser</label></td>
+                            {% elseif blog.etat == 2 %}
+                            <td><label class="badge badge-success">Approuver</label></td>
+                            {% endif %}
+
+                            <td>
+                            <button type="button" data-toggle="modal" data-target="#declinModal{{ loop.index }}" class="badge badge-danger">Réfuser</button>
+
+<div class="modal fade" id="declinModal{{ loop.index }}" tabindex="-1" role="dialog" aria-labelledby="declinModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <h5 class="modal-title" id="declinModalLabel">Confirmation</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+
+            <div class="modal-body">
+                Êtes-vous sûr de vouloir Réfuser ce blog?
+            </div>
+
+            <div class="modal-footer">
+                <form method="post" action="{{ path('app_blog_backend_declin', {'id': blog.id}) }}">
+                    <input type="hidden" name="id" value="{{ csrf_token('declin' ~ blog.id) }}">
+                    <button type="submit" class="btn btn-danger">oui</button>
+                </form>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Non</button>
+            </div>
+
+        </div>
+    </div>
+</div>
+                            </td>
+
+                            <td>
+                            <button type="button" data-toggle="modal" data-target="#approuveModal{{ loop.index }}" class="badge badge-success">Approuver</button>
+
+<div class="modal fade" id="approuveModal{{ loop.index }}" tabindex="-1" role="dialog" aria-labelledby="approuveModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <h5 class="modal-title" id="approuveModalLabel">Confirmation</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+
+            <div class="modal-body">
+                Êtes-vous sûr de vouloir Approuver ce blog?
+            </div>
+
+            <div class="modal-footer">
+                <form method="post" action="{{ path('app_blog_backend_approve', {'id': blog.id}) }}">
+                    <input type="hidden" name="id" value="{{ csrf_token('approuve' ~ blog.id) }}">
+                    <button type="submit" class="btn btn-danger">oui</button>
+                </form>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Non</button>
+            </div>
+
+        </div>
+    </div>
+</div>
+                            </td>
+
+                            <td>
+                                <a href="{{ path('app_blog_show', {'id': blog.id}) }}" class="btn btn-primary"> Voir <i class="mdi mdi-chevron-right"></i> </a>
+
+                                <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#deleteModal{{ loop.index }}">
+                                <i class="mdi mdi-delete"></i>
+                                </button>
+<!-- Delete Modal -->
+<div class="modal fade" id="deleteModal{{ loop.index }}" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <h5 class="modal-title" id="deleteModalLabel">Confirmation du supprission</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+
+            <div class="modal-body">
+                Êtes-vous sûr de vouloir supprimer cet élément?
+            </div>
+
+            <div class="modal-footer">
+                <form method="post" action="{{ path('app_blog_backend_delete', {'id': blog.id}) }}">
+                    <input type="hidden" name="id" value="{{ csrf_token('delete' ~ blog.id) }}">
+                    <button type="submit" class="btn btn-danger">oui</button>
+                </form>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Non</button>
+            </div>
+
+        </div>
+    </div>
+</div>
+                            </td>
+                            </tr>
+                        </tbody>
+                        {% endfor %} 
+                      </table>
+                    </div>
+                </div>
+            </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

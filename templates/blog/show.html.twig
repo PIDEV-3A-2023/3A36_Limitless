@@ -1,0 +1,119 @@
+{% extends 'base.html.twig' %}
+{% block title  %} Blog {% endblock %}
+{% block body %}
+<link href="{{asset('css-min/soccer.min.css')}}" rel="stylesheet" type="text/css" />
+
+<!--************************************************************************************************************************************************** -->
+<!--************************************************************************************************************************************************** -->
+<!--************************************************************************************************************************************************** -->
+<!--************************************************************************************************************************************************** -->
+    <!--CONTENT BEGIN-->
+    <div class="content">
+        <div class="container">
+            <div class="row row-offcanvas row-offcanvas-left">
+
+                <!--SIEDBAR BEGIN-->
+
+
+                <!--NEWS SINGLE BEGIN-->
+
+                <section class="news-single col-xs-12 col-sm-12 col-md-9">
+                    <p class="hidden-md hidden-lg">
+                        <button type="button" class="btn sidebar-btn" data-toggle="offcanvas" title="Toggle sidebar">sidebar</button>
+                    </p>
+                    <div class="item">
+                        <div class="top-info">
+                            <div class="date"><a>{{ blog.dateCreation|date("m/d/Y") }}</a> Par <a >Mason Carrington</a></div>
+                            <div class="comment-quantity">{{ number }} Commentaires</div>
+                        </div>
+
+                        <h1>{{ blog.titre }}</h1>
+                        <div class="img-wrap">
+                            <img src="{{ asset('blogImages/' ~ blog.imageBlog) }}">
+                        </div>
+
+
+                        <div class="post-text">
+                            <p>{{ blog.contenu }}</p>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="top-info">
+                                    <div class="date">
+                                        Modifié à <a> {{ blog.dateModification|date("m/d/Y") }}</a> Par <a >Mason Carrington</a>
+                                    </div>
+                                    </div>
+                                    <div class="tags">
+                                        <a href="{{path('app_blog', {'id': blog.id} )}}" >Retour</a>
+                                        <a href="{{path('app_blog_edit', {'id': blog.id} )}}" >Editer</a>
+                                        <a href="{{path('app_blog_delete', {'id': blog.id} ) }}" >Supprimer</a>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <ul class="share-bar">
+                                        <li class="facebook"><a href="#"><i class="fa fa-facebook-square" aria-hidden="true"></i></a></li>
+                                        <li class="twitter"><a href="#"><i class="fa fa-twitter" aria-hidden="true"></i></a></li>
+                                        <li class="google"><a href="#"><i class="fa fa-google" aria-hidden="true"></i></a></li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <div class="comments-wrap">
+                            <h4>Commentaires</h4>
+                            {% for comment in comment %}
+                            <div class="comment-item">
+                                <div class="avatar"><img src="{{ asset('blogImages/user.png') }}"></div>
+                                <div class="info">
+                                    <div class="date">
+                                        <a>{{ comment.dateCreation|date("m/d/Y") }}</a> Par <a>Ian Finch</a>  Modifié à <a>{{ comment.dateModification|date("m/d/Y") }}</a>
+                                    </div>
+                                    <p>{{ comment.contenu }}</p>
+                                </div>
+                                <div> 
+                                <a href="{{path('app_comment_delete', {'id': comment.id} ) }}" >Supprimer</a>
+                                <a>   </a> 
+                                <a href="{{path('app_comment_edit', {'id': comment.id} ) }}" >Editer</a>
+                                </div>
+                            </div>
+                            {% endfor %}
+                            <br>
+                            <br>
+                            <br>
+                            <div class="leave-comment-wrap">
+                                <h4>Laissez un commentaire</h4>	
+                                {{ form_start(form, {'attr': {'novalidate': 'novalidate'}}) }}
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <div class="item">
+                                                <label>
+                                                    <span>Votre commentaire</span>
+                                                    {{ form_widget(form.contenu) }}
+                                                    <div class="text-danger" > {{ form_errors(form.contenu) }} </div>
+                                                </label>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-12">
+                                            <button type='submit' class="comment-submit">Poster un commentaire</button>
+                                        </div>
+                                    </div>
+                                {{ form_end(form) }}
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!--NEWS SINGLE END-->
+
+            </div>
+        </div>
+    </div>
+
+<!--************************************************************************************************************************************************** -->
+<!--************************************************************************************************************************************************** -->
+<!--************************************************************************************************************************************************** -->
+<!--************************************************************************************************************************************************** -->
+<!--************************************************************************************************************************************************** -->
+
+
+{% endblock %}
