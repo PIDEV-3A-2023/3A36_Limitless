@@ -31,6 +31,10 @@
                 <th>Site_web</th>
                 <td><a href="{{ equipe.siteWeb }}">{{ equipe.siteWeb }}</a></td>
             </tr>
+            <tr>
+                <th>Date_creation</th>
+                <td>{{ equipe.dateCreation|date("m/d/y") }}</td>
+            </tr>
         </tbody>
     </table>
 

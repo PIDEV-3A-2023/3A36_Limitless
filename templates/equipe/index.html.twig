@@ -3,159 +3,50 @@
 {% block title %}Equipe index{% endblock %}
 
 {% block body %}
-    <section class="product-single">
+     <section class="club-wrap club-champ">
         <div class="container">
             <div class="row">
+                <div class="col-md-9">
+                    <h4>word club championship </h4>
+                    <div class="champ-date"><i class="fa fa-calendar" aria-hidden="true"></i>20 August 2016 - 16 may 2017</div>
+                </div>
            {% for equipe in equipes %}
-                <div class="col-md-12"><h4>Slim Support</h4></div>
-                <div class="col-md-7">
-                    <div class="product-slider">
-                        <div class="connected-carousels">
-                          
-                            <div class="stage">
-                                <div class="carousel carousel-stage">
-
-                                    <ul>
-                                       
-                                        <li class="stage-item">
-                                            <span class="store-badge new">new</span>
-                                             <img src="{{asset('equipeImages/'~equipe.logoEquipe)}}"
-                                        </li>
-                                    </ul>
-                                    <a href="#" class="prev prev-stage"><span><i class="fa fa-angle-left" aria-hidden="true"></i></span></a>
-                                    <a href="#" class="next next-stage"><span><i class="fa fa-angle-right" aria-hidden="true"></i></span></a>
-                                </div>
-
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-5">
-                    <div class="product-right-info">
-                       
- <div class="title">Nom equipe :</div>	
-                        <div class="price">{{equipe.nomEquipe}}</div>
-                        <div class="title">Description equipe :</div>
-                        <p>{{equipe.descriptionEquipe}}</p>
-                        <div class="title">Nombre de joueurs :</div>
-                         <div class="price">{{equipe.nbJoueurs}}</div>
-                        <div class="title">Site web :</div>
-                                        <span class="price"><a href="{{ equipe.siteWeb }}">{{ equipe.siteWeb }}</a></span>
-                        <div class="title">Colors</div>	
-                        <div class="color-filter-item">
-                            <ul>
-                                <li>
-                                    <label class="color-check green">
-                                        <input type="checkbox" />
-                                        <span class="check"><i class="fa fa-check" aria-hidden="true"></i></span>
-                                    </label>
-                                </li>
-                                <li>
-                                    <label class="color-check black">
-                                        <input type="checkbox" />
-                                        <span class="check"><i class="fa fa-check" aria-hidden="true"></i></span>
-                                    </label>
-                                </li>
-                                <li>
-                                    <label class="color-check purple">
-                                        <input type="checkbox" />
-                                        <span class="check"><i class="fa fa-check" aria-hidden="true"></i></span>
-                                    </label>
-                                </li>
-                                <li>
-                                    <label class="color-check gray">
-                                        <input type="checkbox" />
-                                        <span class="check"><i class="fa fa-check" aria-hidden="true"></i></span>
-                                    </label>
-                                </li>
-                                <li>
-                                    <label class="color-check red">
-                                        <input type="checkbox" />
-                                        <span class="check"><i class="fa fa-check" aria-hidden="true"></i></span>
-                                    </label>
-                                </li>
-                                <li>
-                                    <label class="color-check green">
-                                        <input type="checkbox" />
-                                        <span class="check"><i class="fa fa-check" aria-hidden="true"></i></span>
-                                    </label>
-                                </li>
-                            </ul>
-                        </div>
-                        <div class="title">Sizes</div>
-                        <div class="size-filter-item">
-                            <ul>
-                                <li>
-                                    <label class="size-check">
-                                        <input type="checkbox" />
-                                        <span class="size">xs</span>
-                                    </label>
-                                </li>
-                                <li>
-                                    <label class="size-check">
-                                        <input type="checkbox" />
-                                        <span class="size">s</span>
-                                    </label>
-                                </li>
-                                <li>
-                                    <label class="size-check">
-                                        <input type="checkbox" />
-                                        <span class="size">m</span>
-                                    </label>
-                                </li>
-                                <li>
-                                    <label class="size-check">
-                                        <input type="checkbox" />
-                                        <span class="size">l</span>
-                                    </label>
-                                </li>
-                                <li>
-                                    <label class="size-check">
-                                        <input type="checkbox" />
-                                        <span class="size">xl</span>
-                                    </label>
-                                </li>
-                                <li>
-                                    <label class="size-check">
-                                        <input type="checkbox" />
-                                        <span class="size">xxl</span>
-                                    </label>
-                                </li>
-                                <li>
-                                    <label class="size-check">
-                                        <input type="checkbox" />
-                                        <span class="size">xxxl</span>
-                                    </label>
-                                </li>
-                            </ul>	
-                        </div>
-                        <div class="title"></div>
-                        
-                        <div class="details">
-                            <ul>
-                                <li><span> </span></li>
-                                <li><span></span></li>
-                                <li>
-                                    <span></span>
-                                    <a href="#"></a>
-                                    <a href="#"></a>
-                                    <a href="#"></a>
-                                    <a href="#"></a>
-                                    <a href="#"></a>
-                                    <a href="#"></a>
-                                </li>
-                            </ul>
-                        </div>
-                        <ul class="socials">
-                            <li><a href="#"><i class="fa fa-facebook-square" aria-hidden="true"></i></a></li>
-                            <li><a href="#"><i class="fa fa-twitter" aria-hidden="true"></i></a></li>
-                            <li><a href="#"><i class="fa fa-google" aria-hidden="true"></i></a></li>
-                            <li><a href="#"><i class="fa fa-pinterest" aria-hidden="true"></i></a></li>
-                            <li><a href="#"><i class="fa fa-instagram" aria-hidden="true"></i></a></li>
-                        </ul>
-                    </div>
-                </div>
+               
             </div>
         </div>
+        
+<div class="championship-header-wrapper">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-5">
+                <div class="club-logo">
+                    <img src="{{asset('equipeImages/'~equipe.logoEquipe)}}" class="img-responsive" alt="champ image">                
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="club-info">
+                    <div class="item"><span>Nom equipe : </span>{{equipe.nomEquipe}}</div>
+                    <div class="item"><span>Nombre de joueurs :     </span>{{equipe.nbJoueurs}}</div>
+                    <div class="item"><span>Date de creation :     </span>{{equipe.dateCreation|date("m/d/y")}}</div>
+                    <div class="item"><span>Site web : </span> <a href="{{ equipe.siteWeb }}">{{ equipe.siteWeb }}</a></div>
+                    <div class="col-md-7">
+                   <div class="item"> <a href="trophies.html" class="btn small club-top-btn">trophies</a> </div>
+                   <div class="item"> <a href="{{ path('app_equipe_edit', {'id': equipe.id}) }}" class="btn small club-top-btn">edit</a> </div>
+                   <div class="item"> <a href="{{ path('app_sponsor_index') }}" class="btn small club-top-btn">sponsor</a> </div>
+                </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="club-info">
+                    <div class="item">Description equipe : </div>
+                    <p>{{equipe.descriptionEquipe}}</p>
+                </div>	
+            </div>
+        </div>	
+    </div>	
+</div>
+    </section>
+
  {% endfor %}
+ 
 {% endblock %}

@@ -1,62 +1,94 @@
 {% extends 'back.html.twig' %}
 
-{% block title %}Sponsor index{% endblock %}
+{% block title %}Table de sponsors{% endblock %}
 
 {% block body %}
-      <div class="main-panel">
+   <div class="main-panel">
           <div class="content-wrapper">
             <div class="page-header">
-              <h3 class="page-title"> Basic Tables </h3>
+              <h3 class="page-title"> Sponsors </h3>
               <nav aria-label="breadcrumb">
                 <ol class="breadcrumb">
                   <li class="breadcrumb-item"><a href="#">Tables</a></li>
-                  <li class="breadcrumb-item active" aria-current="page">Basic tables</li>
                 </ol>
               </nav>
             </div>
-            <div class="row">
-              <div class="col-lg-6 grid-margin stretch-card">
+            
+              <div class="col-lg-12 grid-margin stretch-card">
                 <div class="card">
                   <div class="card-body">
-                    <h4 class="card-title">Basic Table</h4>
-                    <p class="card-description"> Add class <code>.table</code>
-                    </p>
+                    <h4 class="card-title">Table d'équipe</h4>
+                    <div class="d-flex justify-content-end mt-3 mb-3">
+                        <a href="{{ path('app_sponsorback_new') }}" class="btn btn-success">Ajout</a>
+                        </div>
                     <div class="table-responsive">
-
-    <table class="table">
-        <thead>
+                      <table class="table table-striped">
+                        <thead>
             <tr>
-                <th>Id</th>
-                <th>Nom_sponsor</th>
-                <th>Description_sponsor</th>
+               
                 <th>Logo_sponsor</th>
+                <th>Nom_sponsor</th>               
                 <th>Site_webs</th>
+                <th>Nom équipe</th>
                 <th>actions</th>
             </tr>
         </thead>
         <tbody>
         {% for sponsor in sponsors %}
             <tr>
-                <td>{{ sponsor.id }}</td>
-                <td>{{ sponsor.nomSponsor }}</td>
-                <td>{{ sponsor.descriptionSponsor }}</td>
-                <td>{{ sponsor.logoSponsor }}</td>
+                
+                <td><a  class="custom-logo-link"><img src="{{asset('sponsorImages/'~sponsor.logoSponsor)}}" alt="logo" class="custom-logo"></a></td>
+                <td>{{ sponsor.nomSponsor }}</td>          
                 <td>{{ sponsor.siteWebs }}</td>
+                <td>{{ sponsor.IdEquipe }}</td>
                 <td>
-                    <a href="{{ path('app_sponsorback_show', {'id': sponsor.id}) }}">show</a>
-                    <a href="{{ path('app_sponsorback_edit', {'id': sponsor.id}) }}">edit</a>
+                  <a class="btn btn-primary" href="{{ path('app_sponsorback_edit', {'id': sponsor.id}) }}"><i class="mdi mdi-pencil"></i></a>
+                     <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#deleteModal{{ loop.index }}">
+                <i class="mdi mdi-delete"></i>
+            </button>
+<!-- Delete Modal -->
+<div class="modal fade" id="deleteModal{{ loop.index }}" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+        
+            <div class="modal-header">
+                <h5 class="modal-title" id="deleteModalLabel">Confirmation du supprission</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+
+            <div class="modal-body">
+                Êtes-vous sûr de vouloir supprimer cet élément?
+            </div>
+
+            <div class="modal-footer">
+                <form method="post" action="{{ path('app_sponsorback_delete', {'id': sponsor.id}) }}">
+                    <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ sponsor.id) }}">
+                    <button type="submit" class="btn btn-danger">oui</button>
+                </form>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Non</button>
+            </div>
+
+        </div>
+    </div>
+</div>
                 </td>
             </tr>
         {% else %}
             <tr>
-                <td colspan="6">no records found</td>
+                <td colspan="7">no records found</td>
             </tr>
-        {% endfor %}
+    
         </tbody>
+        {% endfor %}
     </table>
-  </div>
+        
+                     </div>
                   </div>
                 </div>
               </div>
-    <a href="{{ path('app_sponsorback_new') }}">Create new</a>
+            </div>
+        </div>
 {% endblock %}
+

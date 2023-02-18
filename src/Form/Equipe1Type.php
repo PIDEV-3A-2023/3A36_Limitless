@@ -3,17 +3,20 @@
 namespace App\Form;
 
 use App\Entity\Equipe;
+
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Validator\Constraints\Length;
+use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Validator\Constraints\Url;
 use Symfony\Component\Validator\Constraints\Range;
 use Symfony\Component\Validator\Constraints\GreaterThanOrEqual;
 use Symfony\Component\Validator\Constraints\LessThanOrEqual;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 class Equipe1Type extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
@@ -30,8 +33,15 @@ class Equipe1Type extends AbstractType
                 ]),
             ],
         ])
-        
-        ->add('description_equipe')
+
+        ->add('description_equipe', TextareaType::class, [
+            'label' => 'Description de l\'équipe',
+            'required' => false,
+            'attr' => [
+                'rows' => 5,
+                'cols' => 50
+            ],
+        ])
         
         ->add('nb_joueurs' , null, [
             'constraints' => [
@@ -61,7 +71,18 @@ class Equipe1Type extends AbstractType
                 ]),
             ],
         ])
-    ;
+        ->add('date_creation', DateType::class, [
+            
+            'constraints' => [
+                new NotBlank([
+                    'message' => 'La date de création ne peut pas être vide.',
+                ]),
+                new LessThanOrEqual([
+                    'value' => 'today',
+                    'message' => 'La date de création doit être antérieure ou égale à la date actuelle.',
+                ]),
+            ],
+        ]);
 }
 
     public function configureOptions(OptionsResolver $resolver): void

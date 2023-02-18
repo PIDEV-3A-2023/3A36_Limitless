@@ -7,7 +7,7 @@
 
     {{ include('equipe/_form.html.twig', {'button_label': 'Update'}) }}
 
-    <a href="{{ path('app_equipe_index') }}">back to list</a>
+   <div class="item"> <a href="{{ path('app_equipe_index') }}" class="btn small club-top-btn">back to list</a> </div>
 
     {{ include('equipe/_delete_form.html.twig') }}
 {% endblock %}

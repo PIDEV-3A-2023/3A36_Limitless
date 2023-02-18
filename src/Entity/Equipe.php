@@ -5,6 +5,7 @@ namespace App\Entity;
 use App\Repository\EquipeRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 #[ORM\Entity(repositoryClass: EquipeRepository::class)]
@@ -16,6 +17,7 @@ class Equipe
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
+    
     private ?string $nom_equipe = null;
 
     #[ORM\Column(length: 255)]
@@ -37,6 +39,9 @@ class Equipe
 
     #[ORM\OneToMany(mappedBy: 'id_equipe', targetEntity: Sponsor::class)]
     private Collection $sponsors;
+
+    #[ORM\Column(type: Types::DATE_MUTABLE)]
+    private ?\DateTimeInterface $date_creation = null;
 
     public function __construct()
     {
@@ -139,6 +144,18 @@ class Equipe
                 $sponsor->setIdEquipe(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getDateCreation(): ?\DateTimeInterface
+    {
+        return $this->date_creation;
+    }
+
+    public function setDateCreation(\DateTimeInterface $date_creation): self
+    {
+        $this->date_creation = $date_creation;
 
         return $this;
     }

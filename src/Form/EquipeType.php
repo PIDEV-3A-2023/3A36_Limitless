@@ -8,6 +8,7 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Validator\Constraints\Length;
+use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Validator\Constraints\Url;
@@ -59,7 +60,17 @@ class EquipeType extends AbstractType
                     ]),
                 ],
             ])
-        ;
+            ->add('date_creation', DateType::class, [
+                'constraints' => [
+                    new NotBlank([
+                        'message' => 'La date de création ne peut pas être vide.',
+                    ]),
+                    new LessThanOrEqual([
+                        'value' => 'today',
+                        'message' => 'La date de création doit être antérieure ou égale à la date actuelle.',
+                    ]),
+                ],
+            ]);
     }
 
     public function configureOptions(OptionsResolver $resolver): void

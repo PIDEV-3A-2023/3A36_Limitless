@@ -3,69 +3,102 @@
 {% block title %}Equipe index{% endblock %}
 
 {% block body %}
-   <div class="main-panel">
+    <div class="main-panel">
           <div class="content-wrapper">
             <div class="page-header">
-              <h3 class="page-title"> Basic Tables </h3>
+              <h3 class="page-title"> Equipes </h3>
               <nav aria-label="breadcrumb">
                 <ol class="breadcrumb">
                   <li class="breadcrumb-item"><a href="#">Tables</a></li>
-                  <li class="breadcrumb-item active" aria-current="page">Basic tables</li>
                 </ol>
               </nav>
             </div>
-            <div class="row">
-              <div class="col-lg-6 grid-margin stretch-card">
+            
+              <div class="col-lg-12 grid-margin stretch-card">
                 <div class="card">
                   <div class="card-body">
-                    <h4 class="card-title">Basic Table</h4>
-                    <p class="card-description"> Add class <code>.table</code>
-                    </p>
+                    <h4 class="card-title">Table d'équipe</h4>
+                    <div class="d-flex justify-content-end mt-3 mb-3">
+                        <a href="{{ path('app_equipeback_new') }}" class="btn btn-success">Ajout</a>
+                        </div>
                     <div class="table-responsive">
-                      <table class="table">
+                      <table class="table table-striped">
                         <thead>
             <tr>
-                <th>Id</th>
-                <th>Nom_equipe</th>
-                <th>Description_equipe</th>
-                <th>Nb_joueurs</th>
+                
                 <th>Logo_equipe</th>
+                <th>Nom_equipe</th>               
+                <th>Nb_joueurs</th>                
                 <th>Site_web</th>
+                <th>Date_creation</th>
                 <th>actions</th>
             </tr>
 
 
         </thead>
+        {% for equipe in equipes %}
         <tbody>
 
 
 
-        {% for equipe in equipes %}
 
             <tr>
-                <td>{{ equipe.id }}</td>
-                <td>{{ equipe.nomEquipe }}</td>
-                <td>{{ equipe.descriptionEquipe }}</td>
-                <td>{{ equipe.nbJoueurs }}</td>
-                <td>{{ equipe.logoEquipe }}</td>
+                
+               
+                <td><a  class="custom-logo-link"><img src="{{asset('equipeImages/'~equipe.logoEquipe)}}" alt="logo" class="custom-logo"></a></td>          
+                 <td>{{ equipe.nomEquipe }}</td> 
+                <td>{{ equipe.nbJoueurs }}</td>            
                 <td>{{ equipe.siteWeb }}</td>
+                <td>{{equipe.dateCreation ? equipe.dateCreation|date("m/d/y") }}</td>
                 <td>
-                    <a href="{{ path('app_equipeback_show', {'id': equipe.id}) }}">show</a>
-                    <a href="{{ path('app_equipeback_edit', {'id': equipe.id}) }}">edit</a>
+                    
+                    <a class="btn btn-primary" href="{{ path('app_equipeback_edit', {'id': equipe.id}) }}"><i class="mdi mdi-pencil"></i></a>
+                     <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#deleteModal{{ loop.index }}">
+                <i class="mdi mdi-delete"></i>
+            </button>
+<!-- Delete Modal -->
+<div class="modal fade" id="deleteModal{{ loop.index }}" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+        
+            <div class="modal-header">
+                <h5 class="modal-title" id="deleteModalLabel">Confirmation du supprission</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+
+            <div class="modal-body">
+                Êtes-vous sûr de vouloir supprimer cet élément?
+            </div>
+
+            <div class="modal-footer">
+                <form method="post" action="{{ path('app_equipeback_delete', {'id': equipe.id}) }}">
+                    <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ equipe.id) }}">
+                    <button type="submit" class="btn btn-danger">oui</button>
+                </form>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Non</button>
+            </div>
+
+        </div>
+    </div>
+</div>
                 </td>
             </tr>
         {% else %}
             <tr>
                 <td colspan="7">no records found</td>
             </tr>
-        {% endfor %}
+    
         </tbody>
+        {% endfor %}
     </table>
         
-                    </div>
+                     </div>
                   </div>
                 </div>
               </div>
-    <a href="{{ path('app_equipeback_new') }}">Create new</a>
+            </div>
+        </div>
 {% endblock %}
 
