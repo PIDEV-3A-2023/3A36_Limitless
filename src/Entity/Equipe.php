@@ -39,11 +39,7 @@ class Equipe
     private ?string $logo_equipe = null;
 
     #[ORM\Column(length: 255)]
-    /**
-     * @Assert\Url(
-     *    message = "The url '{{ value }}' is not a valid url",
-     * )
-     */
+    
     #[Assert\NotBlank(message:"veuillez choisir un site web")]
     private ?string $site_web = null;
 
