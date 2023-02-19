@@ -36,13 +36,13 @@
 
         <div class="form-group">
         <div class="form-group">
-        {{ form_label(form.id_equipe,"Nom équipe") }}
+        {{ form_label(form.id_equipe,"Nom équipe sponsorisée") }}
         {{ form_widget(form.id_equipe,{'attr': {'class': 'form-control'}})}}
         {{ form_errors(form.id_equipe) }}
         </div>
 
-   <button class="btn btn-primary mr-2">{{ button_label|default('Save') }}</button>
-        <a href="{{ path('app_sponsorback_index') }}">Retour</a>
+   <button class="btn btn-primary mr-2">{{ button_label|default('Enregistrer') }}</button>
+        <a class="btn btn-primary mr-2" href="{{ path('app_sponsorback_index') }}">Retour à la liste</a>
 {{ form_end(form) }}
 
   </div>

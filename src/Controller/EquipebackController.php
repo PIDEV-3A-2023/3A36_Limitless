@@ -9,6 +9,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Form\FormInterface;
 
 #[Route('/equipeback')]
 class EquipebackController extends AbstractController
@@ -48,6 +49,7 @@ class EquipebackController extends AbstractController
                 // instead of its contents
                 $equipe->setLogoEquipe($filename);
             }
+            $equipe->setDateCreation(new \DateTime());
             $equipeRepository->save($equipe, true);
             return $this->redirectToRoute('app_equipeback_index', [], Response::HTTP_SEE_OTHER);
         }

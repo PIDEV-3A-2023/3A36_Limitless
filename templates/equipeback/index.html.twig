@@ -50,7 +50,7 @@
                  <td>{{ equipe.nomEquipe }}</td> 
                 <td>{{ equipe.nbJoueurs }}</td>            
                 <td>{{ equipe.siteWeb }}</td>
-                <td>{{equipe.dateCreation ? equipe.dateCreation|date("m/d/y") }}</td>
+                <td>{{equipe.dateCreation ? equipe.dateCreation|date('Y-m-d H:i') }}</td>
                 <td>
                     
                     <a class="btn btn-primary" href="{{ path('app_equipeback_edit', {'id': equipe.id}) }}"><i class="mdi mdi-pencil"></i></a>
@@ -91,7 +91,7 @@
             </tr>
         {% else %}
             <tr>
-                <td colspan="7">no records found </td>
+                <td colspan="7">Aucun enregistrement trouvé </td>
             </tr>
     
         </tbody>

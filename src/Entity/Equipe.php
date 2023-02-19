@@ -16,8 +16,9 @@ class Equipe
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(length: 255)] 
     
+    #[Assert\NotBlank(message:"Le nom est obligatoire")]
     private ?string $nom_equipe = null;
 
     #[ORM\Column(length: 255)]
@@ -37,7 +38,7 @@ class Equipe
      */
     private ?string $site_web = null;
 
-    #[ORM\OneToMany(mappedBy: 'id_equipe', targetEntity: Sponsor::class)]
+    #[ORM\OneToMany(mappedBy: 'id_equipe', targetEntity: Sponsor::class, cascade: ["remove"], orphanRemoval: true)]
     private Collection $sponsors;
 
     #[ORM\Column(type: Types::DATE_MUTABLE)]

@@ -1,17 +1,17 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Sponsor index{% endblock %}
+{% block title %}les sponsors{% endblock %}
 
 {% block body %}
-    <h1>Sponsor index</h1>
+    <h1>les sponsors</h1>
 
     <table class="table">
         <thead>
             <tr>
-                <th>Id</th>
-                <th>Nom_sponsor</th>
-                <th>Description_sponsor</th>
+                
                 <th>Logo_sponsor</th>
+                <th>Nom_sponsor</th>
+                
                 <th>Site_webs</th>
                 <th>actions</th>
             </tr>
@@ -19,14 +19,14 @@
         <tbody>
         {% for sponsor in sponsors %}
             <tr>
-                <td>{{ sponsor.id }}</td>
+                
+                <td><a  class="custom-logo-link"><img src="{{asset('sponsorImages/'~sponsor.logoSponsor)}}" alt="logo" class="custom-logo"></a></td>
                 <td>{{ sponsor.nomSponsor }}</td>
-                <td>{{ sponsor.descriptionSponsor }}</td>
-                <td>{{ sponsor.logoSponsor }}</td>
+                
                 <td>{{ sponsor.siteWebs }}</td>
                 <td>
-                    <a href="{{ path('app_sponsor_show', {'id': sponsor.id}) }}">show</a>
-                    <a href="{{ path('app_sponsor_edit', {'id': sponsor.id}) }}">edit</a>
+                    <a href="{{ path('app_sponsor_show', {'id': sponsor.id}) }}">Détails</a>
+                   
                 </td>
             </tr>
         {% else %}
@@ -37,5 +37,5 @@
         </tbody>
     </table>
 
-    <a href="{{ path('app_sponsor_new') }}">Create new</a>
+    <a href="{{ path('app_sponsor_new') }}"></a>
 {% endblock %}

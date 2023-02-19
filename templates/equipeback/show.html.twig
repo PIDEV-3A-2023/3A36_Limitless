@@ -33,12 +33,12 @@
             </tr>
             <tr>
                 <th>Date_creation</th>
-                <td>{{ equipe.dateCreation|date("m/d/y") }}</td>
+                <td>{{ equipe.dateCreation|date('Y-m-d H:i') }}</td>
             </tr>
         </tbody>
+    <a  href="{{ path('app_equipeback_index') }}">back to list</a>
     </table>
 
-    <a href="{{ path('app_equipeback_index') }}">back to list</a>
 
     
 {% endblock %}

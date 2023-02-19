@@ -1,30 +1,9 @@
- <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#deleteModal{{ loop.index }}">
-                DELETE
-            </button>
-<!-- Delete Modal -->
-<div class="modal fade" id="deleteModal{{ loop.index }}" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-        
-            <div class="modal-header">
-                <h5 class="modal-title" id="deleteModalLabel">Confirmation du supprission</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
+ 
+<form method="post" action="{{ path('app_equipe_delete', {'id': equipe.id}) }}" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer cet élément ?')">
+    <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ equipe.id) }}">
+    <button class="btn btn-danger" data-toggle="modal" data-target="#deleteModal"><i class="mdi mdi-delete"></i></button>
 
-            <div class="modal-body">
-                Êtes-vous sûr de vouloir supprimer cet élément?
-            </div>
 
-            <div class="modal-footer">
-                <form method="post" action="{{ path('app_equipe_delete', {'id': equipe.id}) }}">
-                    <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ equipe.id) }}">
-                    <button type="submit" class="btn btn-danger">oui</button>
-                </form>
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Non</button>
-            </div>
-
-        </div>
-    </div>
-</div>
+</form>
+ 
+ 

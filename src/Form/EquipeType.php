@@ -60,17 +60,9 @@ class EquipeType extends AbstractType
                     ]),
                 ],
             ])
-            ->add('date_creation', DateType::class, [
-                'constraints' => [
-                    new NotBlank([
-                        'message' => 'La date de création ne peut pas être vide.',
-                    ]),
-                    new LessThanOrEqual([
-                        'value' => 'today',
-                        'message' => 'La date de création doit être antérieure ou égale à la date actuelle.',
-                    ]),
-                ],
-            ]);
+       
+           
+            ;
     }
 
     public function configureOptions(OptionsResolver $resolver): void

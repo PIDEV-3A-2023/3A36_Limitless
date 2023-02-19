@@ -3,7 +3,7 @@
         <div class="card-body">
         <h4 class="card-title"></h4>
         <p class="card-description"> <br></p>
-{{ form_start(form, {attr: {novalidate: 'novalidate'}}) }}
+{{ form_start(form, {attr: {'novalidate': 'novalidate'}}) }}
   <h1>Equipe</h1>
     <div class="form-group">
         <div class="form-group">
@@ -48,8 +48,8 @@
 #}
     
 
-     <button class="btn btn-primary mr-2">{{ button_label|default('Save') }}</button>
-        <a href="{{ path('app_equipeback_index') }}">{{ button_label|default('Retour') }}</a>
+     <button class="btn btn-primary mr-2">{{ button_label|default('Enregistrer') }}</button>
+        <a class="btn btn-primary mr-2" href="{{ path('app_equipeback_index') }}">{{ button_label|default('Retour à la liste') }}</a>
 {{ form_end(form) }}
 
   </div>

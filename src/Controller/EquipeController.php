@@ -34,6 +34,7 @@ class EquipeController extends AbstractController
             // If a file was uploaded
             if ($file) {
                 $filename = uniqid() . '.' . $file->guessExtension();
+
                 // Move the file to the directory where brochures are stored
                 $file->move(
                     'equipeImages',
@@ -43,6 +44,7 @@ class EquipeController extends AbstractController
                 // instead of its contents
                 $equipe->setLogoEquipe($filename);
             }
+            $equipe->setDateCreation(new \DateTime());
             $equipeRepository->save($equipe, true);
             return $this->redirectToRoute('app_equipe_index', [], Response::HTTP_SEE_OTHER);
         }
