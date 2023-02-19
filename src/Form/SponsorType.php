@@ -11,6 +11,8 @@ use Symfony\Component\Validator\Constraints\Length;
 use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Validator\Constraints\Url;
+use Symfony\Component\Validator\Constraints\Image;
+use Symfony\Component\Validator\Constraints\File;
 class SponsorType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
@@ -40,6 +42,13 @@ class SponsorType extends AbstractType
                 'constraints' => [
                     new Url([
                         'message' => "L'URL n'est pas valide.",
+                    ]),
+                    new File([
+                        'mimeTypes' => [
+                            'image/jpeg',
+                            'image/png',
+                        ],
+                        'mimeTypesMessage' => 'Le logo doit être une image JPEG ou PNG',
                     ]),
                 ],
             ])

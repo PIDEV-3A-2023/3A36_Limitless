@@ -12,6 +12,8 @@ use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Validator\Constraints\Url;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
+use Symfony\Component\Validator\Constraints\Image;
+use Symfony\Component\Validator\Constraints\File;
 class Sponsor1Type extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
@@ -46,6 +48,13 @@ class Sponsor1Type extends AbstractType
                 'constraints' => [
                     new NotBlank([
                         'message' => 'Le logo est obligatoire',
+                    ]),
+                    new File([
+                        'mimeTypes' => [
+                            'image/jpeg',
+                            'image/png',
+                        ],
+                        'mimeTypesMessage' => 'Le logo doit être une image JPEG ou PNG',
                     ]),
                 ],
             ]
