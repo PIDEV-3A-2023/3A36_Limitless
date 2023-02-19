@@ -1,0 +1,29 @@
+ {% extends 'back.html.twig' %} 
+{% block title  %} Jeux {% endblock %}
+        {% block body %}
+        <div class="main-panel">
+          <div class="content-wrapper">
+            <div class="page-header">
+              <h3 class="page-title"> Form </h3>
+            </div>
+            
+
+              <div class="col-12 grid-margin">
+                <div class="card">
+                  <div class="card-body">
+                    <h4 class="card-title">Ajouter ou modifier un jeux</h4>
+                {{ include('jeux/_form.html.twig', {'button_label': 'Update'}) }}
+
+
+                </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- content-wrapper ends -->
+          <!-- partial:../../partials/_footer.html -->
+
+          <!-- partial -->
+        </div>
+        <!-- main-panel ends -->
+      {% endblock %}

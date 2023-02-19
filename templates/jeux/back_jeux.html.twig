@@ -1,0 +1,103 @@
+ {% extends 'back.html.twig' %} 
+{% block title  %}  Jeux {% endblock %}
+        
+        {% block body %}
+        <!-- partial -->
+        <div class="main-panel">
+          <div class="content-wrapper">
+            <div class="page-header">
+              <h3 class="page-title"> Jeux </h3>
+              <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                  <li class="breadcrumb-item"><a href="#">Tables</a></li>
+                </ol>
+              </nav>
+            </div>
+            
+              <div class="col-lg-12 grid-margin stretch-card">
+                <div class="card">
+                  <div class="card-body">
+                    <h4 class="card-title">Table de Jeux</h4>
+                    <div class="d-flex justify-content-end mt-3 mb-3">
+                        <a href="{{ path('app_jeux_new') }}" class="btn btn-success">Ajout</a>
+                        </div>
+                    <div class="table-responsive">
+                      <table class="table table-striped">
+                        <thead>
+                          <tr>
+                            <th> Logo </th>
+                            <th> Reference </th>
+                            <th> Nom </th>
+                            <th> Catgories </th>
+                            <th> Type </th>
+                            <th> Actions </th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                        {% for jeux in jeuxes %}
+                          <tr>
+                            <td class="py-1">
+                              <img src="{{asset('JeuxImages/'~jeux.LogoJeux)}}" />
+                            </td>
+                            <td>{{ jeux.ref }}</td>
+                            <td>{{ jeux.libelle }}</td>
+                            <td>
+                            {% for categorie in jeux.categories %}
+                            {{ categorie.NomCat }}{% if not loop.last %}, {% endif %}
+                            {% endfor %}</td>
+                            <td>
+                            {% for type in jeux.types %}
+                            {{ type.NomType }}{% if not loop.last %}, {% endif %}
+                            {% endfor %}</td>
+                            
+                              <td>
+                              
+                              <a href="{{ path('app_jeux_edit', {'id': jeux.id}) }}" class="btn btn-primary">
+                                  <i class="mdi mdi-pencil"></i>
+                              </a>
+                              <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#deleteModal{{ loop.index }}">
+                                <i class="mdi mdi-delete"></i>
+                              </button>
+<!-- Delete Modal -->
+<div class="modal fade" id="deleteModal{{ loop.index }}" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="deleteModalLabel">Confirmation du supprission</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                Êtes-vous sûr de vouloir supprimer cet élément?
+            </div>
+            <div class="modal-footer">
+                <form method="post" action="{{ path('app_jeux_delete', {'id': jeux.id}) }}">
+                    <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ jeux.id) }}">
+                    <button type="submit" class="btn btn-danger">oui</button>
+                </form>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Non</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+                            </td>
+                          </tr>
+                          {% else %}
+                              <tr>
+                              <td colspan="5">no records found</td>
+                            </tr>
+                          {% endfor %}
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+        </div>
+        <!-- content-wrapper ends -->
+        <!-- partial:../../partials/_footer.html -->
+        <!-- partial -->
+       {% endblock %} 

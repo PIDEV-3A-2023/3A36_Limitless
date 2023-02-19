@@ -1,0 +1,18 @@
+
+{{ form_start(form,{'attr': {'class': 'form-sample', 'novalidate': 'novalidate'}} ) }}
+    
+    <div class="row">
+        <div class="col-md-6">
+            <div class="form-group row">
+                <label class="col-sm-3 col-form-label">{{ form_label(form.NomCat,"Nom Categorie")}}</label>
+                <div class="col-sm-9">
+                    {{ form_widget(form.NomCat, {'attr': {'class': 'form-control'}}) }}
+                    {{ form_errors(form.NomCat) }}
+                </div>
+            </div>
+        </div>
+        <div class="d-flex justify-content-end mt-3 mb-3">
+        <button type="submit" class="btn btn-success">{{ button_label|default('Save') }}</button>
+    </div>
+    </div>
+{{ form_end(form) }}
