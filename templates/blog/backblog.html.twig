@@ -46,13 +46,13 @@
                             {% if blog.etat == 0 %}
                             <td><label class="badge badge-warning">En attente</label></td>
                             {% elseif blog.etat == 1 %}
-                            <td><label class="badge badge-danger">Réfuser</label></td>
+                            <td><label class="badge badge-danger"><i class="mdi mdi-block-helper"></i></label></td>
                             {% elseif blog.etat == 2 %}
-                            <td><label class="badge badge-success">Approuver</label></td>
+                            <td><label class="badge badge-success"><i class="mdi mdi-check"></i></label></td>
                             {% endif %}
 
                             <td>
-                            <button type="button" data-toggle="modal" data-target="#declinModal{{ loop.index }}" class="badge badge-danger">Réfuser</button>
+                            <button type="button" data-toggle="modal" data-target="#declinModal{{ loop.index }}" class="badge badge-danger"><i class="mdi mdi-block-helper"></i></button>
 
 <div class="modal fade" id="declinModal{{ loop.index }}" tabindex="-1" role="dialog" aria-labelledby="declinModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
@@ -83,7 +83,9 @@
                             </td>
 
                             <td>
-                            <button type="button" data-toggle="modal" data-target="#approuveModal{{ loop.index }}" class="badge badge-success">Approuver</button>
+                            <button type="button" data-toggle="modal" data-target="#approuveModal{{ loop.index }}" class="badge badge-success"> 
+                            <i class="mdi mdi-check"></i>
+                            </button>
 
 <div class="modal fade" id="approuveModal{{ loop.index }}" tabindex="-1" role="dialog" aria-labelledby="approuveModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
@@ -114,7 +116,7 @@
                             </td>
 
                             <td>
-                                <a href="{{ path('app_blog_show', {'id': blog.id}) }}" class="btn btn-primary"> Voir <i class="mdi mdi-chevron-right"></i> </a>
+                                <a href="{{ path('app_blog_show', {'id': blog.id}) }}" class="btn btn-primary"> <i class="mdi mdi-eye"> </i> </a>
 
                                 <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#deleteModal{{ loop.index }}">
                                 <i class="mdi mdi-delete"></i>
