@@ -3,7 +3,7 @@
 {% block title %}New Equipe{% endblock %}
 
 {% block body %}
-    <h1>Create new Equipe</h1>
+    <h1>Ajouter une equipe</h1>
 <center><div class="leave-comment-wrap">
 {{ form_start(form) }}
 <div class="row">
@@ -89,7 +89,7 @@
 										
 
     {{ include('equipe/_form.html.twig') }}
-    <a href="{{ path('app_equipe_index') }}">back to list</a>
+    <a class="btn" href="{{ path('app_equipe_index') }}">Retour à la liste</a>
 {{form_end(form)}}
 
 		

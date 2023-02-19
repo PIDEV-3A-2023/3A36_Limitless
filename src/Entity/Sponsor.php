@@ -3,10 +3,12 @@
 namespace App\Entity;
 
 use App\Repository\SponsorRepository;
-
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Component\Validator\Constraints\NotBlank;
 #[ORM\Entity(repositoryClass: SponsorRepository::class)]
+#[UniqueEntity(fields: ['nom_sponsor'], message: 'nom d equipe déja utilisé')]
 class Sponsor
 {
     #[ORM\Id]
@@ -15,18 +17,23 @@ class Sponsor
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
+    #[Assert\NotBlank(message:"veuillez choisir un nom de sponsor")]
     private ?string $nom_sponsor = null;
 
     #[ORM\Column(length: 255)]
+    #[Assert\NotBlank(message:"veuillez choisir une description du sponsor")]
     private ?string $description_sponsor = null;
 
     #[ORM\Column(length: 255)]
+     
     private ?string $logo_sponsor = null;
 
     #[ORM\Column(length: 255)]
+    #[Assert\NotBlank(message:"veuillez choisir un site web")]
     private ?string $site_webs = null;
 
     #[ORM\ManyToOne(inversedBy: 'sponsors')]
+    #[Assert\NotBlank(message:"veuillez choisir une equipe à sponsoriser")]
     private ?Equipe $id_equipe = null;
 
     public function getId(): ?int

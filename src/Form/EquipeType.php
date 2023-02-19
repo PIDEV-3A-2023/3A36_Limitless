@@ -15,14 +15,16 @@ use Symfony\Component\Validator\Constraints\Url;
 use Symfony\Component\Validator\Constraints\Range;
 use Symfony\Component\Validator\Constraints\GreaterThanOrEqual;
 use Symfony\Component\Validator\Constraints\LessThanOrEqual;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 class EquipeType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
             ->add('nom_equipe' ,TextType::class, [
+                'required' => false,
                 'constraints' => [
-                    new NotBlank(),
+                   
                     new Length([
                         'min' => 3,
                         'max' => 15,
@@ -31,10 +33,18 @@ class EquipeType extends AbstractType
                     ]),
                 ],
             ])
-            ->add('description_equipe')
+             ->add('description_equipe', TextareaType::class, [
+            'label' => 'Description de l\'équipe',
+            'required' => false,
+            'attr' => [
+                'rows' => 5,
+                'cols' => 50
+            ],
+        ])
             ->add('nb_joueurs' , null, [
+                'required' => false,
                 'constraints' => [
-                    new NotBlank(),
+                    
                     new GreaterThanOrEqual([
                         'value' => 1,
                         'message' => 'Le nombre de joueurs doit être supérieur à {{ compared_value }}'
@@ -51,9 +61,15 @@ class EquipeType extends AbstractType
                 'label' => 'logo',
                 'mapped' => false,
                 'required' => false,
+                'constraints' => [
+                    new NotBlank([
+                        'message' => 'Le logo est obligatoire',
+                    ]),
+                ],
             ]
         ) 
             ->add('site_web', TextType::class, [
+                'required' => false,
                 'constraints' => [
                     new Url([
                         'message' => "L'URL n'est pas valide.",

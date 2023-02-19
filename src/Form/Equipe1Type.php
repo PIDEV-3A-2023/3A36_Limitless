@@ -23,9 +23,9 @@ class Equipe1Type extends AbstractType
     {
         $builder
         ->add('nom_equipe' ,TextType::class, [
-            
+            'required' => false,
             'constraints' => [
-                new NotBlank(),
+                
                 new Length([
                     'min' => 3,
                     'max' => 15,
@@ -45,8 +45,8 @@ class Equipe1Type extends AbstractType
         ])
         
         ->add('nb_joueurs' , null, [
+            'required' => false,
             'constraints' => [
-                new NotBlank(),
                 new GreaterThanOrEqual([
                     'value' => 1,
                     'message' => 'Le nombre de joueurs doit être supérieur à {{ compared_value }}'
@@ -63,9 +63,15 @@ class Equipe1Type extends AbstractType
             'label' => 'logo',
             'mapped' => false,
             'required' => false,
+            'constraints' => [
+                new NotBlank([
+                    'message' => 'Le logo est obligatoire',
+                ]),
+            ],
         ]
     ) 
         ->add('site_web', TextType::class, [
+            'required' => false,
             'constraints' => [
                 new Url([
                     'message' => "L'URL n'est pas valide.",

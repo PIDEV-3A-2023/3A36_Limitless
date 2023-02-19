@@ -3,31 +3,36 @@
 {% block title %}Sponsor{% endblock %}
 
 {% block body %}
-    <h1>Sponsor</h1>
+    <h1>Détails sponsor</h1>
 
     <table class="table">
         <tbody>
             
             <tr>
-                <th>Nom_sponsor</th>
+                <th>Nom du sponsor</th>
                 <td>{{ sponsor.nomSponsor }}</td>
             </tr>
             <tr>
-                <th>Description_sponsor</th>
-                <td>{{ sponsor.descriptionSponsor }}</td>
+                <th>Description du sponsor</th>
+                
+                 <td style="white-space: pre-line;">{{ sponsor.descriptionSponsor|nl2br }}</td>
             </tr>
             <tr>
-                <th>Logo_sponsor</th>
+                <th>Logo du sponsor</th>
                 <td>{{ sponsor.logoSponsor }}</td>
             </tr>
             <tr>
-                <th>Site_webs</th>
+                <th>Nom équipe sponsoriseé</th>
+                <td>{{ sponsor.IdEquipe }}</td>
+            </tr>
+            <tr>
+                <th>Site web</th>
                  <td><a href="{{ sponsor.siteWebs }}">{{ sponsor.siteWebs }}</a></td>
             </tr>
         </tbody>
     </table>
 
-    <a href="{{ path('app_sponsor_index') }}">Retour à la liste</a>
+    <a class="btn" href="{{ path('app_sponsor_index') }}">Retour à la liste</a>
 
     
 

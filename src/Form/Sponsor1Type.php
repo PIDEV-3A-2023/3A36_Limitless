@@ -18,8 +18,9 @@ class Sponsor1Type extends AbstractType
     {
         $builder
             ->add('nom_sponsor'  ,TextType::class, [
+                'required' => false,
                 'constraints' => [
-                    new NotBlank(),
+                    
                     new Length([
                         'min' => 3,
                         'max' => 15,
@@ -42,9 +43,15 @@ class Sponsor1Type extends AbstractType
                 'label' => 'logo',
                 'mapped' => false,
                 'required' => false,
+                'constraints' => [
+                    new NotBlank([
+                        'message' => 'Le logo est obligatoire',
+                    ]),
+                ],
             ]
         ) 
             ->add('site_webs'  , TextType::class, [
+                'required' => false,
                 'constraints' => [
                     new Url([
                         'message' => "L'URL n'est pas valide.",

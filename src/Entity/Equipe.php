@@ -8,7 +8,10 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Symfony\Component\Validator\Constraints\NotBlank;
 #[ORM\Entity(repositoryClass: EquipeRepository::class)]
+#[UniqueEntity(fields: ['nom_equipe'], message: 'nom d equipe déja utilisé')]
 class Equipe
 {
     #[ORM\Id]
@@ -17,14 +20,19 @@ class Equipe
     private ?int $id = null;
 
     #[ORM\Column(length: 255)] 
-    
-    #[Assert\NotBlank(message:"Le nom est obligatoire")]
+    #[Assert\NotBlank(message:"veuillez choisir un nom d equipe")]
     private ?string $nom_equipe = null;
 
     #[ORM\Column(length: 255)]
+    #[Assert\NotBlank(message:"veuillez choisir une description d'equipe")]
     private ?string $description_equipe = null;
 
     #[ORM\Column]
+     /**
+     * @ORM\Column(type="integer")
+     
+     * @Assert\NotBlank(message="Le nombre de joueurs est obligatoire")
+     */
     private ?int $nb_joueurs = null;
 
     #[ORM\Column(length: 255)]
@@ -36,6 +44,7 @@ class Equipe
      *    message = "The url '{{ value }}' is not a valid url",
      * )
      */
+    #[Assert\NotBlank(message:"veuillez choisir un site web")]
     private ?string $site_web = null;
 
     #[ORM\OneToMany(mappedBy: 'id_equipe', targetEntity: Sponsor::class, cascade: ["remove"], orphanRemoval: true)]

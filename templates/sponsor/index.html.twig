@@ -9,10 +9,10 @@
         <thead>
             <tr>
                 
-                <th>Logo_sponsor</th>
-                <th>Nom_sponsor</th>
+                <th>Logo du sponsor</th>
+                <th>Nom du sponsor</th>
                 
-                <th>Site_webs</th>
+                <th>Site web</th>
                 <th>actions</th>
             </tr>
         </thead>
@@ -25,13 +25,13 @@
                 
                 <td>{{ sponsor.siteWebs }}</td>
                 <td>
-                    <a href="{{ path('app_sponsor_show', {'id': sponsor.id}) }}">Détails</a>
+                    <a class="btn" href="{{ path('app_sponsor_show', {'id': sponsor.id}) }}">Détails</a>
                    
                 </td>
             </tr>
         {% else %}
             <tr>
-                <td colspan="6">no records found</td>
+                <td colspan="6">Aucun enregistrement trouvé</td>
             </tr>
         {% endfor %}
         </tbody>
