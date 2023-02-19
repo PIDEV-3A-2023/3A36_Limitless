@@ -3,24 +3,42 @@
         {% block body %}
     {% if app.flashes('success') is not empty %}
     <div class="alert alert-success notification" role="alert">
-       Ajout effectué avec success
+       <center>Produit Ajouté avec succès...</center>
          
         <script>
             setTimeout(function() {
                 document.querySelector('.alert').style.display = 'none';
-            }, 6000);
+            }, 3000);
+        </script>
+    </div>
+{% endif %}
+ {% if app.flashes('delete') is not empty %}
+    <div class="alert alert-success notification" role="alert">
+       <center>Produit Supprimé avec succès...</center>
+         
+        <script>
+            setTimeout(function() {
+                document.querySelector('.alert').style.display = 'none';
+            }, 3000);
+        </script>
+    </div>
+{% endif %}
+{% if app.flashes('update') is not empty %}
+    <div class="alert alert-success notification" role="alert">
+       <center>Categorie Modifiée avec succès...</center>
+         
+        <script>
+            setTimeout(function() {
+                document.querySelector('.alert').style.display = 'none';
+            }, 3000);
         </script>
     </div>
 {% endif %}
         <div class="main-panel">
           <div class="content-wrapper">
             <div class="page-header">
-              <h3 class="page-title"> Produits </h3>
-              <nav aria-label="breadcrumb">
-                <ol class="breadcrumb">
-                  <li class="breadcrumb-item"><a href="#">Tables</a></li>
-                </ol>
-              </nav>
+              <h3 class="page-title"> Boutique </h3>
+              
             </div>
             
               <div class="col-lg-12 grid-margin stretch-card">
@@ -28,19 +46,20 @@
                   <div class="card-body">
                     <h4 class="card-title">Table de Produits</h4>
                     <div class="d-flex justify-content-end mt-3 mb-3">
-                        <a href="{{ path('app_produit_new') }}" class="btn btn-success">Ajout</a>
+                        <a href="{{ path('app_produit_new') }}" class="btn btn-success">+Ajout</a>
                         </div>
                     <div class="table-responsive">
                       <table class="table table-striped">
                         <thead>
                           <tr>
-                            <th class="h3 text-primary">REF</th>
+                            <th class="h3 text-primary">REFERENCE</th>
+                            <th class="h3 text-primary">IMAGE</th>
                             <th class="h3 text-primary">CATEGORIE</th>
                             <th class="h3 text-primary">NOM</th>
                             <th class="h3 text-primary">QUANTITE</th>
                             <th class="h3 text-primary">PRIX</th>
-                            <th class="h3 text-primary">IMAGE</th>
-                            <th class="h3 text-primary">Date</th>
+                            
+                            <th class="h3 text-primary">DATE</th>
                             <th class="h3 text-primary">ACTIONS</th>
                           </tr>
                         </thead>
@@ -48,11 +67,12 @@
                         {% for produit in produits %}
                           <tr>
                             <td>{{ produit.refer }}</td>
+                            <td><img class="img-xs rounded-circle " src="{{asset('images/common/'~produit.image)}}" alt=""></td>
                             <td>{{ produit.categorieProduit.nom }}</td>
                             <td>{{ produit.nom }}</td>
                             <td>{{ produit.quantite }}</td>
                             <td>{{ produit.prix }}</td>
-                            <td>{{ produit.quantite }}</td>
+                            
                             <td>{{ produit.dateProduit|date('Y-m-d H:i')}}</td>
                               <td>
                               

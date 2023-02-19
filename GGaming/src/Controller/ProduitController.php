@@ -11,6 +11,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\HttpFoundation\File\File;
 
 #[Route('/boutique')]
 class ProduitController extends AbstractController
@@ -66,6 +67,7 @@ class ProduitController extends AbstractController
             
             /** @var UploadedFile $file */
             $file = $form->get('image')->getData();
+            $produit->setPicture($file);
             // If a file was uploaded
             if ($file) {
                 $filename = uniqid() . '.' . $file->guessExtension();
@@ -79,7 +81,7 @@ class ProduitController extends AbstractController
                 $produit->setImage($filename);
             }
             //partie génération de référence:
-             $prefix = 'REF-'; // préfixe de la référence
+             $prefix = 'REF-PR-'; // préfixe de la référence
                 $timestamp = time(); // horodatage actuel
                 $random = mt_rand(1000, 9999); // nombre aléatoire à 4 chiffres
                 $reference = $prefix . $timestamp . '-' . $random;
@@ -91,7 +93,9 @@ class ProduitController extends AbstractController
 
 
             $produitRepository->save($produit, true);
-            $this->addFlash('success','Ajout effectué');
+             $session = $this->get('session');
+             $session->getFlashBag()->clear();
+             $this->addFlash('success','Ajout effectué');
 
             return $this->redirectToRoute('app_produit_showProduit', [], Response::HTTP_SEE_OTHER);
         }
@@ -115,8 +119,16 @@ class ProduitController extends AbstractController
     public function edit(Request $request, Produit $produit, ProduitRepository $produitRepository): Response
     {
         $form = $this->createForm(ProduitType::class, $produit);
-        $form->handleRequest($request);
-         /** @var UploadedFile $file 
+        
+         
+          $form->get('image')->setData($produit->getPicture());
+          $file = $form->get('image')->getData();
+          $form->handleRequest($request);
+        
+
+            
+        if ($form->isSubmitted() && $form->isValid()) {
+                /** @var UploadedFile $file */
             $file = $form->get('image')->getData();
             // If a file was uploaded
             if ($file) {
@@ -129,12 +141,12 @@ class ProduitController extends AbstractController
                 // Update the 'image' property to store the image file name
                 // instead of its contents
                 $produit->setImage($filename);
-            }*/
-        if ($form->isSubmitted() && $form->isValid()) {
-
+            }
             
             $produitRepository->save($produit, true);
-
+             $session = $this->get('session');
+             $session->getFlashBag()->clear();
+             $this->addFlash('update','Modification effectué');
             return $this->redirectToRoute('app_produit_showProduit', [], Response::HTTP_SEE_OTHER);
         }
 
@@ -149,7 +161,9 @@ class ProduitController extends AbstractController
     {
         if ($this->isCsrfTokenValid('delete'.$produit->getId(), $request->request->get('_token'))) {
             $produitRepository->remove($produit, true);
-            $this->addFlash('success', 'L\'élément a été supprimé avec succès.');
+             $session = $this->get('session');
+             $session->getFlashBag()->clear();
+             $this->addFlash('delete','Suppression effectué');
         }
 
         return $this->redirectToRoute('app_produit_showProduit', [], Response::HTTP_SEE_OTHER);

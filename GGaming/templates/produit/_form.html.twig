@@ -1,8 +1,9 @@
 
-{{ form_start(form,{'attr': {'class': 'form-sample', 'novalidate': 'novalidate'}} ) }}
+{{ form_start(form,{'attr': {'class': 'form-sample', 'novalidate': 'novalidate' ,'enctype': 'multipart/form-data'}} ) }}
 <br>
 <br>
 <br>
+
     <div class="row">
         <div class="col-md-6">
             <div class="form-group row">
@@ -66,7 +67,7 @@
             <div class="form-group row">
                 <label class="col-sm-3 col-form-label">{{ form_label(form.image,"") }}</label>
                 <div class="col-sm-9">
-                    {{ form_widget(form.image, {'attr': {'class': 'form-control'}}) }}
+                    {{ form_widget(form.image, {'attr': {'class': 'form-control-file'}}) }}
                    <div class="error">
                     {{ form_errors(form.image) }}
                     </div>

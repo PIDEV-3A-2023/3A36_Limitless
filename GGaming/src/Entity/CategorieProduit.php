@@ -5,6 +5,7 @@ namespace App\Entity;
 use App\Repository\CategorieProduitRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -20,8 +21,14 @@ class CategorieProduit
     #[ORM\Column(length: 255)]
     private ?string $nom = null;
 
-    #[ORM\OneToMany(mappedBy: 'categorieProduit', targetEntity: Produit::class)]
+    #[ORM\OneToMany(mappedBy: 'categorieProduit', targetEntity: Produit::class,cascade:['persist','remove'])]
     private Collection $produit;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $refer = null;
+
+    #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
+    private ?\DateTimeInterface $dateCreation = null;
 
     public function __construct()
     {
@@ -71,6 +78,30 @@ class CategorieProduit
                 $produit->setCategorieProduit(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getRefer(): ?string
+    {
+        return $this->refer;
+    }
+
+    public function setRefer(?string $refer): self
+    {
+        $this->refer = $refer;
+
+        return $this;
+    }
+
+    public function getDateCreation(): ?\DateTimeInterface
+    {
+        return $this->dateCreation;
+    }
+
+    public function setDateCreation(?\DateTimeInterface $dateCreation): self
+    {
+        $this->dateCreation = $dateCreation;
 
         return $this;
     }

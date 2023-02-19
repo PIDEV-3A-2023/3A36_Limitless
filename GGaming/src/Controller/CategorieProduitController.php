@@ -32,7 +32,18 @@ class CategorieProduitController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+
+            $prefix = 'REF-CA-'; // préfixe de la référence
+                $timestamp = time(); // horodatage actuel
+                $random = mt_rand(1000, 9999); // nombre aléatoire à 4 chiffres
+                $reference = $prefix . $timestamp . '-' . $random;
+
+                $categorieProduit->setRefer($reference);
+               $categorieProduit->setDateCreation(new \DateTime());
             $categorieProduitRepository->save($categorieProduit, true);
+            $session = $this->get('session');
+             $session->getFlashBag()->clear();
+             $this->addFlash('success','Ajout effectué');
 
             return $this->redirectToRoute('app_categorie_showCategorieProduit', [], Response::HTTP_SEE_OTHER);
         }
@@ -63,6 +74,9 @@ class CategorieProduitController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $categorieProduitRepository->save($categorieProduit, true);
+            $session = $this->get('session');
+             $session->getFlashBag()->clear();
+             $this->addFlash('update','Modification effectué');
 
             return $this->redirectToRoute('app_categorie_showCategorieProduit', [], Response::HTTP_SEE_OTHER);
         }
@@ -80,6 +94,9 @@ class CategorieProduitController extends AbstractController
       $categorieProduit=$categorieProduitRepository->find($id);
         if ($this->isCsrfTokenValid('delete'.$categorieProduit->getId(), $request->request->get('_token'))) {
             $categorieProduitRepository->remove($categorieProduit, true);
+            $session = $this->get('session');
+             $session->getFlashBag()->clear();
+             $this->addFlash('delete','Suppression effectué');
         }
 
         return $this->redirectToRoute('app_categorie_showCategorieProduit', [], Response::HTTP_SEE_OTHER);
