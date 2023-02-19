@@ -70,6 +70,23 @@ class SponsorController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+             /** @var UploadedFile $file */
+             $file = $form->get('logo_sponsor')->getData();
+
+             // If a file was uploaded
+             if ($file) {
+                 $filename = uniqid() . '.' . $file->guessExtension();
+ 
+                 // Move the file to the directory where brochures are stored
+                 $file->move(
+                     'sponsorImages',
+                     $filename
+                 );
+ 
+                 // Update the 'image' property to store the image file name
+                 // instead of its contents
+                 $sponsor->setLogoSponsor($filename);
+             }
             $sponsorRepository->save($sponsor, true);
 
             return $this->redirectToRoute('app_sponsor_index', [], Response::HTTP_SEE_OTHER);

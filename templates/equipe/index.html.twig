@@ -7,8 +7,8 @@
         <div class="container">
             <div class="row">
                 <div class="col-md-9">
-                    <h4>word club championship </h4>
-                    <div class="champ-date"><i class="fa fa-calendar" aria-hidden="true"></i>20 August 2016 - 16 may 2017</div>
+                    <h4>EQUIPE </h4>
+                    <div class="champ-date"><i class="fa fa-calendar" aria-hidden="true"></i></div>
                 </div>
            {% for equipe in equipes %}
                
@@ -30,7 +30,7 @@
                     <div class="item"><span>Date de creation :     </span>{{equipe.dateCreation|date("m/d/y")}}</div>
                     <div class="item"><span>Site web : </span> <a href="{{ equipe.siteWeb }}">{{ equipe.siteWeb }}</a></div>
                     <div class="col-md-7">
-                   <div class="item"> <a href="trophies.html" class="btn small club-top-btn">trophies</a> </div>
+                   <div class="item">{{ include('equipe/_delete_form.html.twig') }} </div>
                    <div class="item"> <a href="{{ path('app_equipe_edit', {'id': equipe.id}) }}" class="btn small club-top-btn">edit</a> </div>
                    <div class="item"> <a href="{{ path('app_sponsor_index') }}" class="btn small club-top-btn">sponsor</a> </div>
                 </div>

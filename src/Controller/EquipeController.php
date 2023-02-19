@@ -67,6 +67,20 @@ class EquipeController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+             /** @var UploadedFile $file */
+             $file = $form->get('logo_equipe')->getData();
+             // If a file was uploaded
+             if ($file) {
+                 $filename = uniqid() . '.' . $file->guessExtension();
+                 // Move the file to the directory where brochures are stored
+                 $file->move(
+                     'equipeImages',
+                     $filename
+                 );
+                 // Update the 'image' property to store the image file name
+                 // instead of its contents
+                 $equipe->setLogoEquipe($filename);
+             }
             $equipeRepository->save($equipe, true);
 
             return $this->redirectToRoute('app_equipe_index', [], Response::HTTP_SEE_OTHER);

@@ -17,7 +17,7 @@
               <div class="col-lg-12 grid-margin stretch-card">
                 <div class="card">
                   <div class="card-body">
-                    <h4 class="card-title">Table d'équipe</h4>
+                    <h4 class="card-title">Table des sponsors</h4>
                     <div class="d-flex justify-content-end mt-3 mb-3">
                         <a href="{{ path('app_sponsorback_new') }}" class="btn btn-success">Ajout</a>
                         </div>
@@ -29,8 +29,9 @@
                 <th>Logo_sponsor</th>
                 <th>Nom_sponsor</th>               
                 <th>Site_webs</th>
-                <th>Nom équipe</th>
+                <th>Nom équipe sponsoriseé</th>
                 <th>actions</th>
+                <th>Détails</th>
             </tr>
         </thead>
         <tbody>
@@ -74,6 +75,9 @@
     </div>
 </div>
                 </td>
+                <td>
+                  <a class="btn btn-primary" href="{{ path('app_sponsorback_show', {'id': sponsor.id}) }}"><i class="mdi mdi-view-headline"></i></a>
+                  </td>
             </tr>
         {% else %}
             <tr>

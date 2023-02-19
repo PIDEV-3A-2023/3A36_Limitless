@@ -32,6 +32,7 @@
                 <th>Site_web</th>
                 <th>Date_creation</th>
                 <th>actions</th>
+                <th>Détails</th>
             </tr>
 
 
@@ -84,6 +85,9 @@
     </div>
 </div>
                 </td>
+                <td>
+                  <a class="btn btn-primary" href="{{ path('app_equipeback_show', {'id': equipe.id}) }}"><i class="mdi mdi-view-headline"></i></a>
+                  </td>
             </tr>
         {% else %}
             <tr>

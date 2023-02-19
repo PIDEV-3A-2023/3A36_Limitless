@@ -41,6 +41,9 @@ class Equipe
     private Collection $sponsors;
 
     #[ORM\Column(type: Types::DATE_MUTABLE)]
+     /**
+     * @ORM\Column(type="datetime")
+     */
     private ?\DateTimeInterface $date_creation = null;
 
     public function __construct()
@@ -152,7 +155,9 @@ class Equipe
     {
         return $this->date_creation;
     }
-
+/**
+     * @ORM\PrePersist()
+     */
     public function setDateCreation(\DateTimeInterface $date_creation): self
     {
         $this->date_creation = $date_creation;
