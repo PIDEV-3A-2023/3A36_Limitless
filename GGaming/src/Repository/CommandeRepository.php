@@ -2,26 +2,26 @@
 
 namespace App\Repository;
 
-use App\Entity\CategorieProduit;
+use App\Entity\Commande;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
- * @extends ServiceEntityRepository<CategorieProduit>
+ * @extends ServiceEntityRepository<Commande>
  *
- * @method CategorieProduit|null find($id, $lockMode = null, $lockVersion = null)
- * @method CategorieProduit|null findOneBy(array $criteria, array $orderBy = null)
- * @method CategorieProduit[]    findAll()
- * @method CategorieProduit[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
+ * @method Commande|null find($id, $lockMode = null, $lockVersion = null)
+ * @method Commande|null findOneBy(array $criteria, array $orderBy = null)
+ * @method Commande[]    findAll()
+ * @method Commande[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class CategorieProduitRepository extends ServiceEntityRepository
+class CommandeRepository extends ServiceEntityRepository
 {
     public function __construct(ManagerRegistry $registry)
     {
-        parent::__construct($registry, CategorieProduit::class);
+        parent::__construct($registry, Commande::class);
     }
 
-    public function save(CategorieProduit $entity, bool $flush = false): void
+    public function save(Commande $entity, bool $flush = false): void
     {
         $this->getEntityManager()->persist($entity);
 
@@ -30,7 +30,7 @@ class CategorieProduitRepository extends ServiceEntityRepository
         }
     }
 
-    public function remove(CategorieProduit $entity, bool $flush = false): void
+    public function remove(Commande $entity, bool $flush = false): void
     {
         $this->getEntityManager()->remove($entity);
 
@@ -38,17 +38,9 @@ class CategorieProduitRepository extends ServiceEntityRepository
             $this->getEntityManager()->flush();
         }
     }
-     public function findCategoryByDate(): array
-   {
-       return $this->createQueryBuilder('c')          
-            ->orderBy('c.dateCreation', 'DESC')
-            ->getQuery()
-            ->getResult()
-        ;
-    }
 
 //    /**
-//     * @return CategorieProduit[] Returns an array of CategorieProduit objects
+//     * @return Commande[] Returns an array of Commande objects
 //     */
 //    public function findByExampleField($value): array
 //    {
@@ -62,7 +54,7 @@ class CategorieProduitRepository extends ServiceEntityRepository
 //        ;
 //    }
 
-//    public function findOneBySomeField($value): ?CategorieProduit
+//    public function findOneBySomeField($value): ?Commande
 //    {
 //        return $this->createQueryBuilder('c')
 //            ->andWhere('c.exampleField = :val')

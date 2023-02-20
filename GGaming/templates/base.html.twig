@@ -59,9 +59,9 @@
 				<nav class="navbar">
 					<div class="collapse navbar-collapse" id="team-menu">
 						<ul class="main-menu nav">
-							<li class="active">
+							<li >
 								<a href="{{path('app_index')}}">
-									<span>Acceuil</span>
+									<span>Accueil</span>
 								</a>
 							</li>
 							<li>
@@ -85,8 +85,8 @@
 									<span>Jeux</span>
 								</a>
 							</li>
-							<li>
-								<a href="store.html">
+							<li class="active">
+								<a href="{{path('app_produit_index')}}">
 									<span>Boutique</span>
 								</a>
 							</li>
@@ -120,37 +120,27 @@
 							</li>
 							
 							<li class="cart full">
-								<a href="#cart">
+								<a href="{{path('app_panier')}}">
 									<span>
 										<i class="fa fa-shopping-cart" aria-hidden="true"></i>
 									</span>
 								</a>
-								<div class="cart-drop">
+								<!--<div class="cart-drop">
 									<table class="ct">
+									   
 										<tr>
 											<td class="delete">
-												<a href="#">
+												<a href="">
 													<i class="fa fa-close" aria-hidden="true"></i>
 												</a>
 											</td>
 											<td class="info">
-												<img class="product-image" src="{{ asset('images/common/cart-product.jpg') }}" alt="product-image">
-												<em>Men's T-Shirt<br><em class="price">1 x £ 60</em>
+												<img class="product-image" src="" alt="product-image">
+												<em>nom<br><em class="price">18 x DT 18</em>
 												</em>
 											</td>
 										</tr>
-										<tr>
-											<td class="delete">
-												<a href="#">
-													<i class="fa fa-close" aria-hidden="true"></i>
-												</a>
-											</td>
-											<td class="info">
-												<img class="product-image" src="{{ asset('images/common/cart-product.jpg') }}" alt="product-image">
-												<em>Men's T-Shirt<br><em class="price">1 x £ 60</em>
-												</em>
-											</td>
-										</tr>
+										
 									</table>
 									<div class="wrap">
 										<div class="total-text">Subtotal:
@@ -158,10 +148,10 @@
 										<div class="total-digit">£ 120</div>
 									</div>
 									<div class="wrap btn-wrap">
-										<a href="cart.html" class="btn view">View cart</a>
+										<a href="" class="btn view">Voir Panier</a>
 										<a href="checkout.html" class="btn check">checkout cart</a>
 									</div>
-								</div>
+								</div>-->
 							</li>
 						</ul>
 					</div>
@@ -1687,23 +1677,26 @@
 						<div class="col-md-4 col-sm-12">
 							<div class="footer-left">
 								<div class="wrap">
-									<a href="index-2.html" class="foot-logo"><img src="{{ asset('images/soccer/footer-logo.png') }}" alt="footer-logo"></a>
-									<p>Activated charcoal trust fund ugh prism af, beard marfa air plant stumptown gastropub farm-to-table jianbing.</p>
+									<a href="index-2.html" class="foot-logo"><img src="{{ asset('images/soccer/logo.png') }}" alt="footer-logo"></a>
+									<p>Notre site de gaming est l'endroit idéal pour les joueurs passionnés. Nous offrons une large sélection de jeux pour toutes les plateformes, y compris les consoles de salon, les ordinateurs, les smartphones et les tablettes..</p>
 									<ul class="foot-left-menu">
 										<li>
-											<a href="staff.html">First team</a>
+											<a href="staff.html">Accueil</a>
 										</li>
 										<li>
-											<a href="staff.html">Second team</a>
+											<a href="staff.html">Tournois</a>
 										</li>
 										<li>
-											<a href="amateurs.html">Amateurs</a>
+											<a href="amateurs.html">Equipe</a>
 										</li>
 										<li>
-											<a href="donations.html">Donation</a>
+											<a href="donations.html">Jeux</a>
 										</li>
 										<li>
-											<a href="trophies.html">trophies</a>
+											<a href="trophies.html">Blog</a>
+										</li>
+										<li>
+											<a href="{{path('app_produit_index')}}">Boutique</a>
 										</li>
 									</ul>
 								</div>
@@ -1711,10 +1704,10 @@
 						</div>
 						<div class="col-md-4 col-sm-12 col-lg-offset-1">
 							<div class="foot-news">
-								<h4>Recent news</h4>
+								<h4>Nouvelles récentes</h4>
 								<div class="item">
 									<a href="news.html" class="image"><img class="img-responsive" src="{{ asset('images/soccer/foot-news-img.jpg') }}" alt="news-image"></a>
-									<a href="news.html" class="name">When somersaulting Sanchez shouldered Mexico’s hopes</a>
+									<a href="news.html" class="name">Quand le saut périlleux de Sanchez a épaulé les espoirs du Mexique</a>
 									<a href="news.html" class="date">25 Sep 2016</a>
 									<span class="separator">in</span>
 									<a href="news.html" class="category">Highlights</a>
@@ -1723,19 +1716,19 @@
 						</div>
 						<div class=" col-lg-3 col-md-4 col-sm-12">
 							<div class="foot-contact">
-								<h4>Contact us</h4>
+								<h4>Contactez-nous</h4>
 								<ul class="contact-list">
 									<li>
 										<i class="fa fa-flag" aria-hidden="true"></i>
-										<span>276 Upper Parliament Street, Liverpool L8, Great Britain</span>
+										<span>1,Rue André Ampère, Pole technologique El Ghazela</span>
 									</li>
 									<li>
 										<i class="fa fa-envelope" aria-hidden="true"></i>
-										<a href="mailto:team@email.com">team@email.com</a>
+										<a href="mailto:team@email.com">ggaming_esprit@esprit.tn</a>
 									</li>
 									<li class="phone">
 										<i class="fa fa-phone" aria-hidden="true"></i>
-										<span>+61 3 8376 6284</span>
+										<span>+216 58000000</span>
 									</li>
 								</ul>
 								<ul class="socials">

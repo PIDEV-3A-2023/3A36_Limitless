@@ -14,7 +14,7 @@
                 <div class="info">
                     <div class="wrap">
                         <ul class="breadcrumbs">
-                            <li><a href="index-2.html">Boutique</a>/</li>
+                            <li><a href="{{path('app_produit_index')}}">Boutique</a>/</li>
                             <li>Categorie</li>
                         </ul>
                         <h1>BOUTIQUE</h1>
@@ -103,7 +103,7 @@
                         <div class="price">DNT {{produit.prix}}</div>
                         <p>{{produit.description}}</p>
                     
-                        <div class="title">Quantity</div>
+                        <div class="title">QUANTITE</div>
                         <div class="quantity-wrap">
                             <form action="{{path('app_panier_add',{'productId':produit.id})}}" method="POST">
                             <input type="number" name="quantite" placeholder="1">
@@ -113,7 +113,7 @@
                         <div class="details">
                             <ul>
                                 <li><span>REFER: </span>{{produit.refer}}</li>
-                                <li><span>Categories: </span>{{produit.categorieProduit.nom}}</li>
+                                <li><span>CATEGORIE: </span>{{produit.categorieProduit.nom}}</li>
                                
                             </ul>
                         </div>

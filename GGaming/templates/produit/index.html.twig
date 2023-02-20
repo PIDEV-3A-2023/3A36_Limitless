@@ -11,7 +11,7 @@
                 <div class="info">
                     <div class="wrap">
                         <ul class="breadcrumbs">
-                            <li><a href="index-2.html">Boutique</a>/</li>
+                            <li><a href="{{path('app_produit_showProduit')}}">Boutique</a>/</li>
                             <li>Produits</li>
                         </ul>
                         <h1>BOUTIQUE</h1>
@@ -44,7 +44,7 @@
                         </ul>
                     </div>
                     <div class="filter-wrap">
-                        <h6>Filters</h6>
+                        <!--<h6>Filters</h6>
                         <div class="filter-slider">
                             <div class="top">
                                 <label for="amount">Price</label>
@@ -52,7 +52,7 @@
                             </div>
                             <div class="ui-slider">
                             </div>
-                        </div>
+                        </div>-->
                         <!--<div class="filter-items-wrap">
                             <div class="filter-title">Sport</div>
                             <div class="filter-item">
@@ -265,7 +265,7 @@
                             <div class="col-md-4 col-sm-6">
                             <div class="store-list-item">
                                 <div>
-                                    <a href="product.html">
+                                    <a href="{{path('app_produit_details',{'id':produit.id})}}">
                                         <img src="{{asset('images/common/'~produit.image)}}" alt="product">
                                     
                                     </a>
@@ -275,7 +275,7 @@
                                         <div class="btn-wrap">
                                             <form action="{{path('app_panier_add',{'productId':produit.id})}}" method="POST">
                                            
-                                            <button class="btn small" type="submit">add to cart</button>
+                                            <button class="btn small" type="submit">Ajouter</button>
                                             </form>
                                             <a href="{{path('app_produit_details',{'id':produit.id})}}">
                                             <button class="btn small">Details</button>

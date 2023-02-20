@@ -14,7 +14,7 @@
                 <div class="info">
                     <div class="wrap">
                         <ul class="breadcrumbs">
-                            <li><a href="index-2.html">Boutique</a>/</li>
+                            <li><a href="{{path('app_produit_index')}}">Boutique</a>/</li>
                             <li>Panier</li>
                         </ul>
                         <h1>PANIER</h1>
@@ -43,65 +43,73 @@
                         <th>Quantité</th>
                         <th class="total">Total</th>
                     </tr>
-                
+                    {% set somme=0%}
                     {% for panier in paniers%}
+                    {% set somme=somme+panier.total %}
                     <tr class="cart_iem">
                         <td class="delete"><a href="{{path('app_panier_delete',{'id':panier.id})}}"><i class="fa fa-close" aria-hidden="true"></i></a></td>
                         <td class="name"><img class="product-image" src="images/common/cart-product.jpg" alt="cart-product">{{panier.name}}</td>
                         <td class="cost">DT {{panier.price}}</td>
-                        <td class="quantity"><input type="number" value="{{panier.quantity}}"></td>
+                        <td class="quantity"><input type="text" value="{{panier.quantity}}"></td>
                         <td class="total">DT {{panier.total}}</td>
                     </tr>
                     {%endfor%}
                     
                 </table>
             </div>
-            <div class="col-md-4 col-sm-6">
+          <!--  <div class="col-md-4 col-sm-6">
                 <div class="coupon">
                     <input type="text">
                     <button><span>Apply coupon</span></button>
                 </div>
-            </div>
-            <div class="col-md-8 col-sm-6">
+            </div>-->
+            <!--<div class="col-md-8 col-sm-6">
                 <div class="update-wrap">
-                    <button class="update" disabled="">update cart</button>
+                    <button class="update">Actualiser</button>
                 </div>
-            </div>
+            </div>-->
             <div class="col-md-8 col-sm-12">
                 <div class="cart-offer">
-                    <h5>special offer for you</h5>
+                    <h5>Offre special pour vous</h5>
                     <div class="offer">
                         <div class="store-badge new">new</div>
-                        <div class="title">official <span>apparel</span></div>
-                        <img src="images/soccer/cart-offer.jpg" alt="cart-offer">
+                        <div class="title">Meilleur<span>prix</span></div>
+                        <img src="{{ asset('images/soccer/logo.png') }}" alt="cart-offer">
                     </div>
                 </div>
             </div>
             <div class="col-md-4 col-sm-12">
                 <div class="cart-total">
-                    <h5>Cart Totals</h5>
+                    <h5>Total Panier</h5>
                     <div class="delivery-list">
                         <label class="item">
                             <input name="del-check" type="radio">
-                            <span class="name">Express delivery</span>  
-                            <span class="price">£ 4</span>
+                            <span class="name">Payement Bancaire</span>  
+                           <!-- <span class="price">£ 4</span>-->
+                            <span class="delivery-text">Effectuez votre paiement directement sur votre compte bancaire. Veuillez utiliser votre carte visa pour mastercard.</span>
+                        </label>
+                         <label class="item">
+                            <input name="del-check" type="radio">
+                            <span class="name">Payement en espèces</span>  
+                            <!--<span class="price">£ 4</span>-->
+                            <span class="delivery-text">Assurez-vous d'avoir le montant exact avec vous.</span>
                         </label>
                         <label class="item">
-                            <input name="del-check" type="radio">
-                            <span class="name">Express delivery</span>  
-                            <span class="price">£ 4</span>
-                            <span class="delivery-text">Make your payment directly into our bank account. Please use your Order ID as the payment reference.</span>
+                            
+                            <span class="name">Livraison:</span>  
+                            <span class="price">DT 4</span>
+                            
                         </label>
-                        <label class="item">
-                            <input name="del-check" type="radio">
-                            <span class="name">Express delivery</span>  
-                            <span class="price">£ 4</span>
-                        </label>
+
                         <div class="cart-total-info">
                             <div class="title">Total</div>
-                            <div class="price">£ 194</div>
+                            <div class="price">DT {{somme}}</div>
                         </div>
-                        <button class="proceed">Proceed to checkout<i class="fa fa-long-arrow-right" aria-hidden="true"></i></button>
+                        
+                            <form action="{{path('app_commande')}}" method="POST">
+                            <input type="hidden"  name="somme" value="{{somme}}">
+                            <button type="submit" class="proceed">Passer la commande<i class="fa fa-long-arrow-right" aria-hidden="true"></i></button>
+                           </form>
                     </div>
                 </div>
             </div>

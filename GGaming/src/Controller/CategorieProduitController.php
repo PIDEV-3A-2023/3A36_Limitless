@@ -20,7 +20,7 @@ class CategorieProduitController extends AbstractController
     public function index(CategorieProduitRepository $categorieProduitRepository): Response
     {
         return $this->render('categorie_produit/index.html.twig', [
-            'categorie_produits' => $categorieProduitRepository->findAll(),
+            'categorie_produits' => $categorieProduitRepository->findCategoryByDate(),
         ]);
     }
 

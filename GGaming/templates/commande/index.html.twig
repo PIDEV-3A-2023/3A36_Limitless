@@ -1,39 +1,7 @@
 {% extends 'back.html.twig' %} 
 {% block title  %} BOUTIQUE {% endblock %}
         {% block body %}
-    {% if app.flashes('success') is not empty %}
-    <div class="alert alert-success notification" role="alert">
-       <center>Produit Ajouté avec succès...</center>
-         
-        <script>
-            setTimeout(function() {
-                document.querySelector('.alert').style.display = 'none';
-            }, 3000);
-        </script>
-    </div>
-{% endif %}
- {% if app.flashes('delete') is not empty %}
-    <div class="alert alert-success notification" role="alert">
-       <center>Produit Supprimé avec succès...</center>
-         
-        <script>
-            setTimeout(function() {
-                document.querySelector('.alert').style.display = 'none';
-            }, 3000);
-        </script>
-    </div>
-{% endif %}
-{% if app.flashes('update') is not empty %}
-    <div class="alert alert-success notification" role="alert">
-       <center>Produit Modifié avec succès...</center>
-         
-        <script>
-            setTimeout(function() {
-                document.querySelector('.alert').style.display = 'none';
-            }, 3000);
-        </script>
-    </div>
-{% endif %}
+   
         <div class="main-panel">
           <div class="content-wrapper">
             <div class="page-header">
@@ -44,52 +12,37 @@
               <div class="col-lg-12 grid-margin stretch-card">
                 <div class="card">
                   <div class="card-body">
-                    <h4 class="card-title">Table de Produits</h4>
-                    <div class="d-flex justify-content-end mt-3 mb-3">
-                        <a href="{{ path('app_produit_new') }}" class="btn btn-success">+Ajout</a>
-                        </div>
+                    <h4 class="card-title">Table des Commandes</h4>
+                    
                     <div class="table-responsive">
                       <table class="table table-striped">
                         <thead>
                           <tr>
                             <th class="h3 text-primary">REFERENCE</th>
-                            <th class="h3 text-primary">IMAGE</th>
-                            <th class="h3 text-primary">CATEGORIE</th>
-                            <th class="h3 text-primary">NOM</th>
-                            <th class="h3 text-primary">QUANTITE</th>
-                            <th class="h3 text-primary">PRIX</th>
-                            
                             <th class="h3 text-primary">DATE</th>
+                            <th class="h3 text-primary">TOTAL</th>
                             <th class="h3 text-primary">ACTIONS</th>
                           </tr>
                         </thead>
                         <tbody>
-                        {% for produit in produits %}
+                        {% for commande in commandes %}
                           <tr>
-                            <td>{{ produit.refer }}</td>
-                            <td><img class="img-xs rounded-circle " src="{{asset('images/common/'~produit.image)}}" alt=""></td>
-                            <td>{{ produit.categorieProduit.nom }}</td>
-                            <td>{{ produit.nom }}</td>
-                            <td>{{ produit.quantite }}</td>
-                            <td>{{ produit.prix }}</td>
-                            
-                            <td>{{ produit.dateProduit|date('Y-m-d H:i')}}</td>
-                              <td>
+                            <td>{{ commande.refer }}</td>
+                           
+                            <td>{{ commande.dateCommande|date('Y-m-d H:i') }}</td>
+                            <td>{{ commande.prixTotal }}</td>
+                            <td>
                               
-                              <a href="{{ path('app_produit_edit', {'id': produit.id}) }}" class="btn btn-primary">
-                                  <i class="mdi mdi-pencil"></i>
-                              </a>
-                              
-                             <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#deleteModal{{ produit.id }}">
+                             <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#deleteModal{{ commande.id }}">
                 <i class="mdi mdi-delete"></i>
             </button>
 <!-- Delete Modal -->
-<div class="modal fade" id="deleteModal{{produit.id }}" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel" aria-hidden="true">
+<div class="modal fade" id="deleteModal{{commande.id }}" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
         
             <div class="modal-header">
-                <h5 class="modal-title" id="deleteModalLabel">Confirmation du supprission</h5>
+                <h5 class="modal-title" id="deleteModalLabel">Confirmation du suppression</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -100,8 +53,8 @@
             </div>
 
             <div class="modal-footer">
-                <form method="post" action="{{ path('app_produit_delete', {'id': produit.id}) }}">
-                    <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ produit.id) }}">
+                <form method="post" action="{{ path('app_commande_delete', {'id': commande.id}) }}">
+                    <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ commande.id) }}">
                     <button type="submit" class="btn btn-danger">oui</button>
                 </form>
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Non</button>
