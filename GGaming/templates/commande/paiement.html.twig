@@ -71,8 +71,13 @@ button {
 <body>
 	<div class="payment-container">
 		<h1>Paiement en ligne</h1>
-		<form action="https://votre-systeme-de-paiement-securise.com" method="POST">
-			
+		<form action="{{path('app_paiement')}}" method="POST">
+		{% if prixTotal is defined %}
+		  <input type="hidden" value="{{prixTotal}}" name="prix">
+		 {% endif %}
+		{% if refer is defined %}
+		  <input type="hidden" value="{{refer}}" name="refer">
+		{% endif %}
 			<label for="type-carte">Type de carte:</label>
 			<select id="type-carte" name="type-carte" required>
 				<option value=""> Choisissez un type de carte</option>
@@ -83,13 +88,20 @@ button {
 			</select>
 			<label for="nom">Nom:</label>
 			<input type="text" id="nom" name="nom" required>
+			<label for="nom">Email:</label>
+			<input type="text" id="email" name="email" required>
+
 			<label for="numero-carte">Numéro de carte:</label>
 			<input type="text" id="numero-carte" name="numero-carte" required>
 			<label for="expiration">Expiration (MM/AA):</label>
 			<input type="text" id="expiration" name="expiration" required>
 			<label for="cvv">CVV:</label>
 			<input type="text" id="cvv" name="cvv" required>
+			{% if erreur is defined %}
+			<span class="error-message">{{ erreur }}</span>
+			{% endif%}
 			<button type="submit">Payer</button>
+
 		</form>
 	</div>
 </body>

@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Produit;
+use App\Entity\Likes;
 use App\Entity\CategorieProduit;
 use App\Form\ProduitType;
 use App\Repository\ProduitRepository;
@@ -35,7 +36,7 @@ class ProduitController extends AbstractController
     }
 
 
-     #[Route('/categories/{id}', name: 'app_showProduitByCategory', methods: ['GET'])]
+    #[Route('/categories/{id}', name: 'app_showProduitByCategory', methods: ['GET'])]
     public function produitByCategory(ProduitRepository $produitRepository,CategorieProduitRepository $categorieProduitRepository,$id):Response
     {
             $produit=$produitRepository->findProduitByCategorie($id);
@@ -46,11 +47,12 @@ class ProduitController extends AbstractController
     }
 
     #[Route('/showProduit', name: 'app_produit_showProduit', methods: ['GET'])]
-    public function indexBack(ProduitRepository $produitRepository): Response
+    public function indexBack(ProduitRepository $produitRepository,CategorieProduitRepository $categorieProduitRepository): Response
     {
         $prod=$produitRepository->findProduitByDate();
+        $categorieProduit=$categorieProduitRepository->findAll();
         return $this->render('produit/indexBack.html.twig', [
-            'produits' => $prod
+            'produits' => $prod,'categories'=>$categorieProduit
         ]);
     }
 
@@ -168,6 +170,67 @@ class ProduitController extends AbstractController
 
         return $this->redirectToRoute('app_produit_showProduit', [], Response::HTTP_SEE_OTHER);
     }
-     
+    #[Route('/statistique', name: 'app_produit_statistique')]
+    public function statistiques(CategorieProduitRepository $categorieRepository):Response 
+    {
+        $categories=$categorieRepository->findAll();
+        $date=[];
+        foreach($categories as $category){
+            $nbProducts=count($category->getProduit());
+            $data[]=['name'=>$category->getNom(),'nbProducts'=>$nbProducts];
+        }
+        return $this->render('produit/statistique.html.twig',['data'=>$data]);
+    }
+     #[Route('/categoriesBack/{id}', name: 'app_showProduitByCategoryAdmin', methods: ['GET'])]
+    public function produitByCategoryAdmin(ProduitRepository $produitRepository,CategorieProduitRepository $categorieProduitRepository,$id):Response
+    {
+            $produit=$produitRepository->findProduitByCategorie($id);
+            $categorieProduit=$categorieProduitRepository->findAll();
+        return $this->render('produit/indexBack.html.twig', [
+            'produits' => $produit,'categories'=>$categorieProduit
+        ]);
+    }
+
+    #[Route('/addlike/{productId}', name: 'app_addlike', methods: ['GET'])]
+    public function addLike(Request $request, $productId, ProduitRepository $produitRepository)
+    {
+    // Récupérer l'utilisateur connecté
+    //$user = $this->getUser();
+
+    // Récupérer le produit correspondant à $productId
+    $product =$produitRepository->find($productId);
+
+    // Récupérer la session de l'utilisateur
+    $session = $request->getSession();
+
+    // Récupérer les produits déjà likés de la session
+    $likedProducts = $session->get('liked_products', []);
+
+    // Vérifier si le produit a déjà été liké
+    if (in_array($product->getId(), $likedProducts)) {
+        $this->addFlash('warning', 'Vous avez déjà liké ce produit.');
+
+        return $this->redirectToRoute('app_produit_details', ['id' => $productId]);
+    }
+
+    // Ajouter un nouveau like
+    $like = new Likes();
+    $like->setProduit($product)
+         ->setType(1);
+
+    $entityManager = $this->getDoctrine()->getManager();
+    $entityManager->persist($like);
+    $entityManager->flush();
+
+    // Ajouter le produit liké à la session
+    $likedProducts[] = $product->getId();
+    $session->set('liked_products', $likedProducts);
+
+    $this->addFlash('success', 'Merci pour votre like !');
+
+    // Rediriger l'utilisateur vers la page du produit
+    return $this->redirectToRoute('app_produit_details', ['id' => $productId]);
+    }
+
     
 }

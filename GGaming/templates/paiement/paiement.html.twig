@@ -1,18 +1,3 @@
-{% extends 'back.html.twig' %}
-
-{% block title %}Edit CategorieProduit{% endblock %}
-
-{% block body %}
-    <h1>Modifier CategorieProduit</h1>
-
-    {{ include('categorie_produit/_form.html.twig', {'button_label': 'Modifier'}) }}
-
-    <a href="{{ path('app_categorie_showCategorieProduit') }}">back to list</a>
-
-    {{ include('categorie_produit/_delete_form.html.twig') }}
-{% endblock %}
-
-///a supprimer 
 {% if error is defined %}
 <div class="alert alert-danger">{{ error }}</div>
 {% endif %}

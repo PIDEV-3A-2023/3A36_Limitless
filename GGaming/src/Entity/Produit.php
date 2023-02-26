@@ -4,6 +4,8 @@ namespace App\Entity;
 
 use App\Repository\ProduitRepository;
 use App\Entity\CategorieProduit;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -31,7 +33,7 @@ class Produit
 
     //#[Assert\GreaterThan(value:0,message:"Le prix doit être positif")]
     #[Assert\NotBlank(message:"Le prix est obligatoire")]
-    #[Assert\Regex(pattern:'/^[0-9]+([.,][0-9]+)?$/',message:"Le prix ne peut être qu'un nombre.")]
+    #[Assert\Regex(pattern:'/^[0-9]+([.,][0-9]+)?$/',message:"Le prix ne peut être qu'un nombre positif.")]
     #[ORM\Column]
     private ?string $prix = null;
 
@@ -65,6 +67,16 @@ class Produit
 
     #[ORM\Column(type: Types::BLOB, nullable: true)]
     private $picture = null;
+
+    #[ORM\OneToMany(mappedBy: 'produit', targetEntity: Likes::class)]
+    private Collection $likes;
+
+    public function __construct()
+    {
+        $this->likes = new ArrayCollection();
+    }
+
+    
 
     public function getId(): ?int
     {
@@ -178,4 +190,36 @@ class Produit
 
         return $this;
     }
+
+    /**
+     * @return Collection<int, Likes>
+     */
+    public function getLikes(): Collection
+    {
+        return $this->likes;
+    }
+
+    public function addLike(Likes $like): self
+    {
+        if (!$this->likes->contains($like)) {
+            $this->likes->add($like);
+            $like->setProduit($this);
+        }
+
+        return $this;
+    }
+
+    public function removeLike(Likes $like): self
+    {
+        if ($this->likes->removeElement($like)) {
+            // set the owning side to null (unless already changed)
+            if ($like->getProduit() === $this) {
+                $like->setProduit(null);
+            }
+        }
+
+        return $this;
+    }
+
+   
 }

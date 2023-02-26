@@ -43,12 +43,13 @@
                         <th>Quantité</th>
                         <th class="total">Total</th>
                     </tr>
+                   
                     {% set somme=0%}
                     {% for panier in paniers%}
                     {% set somme=somme+panier.total %}
                     <tr class="cart_iem">
                         <td class="delete"><a href="{{path('app_panier_delete',{'id':panier.id})}}"><i class="fa fa-close" aria-hidden="true"></i></a></td>
-                        <td class="name"><img class="product-image" src="images/common/cart-product.jpg" alt="cart-product">{{panier.name}}</td>
+                        <td class="name"><img class="product-image" src="{{asset('images/common/'~panier.image)}}" alt="cart-product">{{panier.name}}</td>
                         <td class="cost">DT {{panier.price}}</td>
                         <td class="quantity"><input type="text" value="{{panier.quantity}}"></td>
                         <td class="total">DT {{panier.total}}</td>

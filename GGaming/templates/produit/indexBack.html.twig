@@ -40,7 +40,53 @@
               <h3 class="page-title"> Boutique </h3>
               
             </div>
+
             
+            <select id="type-carte" name="type-carte" required onchange="redirectToPage(this)">
+            <option value="{{path('app_produit_showProduit')}}"> Choisissez</option>
+                    {% for categorie in categories%}
+                            <option value="{{path('app_showProduitByCategoryAdmin',{'id':categorie.id})}}">
+                                  
+                            {{categorie.nom}}
+
+                            </option>
+                     {%endfor%}
+            <option value="{{path('app_produit_showProduit')}}"> Toutes les categories</option>
+            </select>
+
+            <script>
+                function redirectToPage(select) {
+                var selectedOption = select.options[select.selectedIndex];
+                window.location.href = selectedOption.value;
+                }
+            </script>
+<!--
+            <div class="navbar-menu-wrapper flex-grow d-flex align-items-stretch">    
+            <ul class="navbar-nav navbar-nav-right">    
+            <li class="nav-item dropdown d-none d-lg-block">
+                <a class="nav-link btn btn-success create-new-button" id="createbuttonDropdown" data-toggle="dropdown" aria-expanded="false" href="#">Rechercher</a>
+                <div class="dropdown-menu dropdown-menu-right navbar-dropdown preview-list" aria-labelledby="createbuttonDropdown">
+                  {% for categorie in categories%}
+                  <a class="dropdown-item preview-item">
+                    <div class="preview-thumbnail">
+                      <div class="preview-icon bg-dark rounded-circle">
+                        <i class="mdi mdi-file-outline text-primary"></i>
+                      </div>
+                    </div>
+                    <div class="preview-item-content">
+                      <p class="preview-subject ellipsis mb-1">{{categorie.nom}}</p>
+                    </div>
+                  </a>
+                  {%endfor%}
+                </div>
+                  
+                  
+                
+              </li>
+            </ul>
+            </div>
+-->
+
               <div class="col-lg-12 grid-margin stretch-card">
                 <div class="card">
                   <div class="card-body">

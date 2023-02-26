@@ -107,8 +107,8 @@
                         <div class="quantity-wrap">
                             <form action="{{path('app_panier_add',{'productId':produit.id})}}" method="POST">
                             <input type="number" name="quantite" placeholder="1">
-                            <button class="btn small" type="submit">Add to cart</button></a>
-                          
+                            <button class="btn small" type="submit">Ajouter</button></a>
+                            </form>
                         </div>
                         <div class="details">
                             <ul>
@@ -116,6 +116,11 @@
                                 <li><span>CATEGORIE: </span>{{produit.categorieProduit.nom}}</li>
                                
                             </ul>
+                           <div>
+        <a href="{{path('app_addlike',{'productId':produit.id})}}"><button class="btn-like" onclick="likeButton()" id="like"><i class="fa fa-thumbs-up"></i></button></a>
+        <button class="btn-dislike" onclick="dislikeButton()" id="dislike"><i class="fa fa-thumbs-down"></i></button>
+    </div>
+
                         </div>
                         <ul class="socials">
                             <li><a href="#"><i class="fa fa-facebook-square" aria-hidden="true"></i></a></li>
@@ -272,5 +277,68 @@
     </section>-->
 
     <!--FEATURED PRODUCTS END-->
+   
+    <style>
+        .btn-like,
+.btn-dislike {
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+  display: inline-block;
+  font-size: 16px;
+  margin-right: 10px;
+  padding: 0;
+}
 
+.btn-like:focus,
+.btn-dislike:focus {
+  outline: none;
+}
+
+.btn-like i,
+.btn-dislike i {
+  margin-right: 5px;
+}
+
+.btn-like i.fa-thumbs-up,
+.btn-dislike i.fa-thumbs-down {
+  color: gray;
+}
+
+.btn-like.active i.fa-thumbs-up,
+.btn-dislike.active i.fa-thumbs-down {
+  color: blue;
+}
+    </style>
+    <script>
+        function likeButton() {
+            var likeBtn = document.getElementById("like");
+            var dislikeBtn = document.getElementById("dislike");
+
+            if (likeBtn.classList.contains("active")) {
+                likeBtn.classList.remove("active");
+                likeBtn.querySelector(".fa-thumbs-up").style.color = "gray";
+            } else {
+                likeBtn.classList.add("active");
+                dislikeBtn.classList.remove("active");
+                likeBtn.querySelector(".fa-thumbs-up").style.color = "blue";
+                dislikeBtn.querySelector(".fa-thumbs-down").style.color = "gray";
+            }
+        }
+
+        function dislikeButton() {
+            var dislikeBtn = document.getElementById("dislike");
+            var likeBtn = document.getElementById("like");
+
+            if (dislikeBtn.classList.contains("active")) {
+                dislikeBtn.classList.remove("active");
+                dislikeBtn.querySelector(".fa-thumbs-down").style.color = "gray";
+            } else {
+                dislikeBtn.classList.add("active");
+                likeBtn.classList.remove("active");
+                dislikeBtn.querySelector(".fa-thumbs-down").style.color = "red";
+                likeBtn.querySelector(".fa-thumbs-up").style.color = "gray";
+            }
+        }
+    </script>
 {% endblock %}

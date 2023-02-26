@@ -38,6 +38,14 @@ class CommandeRepository extends ServiceEntityRepository
             $this->getEntityManager()->flush();
         }
     }
+      public function findCommandeByDate(): array
+   {
+       return $this->createQueryBuilder('p')          
+            ->orderBy('p.dateCommande', 'DESC')
+            ->getQuery()
+            ->getResult()
+        ;
+    }
 
 //    /**
 //     * @return Commande[] Returns an array of Commande objects

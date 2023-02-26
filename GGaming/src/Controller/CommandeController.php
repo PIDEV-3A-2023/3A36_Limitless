@@ -31,13 +31,13 @@ class CommandeController extends AbstractController
         $em->persist($commande);
         $em->flush();
         $session->remove('cart');
-        return $this->render('commande/paiement.html.twig');
+        return $this->render('commande/paiement.html.twig',['prixTotal'=>$commande->getPrixTotal(),'refer'=>$commande->getRefer()]);
     }
 
      #[Route('/showCommande', name: 'app_commande_showCommande',methods: ['GET', 'POST'])]
     public function showCommande(CommandeRepository $repo):Response 
     {
-        $commande=$repo->findAll();
+        $commande=$repo->findCommandeByDate();
         return $this->render('commande/index.html.twig', [
             'commandes' => $commande
         ]);
