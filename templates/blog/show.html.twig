@@ -16,9 +16,31 @@
 
 <section class="sidebar col-xs-6 col-sm-6 col-md-3 sidebar-offcanvas" id="sidebar">
 <br><br>
-<br><br>
-<br><br>
-<br><br>
+
+    <div class="sidebar-menu-wrap">
+        <h6>Meilleurs blogs</h6>
+
+        {% set number = 0 %}
+        {% for hotblogs in hotblogs %}
+        {% if hotblogs.etat == 2 %}
+        {% set number = number + 1 %}
+        <ul class="categories-list">
+            <li>
+                <a href="#"><span class="count">{{ number }}</span>{{ hotblogs.titre|slice(0, 25) }}</a>
+            </li>
+        </ul>
+        {% endif %}
+        {% endfor %}
+
+    </div>
+
+    <br><br>
+
+    <div class="sidebar-tags-wrap">
+        <div class="tags">
+            <a href="{{path('app_blog_create')}}" class="booking">Creer un Blog</a>
+        </div>
+    </div>
 
 <h6>Blogs récents</h6>
 {% for blogrecent in blogrecent %}
@@ -56,6 +78,20 @@
 
                         <div class="post-text">
                             <p>{{ blog.contenu }}</p>
+                            <br>
+                            <br>
+
+                            
+                            <a href="{{ path('app_blog_like', { 'id': blog.id }) }}" method="post" >
+                            <i class="fa fa-regular fa-thumbs-up" style="font-size: 2em;"></i> 
+                            </a> {{ numberLikes }}
+                            
+
+                            <a href="{{ path('app_blog_dislike', { 'id': blog.id }) }}" method="post">
+                            <i class="fa fa-regular fa-thumbs-down" style="font-size: 2em;"></i> 
+                            </a>{{ numberDislikes }}
+
+
                             <div class="row">
                                 <div class="col-md-6">
                                     <div class="top-info">
@@ -99,7 +135,7 @@
 
                                     <p>{{ comment.contenu }}
                                     {% if comment.user != app.user %}
-                                    <a href="#" onclick="return confirm('Vous etes sur de signaler ce commentaire ?')" title="Signaler">
+                                    <a href="{{ path('app_comment_report', {'id': comment.id}) }}" onclick="return confirm('Vous etes sur de signaler ce commentaire ?')" title="Signaler">
                                     <i class="fa fa-sharp fa-regular fa-flag text-danger" aria-hidden="true"></i></a>
                                     {% endif %}
                                     </p>

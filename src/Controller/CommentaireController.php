@@ -13,6 +13,8 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use App\Entity\User;
+use App\Entity\Report;
 
 class CommentaireController extends AbstractController
 {
@@ -72,5 +74,40 @@ class CommentaireController extends AbstractController
             'blog' => $blog,
             'form' => $form->createView(),
         ]);
+    }
+
+    #[Route('/commentaire/report/{id}', name: 'app_comment_report', methods: ['GET', 'POST'])]
+    public function reportComment(Request $request, Commentaire $comment): Response
+    {
+        $user = $this->getUser();
+        $getidofblog = $comment->getBlog()->getId();
+
+        // Check if the user has already reported the comment
+        $report = $this->getDoctrine()->getRepository(Report::class)->findOneBy([
+            'commentaire' => $comment,
+            'user' => $user,
+        ]);
+
+        if ($report) {
+            $this->addFlash('error', 'You have already reported this comment.');
+
+            return $this->redirectToRoute('app_blog_show', ['id' => $getidofblog]);
+        }
+
+        // Increment the reported field of the comment and save the report and comment entities
+        $comment->setNbSignaler($comment->getNbSignaler() + 1);
+
+        $report = new Report();
+        $report->setCommentaire($comment);
+        $report->setUser($user);
+
+        $entityManager = $this->getDoctrine()->getManager();
+        $entityManager->persist($report);
+        $entityManager->persist($comment);
+        $entityManager->flush();
+
+        $this->addFlash('success', 'Comment reported.');
+
+        return $this->redirectToRoute('app_blog_show', ['id' => $getidofblog]);
     }
 }

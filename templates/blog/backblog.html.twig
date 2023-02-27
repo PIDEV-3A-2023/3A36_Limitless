@@ -44,7 +44,7 @@
                             <td>{{ blog.dateCreation|date("m/d/Y") }}</td>
                             <td>{{ blog.dateModification|date("m/d/Y") }}</td>
                             <td><img src="{{ asset('blogImages/' ~ blog.imageBlog) }}"></td>
-                            <td><a href="{{ path('app_blog_show', {'id': blog.id}) }}" class="btn btn-primary"> <i class="mdi mdi-eye"> </i> </a></td>
+                            <td><a href="{{ path('app_blog_backend_comments', {'id': blog.id}) }}" class="btn btn-primary"> <i class="mdi mdi-eye"> </i> </a></td>
                             <td><a href="{{ path('app_blog_show', {'id': blog.id}) }}" class="btn btn-primary"> <i class="mdi mdi-eye"> </i> </a></td>
 
                             {% if blog.etat == 0 %}

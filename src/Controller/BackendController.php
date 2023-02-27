@@ -2,20 +2,22 @@
 
 namespace App\Controller;
 
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Annotation\Route;
 use App\Entity\Blog;
 use App\Form\BlogType;
+use App\Entity\LikeBlog;
 use App\Entity\Commentaire;
+use App\Entity\DislikeBlog;
 use App\Form\CommentaireType;
 use App\Repository\BlogRepository;
-use App\Repository\CommentaireRepository;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Component\HttpFoundation\Request;
+use App\Repository\CommentaireRepository;
 use Doctrine\Persistence\ManagerRegistry;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\String\Slugger\SluggerInterface;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
 
 class BackendController extends AbstractController
@@ -109,6 +111,16 @@ class BackendController extends AbstractController
         return $this->redirectToRoute('app_blog_backend');
     }
 
+    #[Route('/backend/blog/comments/{id}', name: 'app_blog_backend_comments', methods: ['GET'])]
+    public function ShowCommentsOfBlog($id,Blog $blog, BlogRepository $blogRepository): Response{
+
+        $em=$this->getDoctrine()->getManager();
+        $commentaire =$em->getRepository(Commentaire::class)->FindCommentaireByIdBlog($id);
+
+        return $this->render('commentaire/backcommentaire.html.twig',[
+            'commentaire' => $commentaire,
+        ]);
+    }
 
 
 
@@ -134,5 +146,16 @@ class BackendController extends AbstractController
         $entityManager->flush();
 
         return $this->redirectToRoute('app_commentaire_backend');
+    }
+
+    #[Route('/backend/comment/blog/{id}', name: 'app_commentaire_blog_backend', methods: ['GET'])]
+    public function ShowBlogParComment($id, BlogRepository $blogRepository): Response{
+
+        $blog[0] =$blogRepository->find($id);
+
+        return $this->render('blog/backblog.html.twig',[
+            'blog' => $blog,
+        ]);
+
     }
 }

@@ -18,6 +18,23 @@
 
     <br><br>
     <div class="sidebar-menu-wrap">
+        <h6>Meilleurs blogs</h6>
+
+        {% set number = 0 %}
+        {% for hotblogs in hotblogs %}
+        {% if hotblogs.etat == 2 %}
+        {% set number = number + 1 %}
+        <ul class="categories-list">
+            <li>
+                <a href="#"><span class="count">{{ number }}</span>{{ hotblogs.titre|slice(0, 25) }}</a>
+            </li>
+        </ul>
+        {% endif %}
+        {% endfor %}
+
+    </div>
+
+    <div class="sidebar-menu-wrap">
     <div class="sidebar-search-wrap">
         <h6>Rechercher</h6>
         {{ form_start(form,{'attr': {'novalidate':'novalidate'}}) }}
@@ -73,7 +90,7 @@
     </div>
 {% endif %}
 {% endfor %} 
-
+{{ knp_pagination_render(blog) }}
 
     <div class="pagination-wrap">
         <ul class="pagination">
@@ -86,6 +103,8 @@
             <li><a href="#"><i class="fa fa-chevron-right" aria-hidden="true"></i></a></li>
         </ul>
     </div>
+
+    
 </div>
 <!--NEWS LIST END-->
             </div>

@@ -3,32 +3,38 @@
 namespace App\Controller;
 
 use App\Entity\Blog;
+use App\Entity\Tags;
 use App\Form\BlogType;
+use App\Form\SearchType;
+use App\Entity\Commentaire;
+use App\Entity\DislikeBlog;
+use App\Entity\LikeBlog;
+use App\Form\SearchFormType;
+use App\Form\CommentaireType;
 use App\Repository\BlogRepository;
+use App\Repository\TagsRepository;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use App\Repository\CommentaireRepository;
+use Doctrine\ORM\Tools\Pagination\Paginator;
+use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use Doctrine\Persistence\ManagerRegistry;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-use App\Entity\Commentaire;
-use App\Entity\Tags;
-use App\Form\CommentaireType;
-use App\Repository\CommentaireRepository;
-use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use Symfony\Component\String\Slugger\SluggerInterface;
-use App\Form\SearchFormType;
-use App\Form\SearchType;
-use App\Repository\TagsRepository;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Symfony\Component\HttpFoundation\File\Exception\FileException;
+use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
+use Knp\Component\Pager\PaginatorInterface;
 
 class BlogController extends AbstractController
 {
     #[Route('/blog', name: 'app_blog', methods: ['GET', 'POST'])]
-    public function index(Request $request,BlogRepository $blogRepository): Response{
+    public function index(Request $request,BlogRepository $blogRepository,PaginatorInterface $paginator): Response{
         $em=$this->getDoctrine()->getManager();
-        $blog =$em->getRepository(Blog::class)->findDESC();
+        // $blog =$em->getRepository(Blog::class)->findDESC();
         $blogrecent =$em->getRepository(Blog::class)->findMostRecentBlogs();
+        $hotblogs= $em->getRepository(LikeBlog::class)->findTopLikedBlogs();
         
         $form = $this->createForm(SearchFormType::class);
         $form->handleRequest($request);
@@ -43,7 +49,10 @@ class BlogController extends AbstractController
             ]);
         }
 
+        $blog = $paginator->paginate($em->getRepository(Blog::class)->findDESC(), $request->query->getInt('page', 1),6);
+
         return $this->renderForm('blog/index.html.twig', [
+            'hotblogs' => $hotblogs,
             'blog' => $blog,
             'blogrecent' => $blogrecent,
             'form' => $form,
@@ -105,6 +114,7 @@ class BlogController extends AbstractController
         $blog=$blogRepository->find($id);
         
         $commentaire->setBlog($blog);
+        $commentaire->setNbSignaler(0);
         $commentaire->setUser($this->getUser());
 
         $em=$this->getDoctrine()->getManager();
@@ -125,8 +135,21 @@ class BlogController extends AbstractController
         $getidofblog = $blog->getId();
         $number= $cmt->numberCommentsByBlog($getidofblog);
 
+        //number dislikes
+        $dislikeblog = $em->getRepository(DislikeBlog::class);
+        $numberDislikes= $dislikeblog->numberDislikesByBlog($getidofblog);
+
+        //number likes
+        $likeblog = $em->getRepository(LikeBlog::class);
+        $numberLikes= $likeblog->numberLikesByBlog($getidofblog);
+
+        $hotblogs= $em->getRepository(LikeBlog::class)->findTopLikedBlogs();
+
         return $this->render('blog/show.html.twig',[
+            'hotblogs' => $hotblogs,
             'number'=>$number,
+            'numberLikes' => $numberLikes,
+            'numberDislikes' => $numberDislikes,
             'comment' => $comment,
             'blog' => $blog,
             'form' => $form->createView(),
@@ -192,4 +215,69 @@ class BlogController extends AbstractController
         return $this->redirectToRoute('app_blog');
     }
 
+    #[Route('/bloglike/{id}', name: 'app_blog_like', methods: ['POST', 'GET', 'DELETE'])]
+    public function likeBlog(Request $request, Blog $blog, EntityManagerInterface $entityManager,$id): Response{
+        
+        $user = $this->getUser();
+        if (!$user) {
+            throw new AccessDeniedHttpException();
+        }
+
+        //Check if the user has already liked this blog
+        $like = $entityManager->getRepository(LikeBlog::class)->findOneBy(['blog' => $blog, 'user' => $user]);
+
+        if ($like) {
+            //If the user has already liked the blog remove the like
+            $entityManager->remove($like);
+        } else {
+            //Create a new Like entity with the value llike in the type column
+            $like = new LikeBlog();
+            $blog->like($user);
+
+            $entityManager->persist($like);
+        }
+
+        //Check if the user has already disliked this blog
+        $dislike = $entityManager->getRepository(DislikeBlog::class)->findOneBy(['blog' => $blog, 'user' => $user]);
+
+        if ($dislike) {
+            //If the user has already disliked the blog, remove the dislike
+            $entityManager->remove($dislike);
+            $blog->like($user);
+        }
+        $entityManager->flush();
+
+        return $this->redirectToRoute('app_blog_show', ['id' => $blog->getId()]);
+    }
+
+
+    #[Route('/blogdislike/{id}', name: 'app_blog_dislike', methods: ['POST', 'GET', 'DELETE'])]
+    public function dislikeBlog(Request $request,$id,Blog $blog, EntityManagerInterface $entityManager): Response
+    {
+        $user = $this->getUser();
+        if (!$user) {
+            throw new AccessDeniedHttpException();
+        }
+
+        $dislike = $entityManager->getRepository(DislikeBlog::class)->findOneBy(['blog' => $blog, 'user' => $user]);
+
+        if ($dislike) {
+            $entityManager->remove($dislike);
+        } else {
+            $dislike = new DislikeBlog();
+            $blog->dislike($user);
+
+            $entityManager->persist($dislike);
+        }
+
+        $like = $entityManager->getRepository(LikeBlog::class)->findOneBy(['blog' => $blog, 'user' => $user]);
+
+        if ($like) {
+            $entityManager->remove($like);
+            $blog->dislike($user);
+        }
+        $entityManager->flush();
+
+        return $this->redirectToRoute('app_blog_show', ['id' => $blog->getId()]);
+    }
 }

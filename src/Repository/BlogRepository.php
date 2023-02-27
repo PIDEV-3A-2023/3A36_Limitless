@@ -65,17 +65,6 @@ class BlogRepository extends ServiceEntityRepository
         return $qb->getResult();
     }
 
-    public function findMostUsedTags(){
-        $qb = $this->createQueryBuilder('b')
-            ->join('b.tags', 't')
-            ->select('t.name, COUNT(b.id) as count')
-            ->groupBy('t.id')
-            ->orderBy('count', 'DESC')
-            ->setMaxResults(5);
-
-        return $qb->getQuery()->getResult();
-    }
-
     public function FindBlogByName($name) {
         $qb = $this->createQueryBuilder('b');
         $qb->where($qb->expr()->like('b.titre', ':name'))

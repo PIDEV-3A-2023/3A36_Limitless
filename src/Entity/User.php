@@ -35,10 +35,22 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToMany(mappedBy: 'user', targetEntity: Commentaire::class)]
     private Collection $commentaires;
 
+    #[ORM\OneToMany(mappedBy: 'user', targetEntity: Report::class)]
+    private Collection $reports;
+
+    #[ORM\OneToMany(mappedBy: 'user', targetEntity: LikeBlog::class)]
+    private Collection $likeBlogs;
+
+    #[ORM\OneToMany(mappedBy: 'user', targetEntity: DislikeBlog::class)]
+    private Collection $dislikeBlogs;
+
     public function __construct()
     {
         $this->blogs = new ArrayCollection();
         $this->commentaires = new ArrayCollection();
+        $this->reports = new ArrayCollection();
+        $this->likeBlogs = new ArrayCollection();
+        $this->dislikeBlogs = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -184,6 +196,96 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
             // set the owning side to null (unless already changed)
             if ($commentaire->getUser() === $this) {
                 $commentaire->setUser(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Report>
+     */
+    public function getReports(): Collection
+    {
+        return $this->reports;
+    }
+
+    public function addReport(Report $report): self
+    {
+        if (!$this->reports->contains($report)) {
+            $this->reports->add($report);
+            $report->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeReport(Report $report): self
+    {
+        if ($this->reports->removeElement($report)) {
+            // set the owning side to null (unless already changed)
+            if ($report->getUser() === $this) {
+                $report->setUser(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, LikeBlog>
+     */
+    public function getLikeBlogs(): Collection
+    {
+        return $this->likeBlogs;
+    }
+
+    public function addLikeBlog(LikeBlog $likeBlog): self
+    {
+        if (!$this->likeBlogs->contains($likeBlog)) {
+            $this->likeBlogs->add($likeBlog);
+            $likeBlog->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeLikeBlog(LikeBlog $likeBlog): self
+    {
+        if ($this->likeBlogs->removeElement($likeBlog)) {
+            // set the owning side to null (unless already changed)
+            if ($likeBlog->getUser() === $this) {
+                $likeBlog->setUser(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, DislikeBlog>
+     */
+    public function getDislikeBlogs(): Collection
+    {
+        return $this->dislikeBlogs;
+    }
+
+    public function addDislikeBlog(DislikeBlog $dislikeBlog): self
+    {
+        if (!$this->dislikeBlogs->contains($dislikeBlog)) {
+            $this->dislikeBlogs->add($dislikeBlog);
+            $dislikeBlog->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeDislikeBlog(DislikeBlog $dislikeBlog): self
+    {
+        if ($this->dislikeBlogs->removeElement($dislikeBlog)) {
+            // set the owning side to null (unless already changed)
+            if ($dislikeBlog->getUser() === $this) {
+                $dislikeBlog->setUser(null);
             }
         }
 
