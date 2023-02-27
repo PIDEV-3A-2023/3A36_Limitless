@@ -56,4 +56,9 @@ class CommentaireRepository extends ServiceEntityRepository
         ->setParameter('id',$id);
         return $query->getSingleScalarResult();
     }
+
+    public function findDESCCom()
+    {
+        return $this->findBy(array(), array('id' => 'DESC'));
+    }
 }

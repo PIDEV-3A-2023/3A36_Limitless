@@ -123,7 +123,7 @@ class BackendController extends AbstractController
         ]);
     }
 
-    #[Route('/commentaire/delete/{id}', name: 'app_commentaire_backend_delete', methods: ['POST', 'GET', 'DELETE'])]
+    #[Route('/backend/commentaire/delete/{id}', name: 'app_commentaire_backend_delete', methods: ['POST', 'GET', 'DELETE'])]
     public function commentdelete($id, EntityManagerInterface $entityManager): Response{
         $comment = $entityManager->getRepository(Commentaire::class)->find($id);
 

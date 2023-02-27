@@ -14,15 +14,19 @@
             <div class="row row-offcanvas row-offcanvas-left">
 
 <!--SIDEBAR BEGIN-->
-<section class="sidebar col-xs-6 col-md-3 sidebar-offcanvas" id="sidebar">
+<section class="sidebar col-xs-6 col-sm-6 col-md-3 sidebar-offcanvas" id="sidebar">
+
     <br><br>
     <div class="sidebar-menu-wrap">
     <div class="sidebar-search-wrap">
         <h6>Rechercher</h6>
+        {{ form_start(form,{'attr': {'novalidate':'novalidate'}}) }}
+        
         <div class="wrap">
-            <input type="text">
-            <button><i class="fa fa-search" aria-hidden="true"></i></button>
+            {{ form_widget(form.Recherche,{'attr' : {'class' : 'form-control'}} ) }}
+            <button type="submit"><i class="fa fa-search" aria-hidden="true"></i></button>
         </div>
+        {{ form_end(form) }}
     </div>
     <br><br>
     <div class="sidebar-tags-wrap">
@@ -30,7 +34,22 @@
             <a href="{{path('app_blog_create')}}" class="booking">Creer un Blog</a>
         </div>
     </div>
-</section>	
+
+<h6>Blogs récents</h6>
+{% for blogrecent in blogrecent %}
+{% if blogrecent.etat == 2 %}
+    <div class="recent-news">
+        <div class="item">
+            <div class="date"><a href="news-single.html">{{ blogrecent.dateCreation|date("m/d/Y") }}</a></div>
+            <a href="{{ path('app_blog_show', {'id': blogrecent.id}) }}" class="name">{{ blogrecent.titre }}</a>
+        </div>
+    </div>
+    <br>
+{% endif %}
+{% endfor %}
+
+</section>
+
 <!--SIEDBAR END-->
 
 
@@ -47,7 +66,7 @@
         <div class="info">
             <a href="{{ path('app_blog_show', {'id': blog.id}) }}" class="name">{{ blog.titre }}</a>
             <div class="wrap">
-                <a>{{ blog.dateCreation|date("m/d/Y") }}</a> Par <a href="news-single.html">Mason Carrington</a>
+                <a>{{ blog.dateCreation|date("m/d/Y") }}</a> Par <a href="news-single.html">{{ blog.user.email }}</a>
             </div>
             <div class="clear"></div>
         </div>

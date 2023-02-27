@@ -13,21 +13,40 @@ use Symfony\Component\Routing\Annotation\Route;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use App\Entity\Commentaire;
+use App\Entity\Tags;
 use App\Form\CommentaireType;
 use App\Repository\CommentaireRepository;
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use Symfony\Component\String\Slugger\SluggerInterface;
-
+use App\Form\SearchFormType;
+use App\Form\SearchType;
+use App\Repository\TagsRepository;
 
 class BlogController extends AbstractController
 {
     #[Route('/blog', name: 'app_blog', methods: ['GET', 'POST'])]
-    public function index(): Response{
+    public function index(Request $request,BlogRepository $blogRepository): Response{
         $em=$this->getDoctrine()->getManager();
         $blog =$em->getRepository(Blog::class)->findDESC();
+        $blogrecent =$em->getRepository(Blog::class)->findMostRecentBlogs();
+        
+        $form = $this->createForm(SearchFormType::class);
+        $form->handleRequest($request);
 
-        return $this->render('blog/index.html.twig', [
+        if ($form->isSubmitted() && $form->getData()['Recherche'] != '') {
+            $blog =$em->getRepository(Blog::class)->FindBlogByName($form->getData()['Recherche']);
+
+            return $this->renderForm('blog/index.html.twig', [
+                'blog' => $blog,
+                'blogrecent' => $blogrecent,
+                'form' => $form
+            ]);
+        }
+
+        return $this->renderForm('blog/index.html.twig', [
             'blog' => $blog,
+            'blogrecent' => $blogrecent,
+            'form' => $form,
         ]);
     }
     
@@ -64,6 +83,7 @@ class BlogController extends AbstractController
             }
 
             $blog->setEtat(0);
+            $blog->setUser($this->getUser());
             $entityManager = $this ->getDoctrine()->getManager();
             $entityManager->persist($blog);
             $entityManager->flush();
@@ -83,7 +103,9 @@ class BlogController extends AbstractController
         $form = $this->createForm(CommentaireType::class, $commentaire);
         $form->handleRequest($request);
         $blog=$blogRepository->find($id);
+        
         $commentaire->setBlog($blog);
+        $commentaire->setUser($this->getUser());
 
         $em=$this->getDoctrine()->getManager();
         $comment =$em->getRepository(Commentaire::class)->FindCommentaireByIdBlog($id);
@@ -96,6 +118,8 @@ class BlogController extends AbstractController
             return $this->redirect($request->getUri());
         }
 
+        $blogrecent =$em->getRepository(Blog::class)->findMostRecentBlogs();
+
         //number
         $cmt = $em->getRepository(Commentaire::class);
         $getidofblog = $blog->getId();
@@ -106,6 +130,7 @@ class BlogController extends AbstractController
             'comment' => $comment,
             'blog' => $blog,
             'form' => $form->createView(),
+            'blogrecent' => $blogrecent,
         ]);
     }
 
@@ -166,4 +191,5 @@ class BlogController extends AbstractController
 
         return $this->redirectToRoute('app_blog');
     }
+
 }

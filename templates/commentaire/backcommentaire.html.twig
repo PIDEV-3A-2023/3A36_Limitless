@@ -27,7 +27,8 @@
                             <th>Contenu</th>
                             <th>Date Creation</th>
                             <th>Date Modification</th>
-                            <th>Commentaire Blog id</th>
+                            <th>Blog</th>
+                            <th>User</th>
                             <th>Actions</th>
                             </tr>
                         </thead>
@@ -38,10 +39,10 @@
                             <td>{{ commentaire.contenu|slice(0, 40) }}</td>
                             <td>{{ commentaire.dateCreation|date("m/d/Y") }}</td>
                             <td>{{ commentaire.dateModification|date("m/d/Y") }}</td>
-                            <td>{{ commentaire.blog.id  }}</td>
+                            <td><a href="" class="btn btn-primary"> <i class="mdi mdi-eye"> </i> </a></td>
+                            <td><a href="" class="btn btn-primary"> <i class="mdi mdi-eye"> </i> </a></td>
 
                             <td>
-                                <a href="{{ path('app_blog_show', {'id': commentaire.blog.id }) }}" class="btn btn-primary"> Voir <i class="mdi mdi-chevron-right"></i> </a>
                                 <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#deleteModal{{ loop.index }}">
                                 <i class="mdi mdi-delete"></i>
                                 </button>

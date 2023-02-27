@@ -29,6 +29,8 @@
                             <th>Date Creation</th>
                             <th>Date Modification</th>
                             <th>Image Blog</th>
+                            <th>Commentaires</th>
+                            <th>User</th>
                             <th>Status</th>
                             <th>Actions</th>
                             </tr>
@@ -41,7 +43,9 @@
                             <td>{{ blog.contenu|slice(0, 25) }}</td>
                             <td>{{ blog.dateCreation|date("m/d/Y") }}</td>
                             <td>{{ blog.dateModification|date("m/d/Y") }}</td>
-                            <td>{{ blog.imageBlog|slice(0, 25) }}</td>
+                            <td><img src="{{ asset('blogImages/' ~ blog.imageBlog) }}"></td>
+                            <td><a href="{{ path('app_blog_show', {'id': blog.id}) }}" class="btn btn-primary"> <i class="mdi mdi-eye"> </i> </a></td>
+                            <td><a href="{{ path('app_blog_show', {'id': blog.id}) }}" class="btn btn-primary"> <i class="mdi mdi-eye"> </i> </a></td>
 
                             {% if blog.etat == 0 %}
                             <td><label class="badge badge-warning">En attente</label></td>
@@ -116,7 +120,6 @@
                             </td>
 
                             <td>
-                                <a href="{{ path('app_blog_show', {'id': blog.id}) }}" class="btn btn-primary"> <i class="mdi mdi-eye"> </i> </a>
 
                                 <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#deleteModal{{ loop.index }}">
                                 <i class="mdi mdi-delete"></i>

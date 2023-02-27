@@ -22,7 +22,7 @@ class Blog
     #[Assert\Length(min:5)]
     private ?string $titre = null;
 
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(length: 9999999)]
     #[Assert\NotBlank(message:"Il faut Ajouter un contenu")]
     #[Assert\Length(min:10)]
     private ?string $contenu = null;
@@ -41,6 +41,9 @@ class Blog
 
     #[ORM\Column]
     private ?int $etat = null;
+
+    #[ORM\ManyToOne(inversedBy: 'blogs')]
+    private ?User $user = null;
 
     public function __construct()
     {
@@ -152,6 +155,18 @@ class Blog
     public function setEtat(int $etat): self
     {
         $this->etat = $etat;
+
+        return $this;
+    }
+
+    public function getUser(): ?User
+    {
+        return $this->user;
+    }
+
+    public function setUser(?User $user): self
+    {
+        $this->user = $user;
 
         return $this;
     }
