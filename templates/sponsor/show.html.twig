@@ -3,38 +3,43 @@
 {% block title %}Sponsor{% endblock %}
 
 {% block body %}
-    <h1>Détails sponsor</h1>
+  <section class="club-wrap club-champ">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-9">
+                    <h4>Détails du sponsor </h4>
+                    
+                </div>
+                <div class="col-md-3">
+                    <a href="{{ path('app_sponsor_index') }}" class="btn small club-top-btn">retour</a>
+                </div>
+            </div>
+        </div>
+        
+<div class="championship-header-wrapper">
+    <div class="container">
+        <div class="row">
+           
+            <div class="col-md-3">
+                <div class="club-info">
+                    <div class="item"><span>Nom du sponsor: </span>{{ sponsor.nomSponsor }}</div>
+                    <div class="item"><span>Nom équipe sponsoriseé: </span>{{ sponsor.IdEquipe }}</div>
+                    <div class="item"><span>Site web: </span><a href="{{ sponsor.siteWebs }}">{{ sponsor.siteWebs }}</a></div>
+                    <div class="item"><span>Date de creation: </span>{{ sponsor.dateCreationn|date("m/d/y") }}</div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="club-info">
+                    <div class="item">Description du sponsor: </div>
+                    <p>{{ sponsor.descriptionSponsor }}</p>
+                </div>	
+            </div>
+        </div>	
+    </div>	
+</div>
+    </section>
 
-    <table class="table">
-        <tbody>
-            
-            <tr>
-                <th>Nom du sponsor</th>
-                <td>{{ sponsor.nomSponsor }}</td>
-            </tr>
-            <tr>
-                <th>Description du sponsor</th>
-                
-                 <td style="white-space: pre-line;">{{ sponsor.descriptionSponsor|nl2br }}</td>
-            </tr>
-            <tr>
-                <th>Logo du sponsor</th>
-                <td>{{ sponsor.logoSponsor }}</td>
-            </tr>
-            <tr>
-                <th>Nom équipe sponsoriseé</th>
-                <td>{{ sponsor.IdEquipe }}</td>
-            </tr>
-            <tr>
-                <th>Site web</th>
-                 <td><a href="{{ sponsor.siteWebs }}">{{ sponsor.siteWebs }}</a></td>
-            </tr>
-        </tbody>
-    </table>
-
-    <a class="btn" href="{{ path('app_sponsor_index') }}">Retour à la liste</a>
-
-    
 
    
 {% endblock %}
+

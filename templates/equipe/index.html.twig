@@ -7,6 +7,48 @@
         <div class="container">
             <div class="row">
                 <div class="col-md-9">
+                    <h4>Les équipes</h4>
+
+                </div>
+            </div>
+            </div>
+            </section>
+                <div class="champ-tab-wrap tab-content">
+                <div class="tab-item part-wrap tab-pane active" id="participants">
+    <div class="part-list">
+        <div class="container">
+            <div class="row">
+           {% for equipe in equipes %}
+
+            <!--CHAMPIONSHIP PART WRAP BEGIN -->
+
+                <div class="col-md-3">
+                    <a href="{{ path('app_equipe_show', {'id': equipe.id}) }}" class="item">
+                        <span class="logo"><img src="{{asset('equipeImages/'~equipe.logoEquipe)}}" width="80" height="80" alt="team-logo"></span>
+                        <span class="name">{{equipe.nomEquipe}}</span>
+                        
+                    </a>
+                </div>
+               
+            
+
+ {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>
+ 
+{% endblock %}
+
+{#{% extends 'base.html.twig' %}
+
+{% block title %}Equipe index{% endblock %}
+
+{% block body %}
+     <section class="club-wrap club-champ">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-9">
                     <h4>EQUIPE </h4>
                     <div class="champ-date"><i class="fa fa-calendar" aria-hidden="true"></i></div>
                 </div>
@@ -75,7 +117,6 @@
               {#  <div class="club-info">
                   {#  <div class="item">Description equipe : </div>
                     <p>{{equipe.descriptionEquipe}}</p>
-                    #}
                 </div>	
             </div>
         </div>	
@@ -86,3 +127,4 @@
  {% endfor %}
  
 {% endblock %}
+                    #}

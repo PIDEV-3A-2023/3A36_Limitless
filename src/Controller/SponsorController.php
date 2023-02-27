@@ -46,6 +46,7 @@ class SponsorController extends AbstractController
                 // instead of its contents
                 $sponsor->setLogoSponsor($filename);
             }
+            $sponsor->setDateCreationn(new \DateTime());
             $sponsorRepository->save($sponsor, true);
             return $this->redirectToRoute('app_sponsor_index', [], Response::HTTP_SEE_OTHER);
         }

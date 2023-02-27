@@ -1,41 +1,42 @@
+
 {% extends 'base.html.twig' %}
 
-{% block title %}les sponsors{% endblock %}
+{% block title %}sponsor index{% endblock %}
 
 {% block body %}
-    <h1>les sponsors</h1>
+     <section class="club-wrap club-champ">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-9">
+                    <h4>Les sponsors</h4>
 
-    <table class="table">
-        <thead>
-            <tr>
-                
-                <th>Logo du sponsor</th>
-                <th>Nom du sponsor</th>
-                
-                <th>Site web</th>
-                <th>actions</th>
-            </tr>
-        </thead>
-        <tbody>
-        {% for sponsor in sponsors %}
-            <tr>
-                
-                <td><a  class="custom-logo-link"><img src="{{asset('sponsorImages/'~sponsor.logoSponsor)}}" alt="logo" class="custom-logo"></a></td>
-                <td>{{ sponsor.nomSponsor }}</td>
-                
-                <td>{{ sponsor.siteWebs }}</td>
-                <td>
-                    <a class="btn" href="{{ path('app_sponsor_show', {'id': sponsor.id}) }}">Détails</a>
-                   
-                </td>
-            </tr>
-        {% else %}
-            <tr>
-                <td colspan="6">Aucun enregistrement trouvé</td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
+                </div>
+            </div>
+            </div>
+            </section>
+                <div class="champ-tab-wrap tab-content">
+                <div class="tab-item part-wrap tab-pane active" id="participants">
+    <div class="part-list">
+        <div class="container">
+            <div class="row">
+           {% for sponsor in sponsors %}
 
-    <a href="{{ path('app_sponsor_new') }}"></a>
+            <!--CHAMPIONSHIP PART WRAP BEGIN -->
+
+                <div class="col-md-3">
+                    <a href="{{ path('app_sponsor_show', {'id': sponsor.id}) }}" class="item">
+                        <span class="logo"><img src="{{asset('sponsorImages/'~sponsor.logoSponsor)}}" width="80" height="80" alt="team-logo"></span>
+                        <span class="name">{{sponsor.nomSponsor}}</span>
+                        
+                    </a>
+                </div>
+               
+            
+
+ {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>
+ 
 {% endblock %}

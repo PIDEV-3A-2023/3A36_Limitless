@@ -47,6 +47,7 @@ class SponsorbackController extends AbstractController
                 // instead of its contents
                 $sponsor->setLogoSponsor($filename);
             }
+            $sponsor->setDateCreationn(new \DateTime());
             $sponsorRepository->save($sponsor, true);
             return $this->redirectToRoute('app_sponsorback_index', [], Response::HTTP_SEE_OTHER);
         }
@@ -87,6 +88,7 @@ class SponsorbackController extends AbstractController
                  // instead of its contents
                  $sponsor->setLogoSponsor($filename);
              }
+             
             $sponsorRepository->save($sponsor, true);
 
             return $this->redirectToRoute('app_sponsorback_index', [], Response::HTTP_SEE_OTHER);

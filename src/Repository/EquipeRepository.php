@@ -39,6 +39,25 @@ class EquipeRepository extends ServiceEntityRepository
         }
     }
 
+    public function search($query)
+{
+    $qb = $this->createQueryBuilder('e')
+        ->where('e.nom_equipe LIKE :query')
+        ->setParameter('query', '%'.$query.'%')
+        ->orderBy('e.nom_equipe', 'ASC')
+        ->setMaxResults(10);
+
+    return $qb->getQuery()->getResult();
+}
+
+public function findAllOrderByNom(): array
+{
+    return $this->createQueryBuilder('u')
+        ->orderBy('u.nom_equipe', 'ASC')
+        ->getQuery()
+        ->getResult();
+}
+
 //    /**
 //     * @return Equipe[] Returns an array of Equipe objects
 //     */

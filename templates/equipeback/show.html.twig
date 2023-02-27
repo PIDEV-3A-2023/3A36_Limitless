@@ -3,13 +3,20 @@
 {% block title %}Equipe{% endblock %}
 
 {% block body %}
-    <h1>Equipe</h1>
-
+<div class="col-12 grid-margin stretch-card">
+    <div class="card">
+        <div class="card-body">
+        <h4 class="card-title"></h4>
+        <p class="card-description"> <br></p>
+    <h1>Détails Equipe</h1>
+<div> <p> </p> </div>
+<div> <p> </p> </div>
     <table class="table">
         <tbody>
+            
             <tr>
-                <th>Id</th>
-                <td>{{ equipe.id }}</td>
+                <th>Logo_equipe</th>
+                <td><a  class="custom-logo-link"><img src="{{asset('equipeImages/'~equipe.logoEquipe)}}" alt="logo" class="custom-logo"></a></td>
             </tr>
             <tr>
                 <th>Nom_equipe</th>
@@ -18,14 +25,12 @@
             <tr>
                 <th>Description_equipe</th>
                 <td>{{ equipe.descriptionEquipe }}</td>
+                
             </tr>
+            
             <tr>
                 <th>Nb_joueurs</th>
                 <td>{{ equipe.nbJoueurs }}</td>
-            </tr>
-            <tr>
-                <th>Logo_equipe</th>
-                <td><a  class="custom-logo-link"><img src="{{asset('equipeImages/'~equipe.logoEquipe)}}" alt="logo" class="custom-logo"></a></td>
             </tr>
             <tr>
                 <th>Site_web</th>
@@ -33,12 +38,16 @@
             </tr>
             <tr>
                 <th>Date_creation</th>
-                <td>{{ equipe.dateCreation|date('Y-m-d H:i') }}</td>
+                <td>{{ equipe.dateCreation|date('Y-m-d ') }}</td>
             </tr>
         </tbody>
-    <a  href="{{ path('app_equipeback_index') }}">back to list</a>
     </table>
+    <div> <p> </p> </div>
+    <div> <p> </p> </div>
+    <a class="btn btn-primary mr-2" href="{{ path('app_equipeback_index') }}">Retour </a>
 
-
+ </div>
+    </div>
+</div>
     
 {% endblock %}

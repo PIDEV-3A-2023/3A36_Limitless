@@ -111,4 +111,40 @@ class EquipebackController extends AbstractController
 
         return $this->redirectToRoute('app_equipeback_index', [], Response::HTTP_SEE_OTHER);
     }
+    #[Route('/search', name: 'app_equipeback_search', methods: ['GET', 'POST'])]
+    public function search(Request $request, EquipeRepository $equipeRepository): JsonResponse
+    {
+        $query = $request->query->get('query');
+        $equipe = $equipeRepository->search($query);
+        $data = $this->renderView('equipeback/_equipes.html.twig', [
+            'equipe' => $equipe,
+        ]);
+        return new JsonResponse(['data' => $data]);
+    }
+    
+    #[Route('/triequipe', name: 'tri_equipe', methods: ['GET', 'POST'])]
+    public function ajaxAction(Request $request, EquipeRepository $equipeRepository): Response
+    { 
+
+        $equipes = $equipeRepository->findBy([], ['nom_equipe' => 'ASC']);
+
+    $data = [];
+
+    foreach ($equipes as $equipe) {
+        $data[] = [
+            'logo_equipe' => $equipe->getLogoEquipe(),
+            'nom_equipe' => $equipe->getNomEquipe(),    
+                 'nb_joueurs' => $equipe->getNbJoueurs(),
+                 'site_web' => $equipe->getSiteWeb(),  
+                 'date_creation' => $equipe->getDateCreation(),
+                 
+        ];
+    }
+
+    return new JsonResponse($data);
+        
+     }  
+
+    
+
 }

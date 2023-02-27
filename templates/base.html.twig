@@ -13,7 +13,7 @@
 		{% block style %}
 			<link href="https://fonts.googleapis.com/css?family=Montserrat%7COpen+Sans:700,400%7CRaleway:400,800,900" rel="stylesheet"/>
 			<link rel="icon" href="favicon.ico" type="image/x-icon">
-
+            
 			<link href="{{asset('css/library/bootstrap.css')}}" rel="stylesheet" type="text/css"/>
 			<link href="{{asset('dev-assets/preloader-default.css')}}" rel="stylesheet" type="text/css"/>
 			<link href="{{asset('dev-assets/demo-switcher.css')}}" rel="stylesheet" type="text/css"/>
@@ -72,13 +72,13 @@
 									<span>Tournois</span>
 								</a>
 							</li>
-							<li class="active">
+							<li >
 								
 								<a href="{{path('app_equipe_new')}}">
 									<span>Equipes</span>
 								</a>
                          <ul> 
-                            <li><a href="{{path('app_equipe_new')}}"><span>creation equipe</span></a></li>
+                            <li><a href="{{path('app_equipe_index')}}"><span>equipes</span></a></li>
                             <li><a href="{{path('app_sponsor_index')}}"><span>sponsors</span></a></li>
                         </ul>
 						

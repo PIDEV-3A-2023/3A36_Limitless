@@ -3,41 +3,46 @@
 {% block title %}Equipe{% endblock %}
 
 {% block body %}
-    <h1>Equipe</h1>
+   <section class="club-wrap club-champ">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-9">
+                    <h4>Détails de l'equipe </h4>
+                    
+                </div>
+                <div class="col-md-3">
+                    <a href="{{ path('app_equipe_index') }}" class="btn small club-top-btn">retour</a>
+                </div>
+            </div>
+        </div>
+        
+<div class="championship-header-wrapper">
+    <div class="container">
+        <div class="row">
+           
+            <div class="col-md-3">
+                <div class="club-info">
+                    <div class="item"><span>Nom de l'equipe: </span>{{ equipe.nomEquipe }}</div>
+                    <div class="item"><span>Nombre de joueurs: </span>{{ equipe.nbJoueurs }}</div>
+                    <div class="item"><span>Site web: </span><a href="{{ equipe.siteWeb }}">{{ equipe.siteWeb }}</a></div>
+                    <div class="item"><span>Date de creation: </span>{{ equipe.dateCreation|date("m/d/y") }}</div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="club-info">
+                    <div class="item">Description de l'equipe: </div>
+                    <p>{{ equipe.descriptionEquipe }}</p>
+                </div>	
+            </div>
+        </div>	
+    </div>	
+</div>
+    </section>
 
-    <table class="table">
-        <tbody>
-            
-            <tr>
-                <th>Nom de l'equipe</th>
-                <td>{{ equipe.nomEquipe }}</td>
-            </tr>
-            <tr>
-                <th>Descriptionde l'equipe</th>
-                <td>{{ equipe.descriptionEquipe }}</td>
-            </tr>
-            <tr>
-                <th>Nombre de joueurs</th>
-                <td>{{ equipe.nbJoueurs }}</td>
-            </tr>
-            <tr>
-                <th>Logo de l'equipe</th>
-                <td>{{ equipe.logoEquipe }}</td>
-            </tr>
-            <tr>
-                <th>Site web</th>
-                <td><a href="{{ equipe.siteWeb }}">{{ equipe.siteWeb }}</a></td>
-            </tr>
-            <tr>
-                <th>Date de creation</th>
-                <td>{{ equipe.dateCreation|date("m/d/y") }}</td>
-            </tr>
-        </tbody>
-    </table>
-
-    <a class="btn" href="{{ path('app_equipe_index') }}">retour à la liste</a>
+  
 
    
 
    
 {% endblock %}
+

@@ -21131,5 +21131,10 @@ div.tagsinput {
   width: 100%;
   -webkit-flex-grow: 1;
   flex-grow: 1; }
+  .sponsor-card {
+    border: 2px solid black;
+    padding: 10px;
+}
+
 
 /*# sourceMappingURL=maps/style.css.map */

@@ -3,10 +3,39 @@
 {% block title %}Equipe index{% endblock %}
 
 {% block body %}
+
+<script language="javascript" src="{{ asset('https://code.jquery.com/jquery-2.2.4.min.js')}}"></script>
+
+			<script language="javascript">
+				
+				$('#triequipe').click(function(response) {
+				$.ajax({
+				url: '/equipeback/triequipe',
+				type: 'POST',
+				dataType: 'json',
+				async: true,
+				//console.log(response);
+				success: function (response) {
+					//console.log();
+					$('#equipes').empty();
+					$.each(response, function (index, equipe) {
+						var row='<tr><td class="py-1"><img src="{{ asset("equipeImages/" ~ 'equipe.logoEquipe')}}</td><td class="bg-warning font-weight-bold text-dark">' + equipe.nomEquipe + '</td><td class="text-capitalize text-success">' + equipe.nbJoueurs + '</td><td>' + equipe.siteWeb + '</td><td>' + equipe.dateCreation  + '</td></tr>';
+						$('#equipes').append(row);
+
+					});
+				}
+				});
+				});
+				
+			</script>
+	<div class="main-panel">
+   
+
     <div class="main-panel">
           <div class="content-wrapper">
             <div class="page-header">
               <h3 class="page-title"> Equipes </h3>
+<a id="triequipe" class="btn btn-primary" href="{{ path('tri_equipe')}}">Trier</a>
               <nav aria-label="breadcrumb">
                 <ol class="breadcrumb">
                   <li class="breadcrumb-item"><a href="#">Tables</a></li>
@@ -26,11 +55,11 @@
                         <thead>
             <tr>
                 
-                <th>Logo_equipe</th>
-                <th>Nom_equipe</th>               
-                <th>Nb_joueurs</th>                
-                <th>Site_web</th>
-                <th>Date_creation</th>
+                <th>Logo de l'equipe</th>
+                <th>Nom de l'equipe</th>               
+                <th>Nombre de joueurs</th>                
+                <th>Site web</th>
+                <th>Date de creation</th>
                 <th>actions</th>
                 <th>Détails</th>
             </tr>
@@ -50,7 +79,7 @@
                  <td>{{ equipe.nomEquipe }}</td> 
                 <td>{{ equipe.nbJoueurs }}</td>            
                 <td>{{ equipe.siteWeb }}</td>
-                <td>{{equipe.dateCreation ? equipe.dateCreation|date('Y-m-d H:i') }}</td>
+                <td>{{equipe.dateCreation ? equipe.dateCreation|date('Y-m-d ') }}</td>
                 <td>
                     
                     <a class="btn btn-primary" href="{{ path('app_equipeback_edit', {'id': equipe.id}) }}"><i class="mdi mdi-pencil"></i></a>
@@ -106,3 +135,28 @@
         </div>
 {% endblock %}
 
+{% block javascripts %}
+    {{ parent() }}
+    <script>
+        $(document).ready(function() {
+            $('#search-form').submit(function(event) {
+                event.preventDefault();
+                var form = $(this);
+                var url = form.attr('action') || window.location.href;
+                var data = form.serialize();
+
+                $.ajax({
+                    type: 'POST',
+                    url: url,
+                    data: data,
+                    success: function(response) {
+                        $('#search-results').html(response.data);
+                    },
+                    error: function(xhr, textStatus, errorThrown) {
+                        console.log(xhr.responseText);
+                    }
+                });
+            });
+        });
+    </script>
+{% endblock %}

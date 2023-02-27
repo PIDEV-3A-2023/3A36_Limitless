@@ -26,10 +26,11 @@
                         <thead>
             <tr>
                
-                <th>Logo_sponsor</th>
-                <th>Nom_sponsor</th>               
-                <th>Site_webs</th>
+                <th>Logo du sponsor</th>
+                <th>Nom du sponsor</th>               
+                <th>Site web</th>
                 <th>Nom équipe sponsoriseé</th>
+                <th>Date de creation</th> 
                 <th>actions</th>
                 <th>Détails</th>
             </tr>
@@ -42,6 +43,7 @@
                 <td>{{ sponsor.nomSponsor }}</td>          
                 <td>{{ sponsor.siteWebs }}</td>
                 <td>{{ sponsor.IdEquipe }}</td>
+                <td>{{sponsor.dateCreationn ? sponsor.dateCreationn|date('Y-m-d ') }}</td>
                 <td>
                   <a class="btn btn-primary" href="{{ path('app_sponsorback_edit', {'id': sponsor.id}) }}"><i class="mdi mdi-pencil"></i></a>
                      <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#deleteModal{{ loop.index }}">
