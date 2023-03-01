@@ -33,6 +33,7 @@ class Equipe
      
      * @Assert\NotBlank(message="Le nombre de joueurs est obligatoire")
      */
+    #[Groups("equipe")]
     private ?int $nb_joueurs = null;
 
     #[ORM\Column(length: 255)]
@@ -55,6 +56,7 @@ class Equipe
     public function __construct()
     {
         $this->sponsors = new ArrayCollection();
+       
     }
 
     public function getId(): ?int

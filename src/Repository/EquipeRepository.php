@@ -58,6 +58,17 @@ public function findAllOrderByNom(): array
         ->getResult();
 }
 
+public function statnbjoueurs($equipe)
+    {
+         
+            return $this->createQueryBuilder('e')
+        ->select('e.nb_joueurs, COUNT(e.id) as count')
+       ->groupBy('e .nb_joueurs')       
+        ->getQuery()
+        ->getResult();
+
+    }
+
 //    /**
 //     * @return Equipe[] Returns an array of Equipe objects
 //     */

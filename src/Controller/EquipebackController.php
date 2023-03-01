@@ -10,18 +10,55 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Form\FormInterface;
-
+use phpDocumentor\Reflection\DocBlock\Tags\Var_;
 #[Route('/equipeback')]
 class EquipebackController extends AbstractController
 {
     #[Route('/', name: 'app_equipeback_index', methods: ['GET'])]
     public function index(EquipeRepository $equipeRepository): Response
     {
+        $equipe = $equipeRepository->findAll();
+        $nbJoueurs = [];
+       $nbJoueursCounts = [];
+
+
+       foreach ($equipe as $equipes) {
+        $nbJoueurs = $equipes->getNbJoueurs();
+        if (!isset($nbJoueursCounts[$nbJoueurs])) {
+            $nbJoueursCounts[$nbJoueurs] = 0;
+        }
+        $nbJoueursCounts[$nbJoueurs]++;
+    }
         return $this->render('equipeback/index.html.twig', [
             'equipes' => $equipeRepository->findAll(),
+            'nbJoueurs'=>json_encode($nbJoueurs),
+            'nbJoueursCounts'=>json_encode($nbJoueursCounts)
         ]);
     }
 
+
+    #[Route('/s', name: 'app_equipeback_indexs', methods: ['GET'])]
+    public function stat(EquipeRepository $equipeRepository) : Response
+    {
+        $equipe = $equipeRepository->findAll();
+         $nbJoueurs = [];
+       $nbJoueursCounts = [];
+
+
+       foreach ($equipe as $equipes) {
+        $nbJoueurs = $equipes->getNbJoueurs();
+        if (!isset($nbJoueursCounts[$nbJoueurs])) {
+            $nbJoueursCounts[$nbJoueurs] = 0;
+        }
+        $nbJoueursCounts[$nbJoueurs]++;
+    }
+        return $this->render('equipeback/stats.html.twig', [
+            'equipes' => $equipeRepository->findAll(),
+            'nbJoueurs'=>json_encode($nbJoueurs),
+            'nbJoueursCounts'=>json_encode($nbJoueursCounts)
+        ]);
+    }
+    
     
     #[Route('/new', name: 'app_equipeback_new', methods: ['GET', 'POST'])]
     public function new(Request $request, EquipeRepository $equipeRepository): Response
@@ -144,7 +181,27 @@ class EquipebackController extends AbstractController
     return new JsonResponse($data);
         
      }  
+/*
+     #[Route('/stat', name: 'app_equipeback_stat')]
+     public function stat(Equipe $equipe ,EquipeRepository $equipeRepository): Reponne
+     {
+        $equipe = $equipeRepository->findAll();
 
-    
+        $equipenb = [];
+        $equipecount = [];
+
+        foreach($equipe as $equipes){
+            $equipenb[] = $equipes->getNbJoueurs();
+            $equipecount[] = count($equipes->getNomEquipe());
+        }
+           
+         return $this->render('equipeback/stats.html.twig', [
+             
+             'equipenb'=>json_encode($equipenb),
+             'equipecount'=>json_encode($equipecount)
+         ]);
+     }
+
+     */
 
 }

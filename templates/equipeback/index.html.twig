@@ -66,6 +66,7 @@
 
 
         </thead>
+        
         {% for equipe in equipes %}
         <tbody>
 
@@ -126,8 +127,61 @@
         </tbody>
         {% endfor %}
     </table>
-        
+    
                      </div>
+        <div>
+    {#    
+<div>
+  <canvas id="myChart"></canvas>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script>
+  const ctx = document.getElementById('myChart');
+  new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels: {{nbJoueursCounts|keys|json_encode|raw}},
+      datasets: [{
+        label: 'Nombre de joueurs',
+        data: {{nbJoueursCounts|raw}},
+          backgroundColor: [
+          'rgba(255, 99, 132, 0.2)', // Couleur pour nbJoueurs=1
+          'rgba(54, 162, 235, 0.2)', // Couleur pour nbJoueurs=2
+          'rgba(255, 206, 86, 0.2)', // Couleur pour nbJoueurs=3
+          'rgba(75, 192, 192, 0.2)', // Couleur pour nbJoueurs=4
+          'rgba(153, 102, 255, 0.2)', // Couleur pour nbJoueurs=5
+          'rgba(255, 159, 64, 0.2)' // Couleur pour nbJoueurs=6
+        ],
+        borderColor: [
+          'rgba(255, 99, 132, 1)', // Couleur de bordure pour nbJoueurs=1
+          'rgba(54, 162, 235, 1)', // Couleur de bordure pour nbJoueurs=2
+          'rgba(255, 206, 86, 1)', // Couleur de bordure pour nbJoueurs=3
+          'rgba(75, 192, 192, 1)', // Couleur de bordure pour nbJoueurs=4
+          'rgba(153, 102, 255, 1)', // Couleur de bordure pour nbJoueurs=5
+          'rgba(255, 159, 64, 1)' // Couleur de bordure pour nbJoueurs=6
+        ],
+        borderWidth: 1
+      }]
+    },
+    options: {
+      scales: {
+        y: {
+          beginAtZero: true
+        }
+      }
+    }
+  });
+</script>
+</div>
+#}
+</div>
+
+                </div>
+            </div>
+        </div>
+    </section>
                   </div>
                 </div>
               </div>
@@ -135,28 +189,3 @@
         </div>
 {% endblock %}
 
-{% block javascripts %}
-    {{ parent() }}
-    <script>
-        $(document).ready(function() {
-            $('#search-form').submit(function(event) {
-                event.preventDefault();
-                var form = $(this);
-                var url = form.attr('action') || window.location.href;
-                var data = form.serialize();
-
-                $.ajax({
-                    type: 'POST',
-                    url: url,
-                    data: data,
-                    success: function(response) {
-                        $('#search-results').html(response.data);
-                    },
-                    error: function(xhr, textStatus, errorThrown) {
-                        console.log(xhr.responseText);
-                    }
-                });
-            });
-        });
-    </script>
-{% endblock %}
