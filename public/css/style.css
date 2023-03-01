@@ -21131,10 +21131,17 @@ div.tagsinput {
   width: 100%;
   -webkit-flex-grow: 1;
   flex-grow: 1; }
+
+
   .sponsor-card {
     border: 2px solid black;
     padding: 10px;
 }
 
+.moved {
+  position: relative;
+  top: 10px; /* changer la valeur pour déplacer l'élément vers le haut ou le bas */
+  left:50%; /* changer la valeur pour déplacer l'élément vers la droite ou la gauche */
+}
 
 /*# sourceMappingURL=maps/style.css.map */

@@ -36,7 +36,10 @@
  {% endfor %}
             </div>
         </div>
+ <div class="moved">
+ {% do sponsors.setPageRange(2) %}
+ {{knp_pagination_render(sponsors , 'sponsor/paginationn.html.twig')}}
+ </div>
     </div>
 </div>
- 
 {% endblock %}

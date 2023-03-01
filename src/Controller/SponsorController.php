@@ -9,15 +9,29 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Knp\Component\Pager\PaginatorInterface;
 
 #[Route('/sponsor')]
 class SponsorController extends AbstractController
 {
     #[Route('/', name: 'app_sponsor_index', methods: ['GET'])]
-    public function index(SponsorRepository $sponsorRepository): Response
+    public function index(
+        SponsorRepository $sponsorRepository,
+        PaginatorInterface $paginator,
+        Request $request
+    
+    ): Response
     {
+        $data = $sponsorRepository->findAll();
+        $sponsors = $paginator->paginate (
+
+          $data,
+          $request->query->getInt('page',1),
+          2
+
+        );
         return $this->render('sponsor/index.html.twig', [
-            'sponsors' => $sponsorRepository->findAll(),
+            'sponsors' => $sponsors,
         ]);
     }
 

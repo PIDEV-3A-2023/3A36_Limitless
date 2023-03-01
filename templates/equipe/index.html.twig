@@ -37,7 +37,10 @@
         </div>
     </div>
 </div>
- 
+ <div class="moved">
+ {% do equipes.setPageRange(2) %}
+ {{knp_pagination_render(equipes , 'equipe/pagination.html.twig')}}
+ </div>
 {% endblock %}
 
 {#{% extends 'base.html.twig' %}

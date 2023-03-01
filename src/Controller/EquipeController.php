@@ -10,15 +10,29 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Knp\Component\Pager\PaginatorInterface;
 
 #[Route('/equipe')]
 class EquipeController extends AbstractController
 {
     #[Route('/', name: 'app_equipe_index', methods: ['GET'])]
-    public function index(EquipeRepository $equipeRepository): Response
+    public function index(
+        EquipeRepository $equipeRepository,
+        PaginatorInterface $paginator,
+        Request $request
+        ): Response
     {
+        $data = $equipeRepository->findAll();
+        $equipes = $paginator->paginate (
+
+          $data,
+          $request->query->getInt('page',1),
+          4
+
+        );
+
         return $this->render('equipe/index.html.twig', [
-            'equipes' => $equipeRepository->findAll(),
+            'equipes' => $equipes  ,
         ]);
     }
 
