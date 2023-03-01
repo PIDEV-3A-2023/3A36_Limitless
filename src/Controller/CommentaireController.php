@@ -36,13 +36,13 @@ class CommentaireController extends AbstractController
         $entityManager->remove($comment);
         $entityManager->flush();
 
-        $getidofblog = $comment->getBlog()->getId();
+        $getSLUGofblog = $comment->getBlog()->getSlug();
 
-        return $this->redirectToRoute('app_blog_show', ['id'=>$getidofblog]);
+        return $this->redirectToRoute('app_blog_show', ['slug'=>$getSLUGofblog]);
     }
 
     #[Route('/commentaire/edit/{id}', name: 'app_comment_edit', methods: ['GET', 'POST'])]
-    public function editBlog(Request $request, $id, EntityManagerInterface $entityManager): Response{
+    public function editCommentaire(Request $request, $id, EntityManagerInterface $entityManager): Response{
 
         $commentaire = $entityManager->getRepository(Commentaire::class)->find($id);
         $form = $this->createForm(CommentaireType::class, $commentaire);
@@ -58,9 +58,9 @@ class CommentaireController extends AbstractController
             $em->persist($commentaire);
             $em->flush();
 
-            $getidofblog = $commentaire->getBlog()->getId();
+            $getSLUGofblog = $commentaire->getBlog()->getSlug();
 
-            return $this->redirectToRoute('app_blog_show', ['id'=>$getidofblog]);
+            return $this->redirectToRoute('app_blog_show', ['slug'=>$getSLUGofblog]);
         }
 
         //number
@@ -80,7 +80,7 @@ class CommentaireController extends AbstractController
     public function reportComment(Request $request, Commentaire $comment): Response
     {
         $user = $this->getUser();
-        $getidofblog = $comment->getBlog()->getId();
+        $getSLUGofblog = $comment->getBlog()->getSlug();
 
         // Check if the user has already reported the comment
         $report = $this->getDoctrine()->getRepository(Report::class)->findOneBy([
@@ -91,7 +91,7 @@ class CommentaireController extends AbstractController
         if ($report) {
             $this->addFlash('error', 'You have already reported this comment.');
 
-            return $this->redirectToRoute('app_blog_show', ['id' => $getidofblog]);
+            return $this->redirectToRoute('app_blog_show', ['slug' => $getSLUGofblog]);
         }
 
         // Increment the reported field of the comment and save the report and comment entities
@@ -108,6 +108,6 @@ class CommentaireController extends AbstractController
 
         $this->addFlash('success', 'Comment reported.');
 
-        return $this->redirectToRoute('app_blog_show', ['id' => $getidofblog]);
+        return $this->redirectToRoute('app_blog_show', ['slug' => $getSLUGofblog]);
     }
 }

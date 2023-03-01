@@ -26,7 +26,7 @@
         {% set number = number + 1 %}
         <ul class="categories-list">
             <li>
-                <a href="#"><span class="count">{{ number }}</span>{{ hotblogs.titre|slice(0, 25) }}</a>
+                <a href="{{ path('app_blog_show', {'slug': hotblogs.slug }) }}"><span class="count">{{ number }}</span>{{ hotblogs.titre|slice(0, 25) }}</a>
             </li>
         </ul>
         {% endif %}
@@ -58,7 +58,7 @@
     <div class="recent-news">
         <div class="item">
             <div class="date"><a href="news-single.html">{{ blogrecent.dateCreation|date("m/d/Y") }}</a></div>
-            <a href="{{ path('app_blog_show', {'id': blogrecent.id}) }}" class="name">{{ blogrecent.titre }}</a>
+            <a href="{{ path('app_blog_show', {'slug': blogrecent.slug }) }}" class="name">{{ blogrecent.titre }}</a>
         </div>
     </div>
     <br>
@@ -78,10 +78,10 @@
 {% if blog.etat == 2 %}
     <div class="item img-top">
         <div class="img-wrap">
-            <a href="{{ path('app_blog_show', {'id': blog.id}) }}"><img src="{{ asset('blogImages/' ~ blog.imageBlog) }}"></a>
+            <a href="{{ path('app_blog_show', {'slug': blog.slug}) }}"><img src="{{asset('/blogImages/' ~ blog.imageBlog ) | imagine_filter('OnetoOne') }}" ></a>
         </div>
         <div class="info">
-            <a href="{{ path('app_blog_show', {'id': blog.id}) }}" class="name">{{ blog.titre }}</a>
+            <a href="{{ path('app_blog_show', {'slug': blog.slug}) }}" class="name">{{ blog.titre }}</a>
             <div class="wrap">
                 <a>{{ blog.dateCreation|date("m/d/Y") }}</a> Par <a href="news-single.html">{{ blog.user.email }}</a>
             </div>
@@ -89,20 +89,10 @@
         </div>
     </div>
 {% endif %}
-{% endfor %} 
-{{ knp_pagination_render(blog) }}
-
-    <div class="pagination-wrap">
-        <ul class="pagination">
-            <li><a href="#"><i class="fa fa-chevron-left" aria-hidden="true"></i></a></li>
-            <li><a href="#">1</a></li>
-            <li class="active"><a href="#">2</a></li>
-            <li><a href="#">3</a></li>
-            <li><a href="#">4</a></li>
-            <li><a href="#">5</a></li>
-            <li><a href="#"><i class="fa fa-chevron-right" aria-hidden="true"></i></a></li>
-        </ul>
-    </div>
+{% endfor %}
+<div class="pagination-wrap">
+    {{ knp_pagination_render(blog, 'blog/pagination.html.twig') }}
+</div>
 
     
 </div>

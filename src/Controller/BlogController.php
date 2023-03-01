@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Controller;
+use Cocur\Slugify\SlugifyInterface;
 
 use App\Entity\Blog;
 use App\Entity\Tags;
@@ -65,17 +66,14 @@ class BlogController extends AbstractController
         $form = $this->createForm(BlogType::class, $blog);
         $form->handleRequest($request);
         
-        
         if($form->isSubmitted() && $form->isValid()){
         
             $file = $form->get('imageBlog')->getData();
             if ($file) {
                 $filename = pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME);
-                //$filename = uniqid() . '.' . $file->guessExtension();
                 $safeFileName= $sluggerInterface->slug($file);
                 $newfilename= $safeFileName.'-'.uniqid().'.'. $file->guessExtension();
 
-                // Move the file to the directory where brochures are stored
                 try{
                     $file->move(
                         'blogImages',
@@ -84,8 +82,6 @@ class BlogController extends AbstractController
                 }catch(FileException $e){
 
                 }
-
-                // Update the 'image' property to store the image file name
                 $blog->setImageBlog($newfilename);
             }else{
                 $blog->setImageBlog(" ");
@@ -105,14 +101,16 @@ class BlogController extends AbstractController
         ]);
     }
 
-    #[Route('/blog/{id}', name: 'app_blog_show', methods: ['GET', 'POST'])]
-    public function showBlog(Request $request, Blog $blog,$id,BlogRepository $blogRepository): Response{
+    #[Route('/blog/{slug}', name: 'app_blog_show', methods: ['GET', 'POST'])]
+    public function showBlog(Request $request, Blog $blog,$slug,BlogRepository $blogRepository,EntityManagerInterface $entityManager): Response{
 
         $commentaire = new Commentaire();
         $form = $this->createForm(CommentaireType::class, $commentaire);
         $form->handleRequest($request);
-        $blog=$blogRepository->find($id);
-        
+
+        $blog = $entityManager->getRepository(Blog::class)->findOneBy(['slug' => $slug]);
+        $id = $blog->getId();
+
         $commentaire->setBlog($blog);
         $commentaire->setNbSignaler(0);
         $commentaire->setUser($this->getUser());
@@ -159,6 +157,7 @@ class BlogController extends AbstractController
 
     #[Route('/blogedit/{id}', name: 'app_blog_edit', methods: ['GET', 'POST'])]
     public function editBlog(Request $request, $id, EntityManagerInterface $entityManager, BlogRepository $blogRepository, SluggerInterface $sluggerInterface): Response{
+
         $blog = $entityManager->getRepository(Blog::class)->find($id);
         $form = $this->createForm(BlogType::class, $blog);
         $form->handleRequest($request);
@@ -175,23 +174,23 @@ class BlogController extends AbstractController
                 $filename = pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME);
                 $safeFileName= $sluggerInterface->slug($file);
                 $newfilename= $safeFileName.'-'.uniqid().'.'. $file->guessExtension();
-                // Move the file to the directory where brochures are stored
+
                 try{
                     $file->move(
                         'blogImages',
                         $newfilename
                     );
                 }catch(FileException $e){
-
                 }
-                // Update the 'image' property to store the image file name
                 $blog->setImageBlog($newfilename);
             }
+
+            $blogSlug= $blog->getSlug();
             
             $em->persist($blog);
             $em->flush();
 
-            return $this->redirectToRoute('app_blog_show', ['id'=>$id]);
+            return $this->redirectToRoute('app_blog_show', ['slug'=>$blogSlug]);
             
         }
 
@@ -222,7 +221,6 @@ class BlogController extends AbstractController
         if (!$user) {
             throw new AccessDeniedHttpException();
         }
-
         //Check if the user has already liked this blog
         $like = $entityManager->getRepository(LikeBlog::class)->findOneBy(['blog' => $blog, 'user' => $user]);
 
@@ -231,10 +229,7 @@ class BlogController extends AbstractController
             $entityManager->remove($like);
         } else {
             //Create a new Like entity with the value llike in the type column
-            $like = new LikeBlog();
             $blog->like($user);
-
-            $entityManager->persist($like);
         }
 
         //Check if the user has already disliked this blog
@@ -247,7 +242,10 @@ class BlogController extends AbstractController
         }
         $entityManager->flush();
 
-        return $this->redirectToRoute('app_blog_show', ['id' => $blog->getId()]);
+        $blog = $entityManager->getRepository(Blog::class)->find($id);
+        $slug = $blog->getSlug();
+
+        return $this->redirectToRoute('app_blog_show', ['slug' => $slug]);
     }
 
 
@@ -264,10 +262,7 @@ class BlogController extends AbstractController
         if ($dislike) {
             $entityManager->remove($dislike);
         } else {
-            $dislike = new DislikeBlog();
             $blog->dislike($user);
-
-            $entityManager->persist($dislike);
         }
 
         $like = $entityManager->getRepository(LikeBlog::class)->findOneBy(['blog' => $blog, 'user' => $user]);
@@ -278,6 +273,9 @@ class BlogController extends AbstractController
         }
         $entityManager->flush();
 
-        return $this->redirectToRoute('app_blog_show', ['id' => $blog->getId()]);
+        $blog = $entityManager->getRepository(Blog::class)->find($id);
+        $slug = $blog->getSlug();
+
+        return $this->redirectToRoute('app_blog_show', ['slug' => $slug]);
     }
 }

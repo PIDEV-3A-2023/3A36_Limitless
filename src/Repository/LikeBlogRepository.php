@@ -50,7 +50,7 @@ class LikeBlogRepository extends ServiceEntityRepository
     {
         
         return $this->createQueryBuilder('l')
-            ->select('b.id, b.titre, b.etat , COUNT(l.id) as likeCount')
+            ->select('b.id, b.titre, b.etat ,b.slug , COUNT(l.id) as likeCount')
             ->join('l.blog', 'b')
             ->groupBy('b.id')
             ->orderBy('likeCount', 'DESC')

@@ -2,11 +2,13 @@
 
 namespace App\Entity;
 
-use App\Repository\BlogRepository;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use App\Repository\BlogRepository;
+use Gedmo\Mapping\Annotation as Gedmo;
+use Doctrine\Common\Collections\Collection;
+use Doctrine\Common\Collections\ArrayCollection;
+use Symfony\Component\String\Slugger\SluggerInterface;
 use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: BlogRepository::class)]
@@ -50,6 +52,22 @@ class Blog
 
     #[ORM\OneToMany(mappedBy: 'blog', targetEntity: DislikeBlog::class,cascade:["persist","remove","merge"], orphanRemoval:true)]
     private Collection $dislikeBlogs;
+
+    #[Gedmo\Slug(fields:["titre"])]
+    #[ORM\Column(length: 255)]
+    private $slug;
+
+    public function getSlug(): ?string
+    {
+        return $this->slug;
+    }
+
+    public function setSlug(string $slug): self
+    {
+        $this->slug = $slug;
+
+        return $this;
+    }
 
     public function __construct()
     {

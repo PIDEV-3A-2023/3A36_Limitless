@@ -100,7 +100,7 @@
                                     </div>
                                     </div>
                                     <div class="tags">
-                                        <a href="{{path('app_blog', {'id': blog.id} )}}" >Retour</a>
+                                        <a href="{{path('app_blog')}}" >Retour</a>
 
                                         {% if app.user is defined and blog.user == app.user %}
                                         <a href="{{path('app_blog_edit', {'id': blog.id} )}}" >Editer</a>

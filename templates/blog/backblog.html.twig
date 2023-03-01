@@ -43,9 +43,9 @@
                             <td>{{ blog.contenu|slice(0, 25) }}</td>
                             <td>{{ blog.dateCreation|date("m/d/Y") }}</td>
                             <td>{{ blog.dateModification|date("m/d/Y") }}</td>
-                            <td><img src="{{ asset('blogImages/' ~ blog.imageBlog) }}"></td>
+                            <td><img src="{{ asset('blogImages/' ~ blog.imageBlog) | imagine_filter('OnetoOne') }}"></td>
                             <td><a href="{{ path('app_blog_backend_comments', {'id': blog.id}) }}" class="btn btn-primary"> <i class="mdi mdi-eye"> </i> </a></td>
-                            <td><a href="{{ path('app_blog_show', {'id': blog.id}) }}" class="btn btn-primary"> <i class="mdi mdi-eye"> </i> </a></td>
+                            <td><a  class="btn btn-primary"> <i class="mdi mdi-eye"> </i> </a></td>
 
                             {% if blog.etat == 0 %}
                             <td><label class="badge badge-warning">En attente</label></td>
