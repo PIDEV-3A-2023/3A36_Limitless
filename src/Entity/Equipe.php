@@ -53,9 +53,13 @@ class Equipe
      */
     private ?\DateTimeInterface $date_creation = null;
 
+    #[ORM\OneToMany(mappedBy: 'equipe', targetEntity: Likeseq::class)]
+    private Collection $likeseqs;
+
     public function __construct()
     {
         $this->sponsors = new ArrayCollection();
+        $this->likeseqs = new ArrayCollection();
        
     }
 
@@ -169,6 +173,36 @@ class Equipe
     public function setDateCreation(\DateTimeInterface $date_creation): self
     {
         $this->date_creation = $date_creation;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Likeseq>
+     */
+    public function getLikeseqs(): Collection
+    {
+        return $this->likeseqs;
+    }
+
+    public function addLikeseq(Likeseq $likeseq): self
+    {
+        if (!$this->likeseqs->contains($likeseq)) {
+            $this->likeseqs->add($likeseq);
+            $likeseq->setEquipe($this);
+        }
+
+        return $this;
+    }
+
+    public function removeLikeseq(Likeseq $likeseq): self
+    {
+        if ($this->likeseqs->removeElement($likeseq)) {
+            // set the owning side to null (unless already changed)
+            if ($likeseq->getEquipe() === $this) {
+                $likeseq->setEquipe(null);
+            }
+        }
 
         return $this;
     }

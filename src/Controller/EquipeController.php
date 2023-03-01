@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\Equipe;
 use App\Form\EquipeType;
 use App\Form\DateType;
+use App\Entity\Likeseq;
 use App\Repository\EquipeRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -35,6 +36,51 @@ class EquipeController extends AbstractController
             'equipes' => $equipes  ,
         ]);
     }
+
+    #[Route('/addlikeq/{equipeId}', name: 'app_addlikeq', methods: ['GET'])]
+    public function addLikeq(Request $request, $equipeId, EquipeRepository $equipeRepository)
+    {
+    // Récupérer l'utilisateur connecté
+    //$user = $this->getUser();
+
+    // Récupérer l equipe correspondant à $productId
+    $equipe =$equipeRepository->find($equipeId);
+
+    // Récupérer la session de l'utilisateur
+    $session = $request->getSession();
+
+    // Récupérer les equipes déjà likés de la session
+    $likedEquipes = $session->get('liked_equipes', []);
+
+    // Vérifier si l equipe a déjà été liké
+    if (in_array($equipe->getId(), $likedEquipes)) {
+        $this->addFlash('warning', 'Vous avez déjà liké cette equipe.');
+
+        return $this->redirectToRoute('app_equipe_index', ['id' => $equipeId]);
+    }
+
+    // Ajouter un nouveau like
+    $likeq = new Likeseq();
+    $likeq->setEquipe($equipe)
+         ->setTypel(1);
+
+    $entityManager = $this->getDoctrine()->getManager();
+    $entityManager->persist($likeq);
+    $entityManager->flush();
+
+    // Ajouter l equipe liké à la session
+    $likedEquipes[] = $equipe->getId();
+    $session->set('liked_equipes', $likedEquipes);
+
+    $this->addFlash('success', 'Merci pour votre like !');
+
+    // Rediriger l'utilisateur vers la page du produit
+    return $this->redirectToRoute('app_equipe_index', ['id' => $equipeId]);
+    }
+
+
+
+
 
     #[Route('/new', name: 'app_equipe_new', methods: ['GET', 'POST'])]
     public function new(Request $request, EquipeRepository $equipeRepository): Response

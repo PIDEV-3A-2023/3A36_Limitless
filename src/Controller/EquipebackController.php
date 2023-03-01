@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Equipe;
 use App\Form\Equipe1Type;
+use App\Entity\Likeseq;
 use App\Repository\EquipeRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
