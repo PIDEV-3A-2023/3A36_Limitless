@@ -30,6 +30,7 @@
                             <th> Nom </th>
                             <th> Catgories </th>
                             <th> Type </th>
+                            <th> Date de Creation</th>
                             <th> Actions </th>
                           </tr>
                         </thead>
@@ -49,7 +50,8 @@
                             {% for type in jeux.types %}
                             {{ type.NomType }}{% if not loop.last %}, {% endif %}
                             {% endfor %}</td>
-                            
+                            {{ knp_pagination_render( jeuxes )}}
+                            <td>{{ jeux.dateCreation|date("m/d/Y") }}</td>
                               <td>
                               
                               <a href="{{ path('app_jeux_edit', {'id': jeux.id}) }}" class="btn btn-primary">
@@ -100,4 +102,4 @@
         <!-- content-wrapper ends -->
         <!-- partial:../../partials/_footer.html -->
         <!-- partial -->
-       {% endblock %} 
+          {% endblock %} 

@@ -3,11 +3,14 @@
 namespace App\Entity;
 
 use App\Repository\JeuxRepository;
+use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
+use Cocur\Slugify\SlugifyInterface;
 
 #[ORM\Entity(repositoryClass: JeuxRepository::class)]
 class Jeux
@@ -41,10 +44,14 @@ class Jeux
     #[ORM\Column(length: 255)]
     private ?string $ImageJeux = null;
 
+    #[ORM\Column(type: Types::DATE_MUTABLE)]
+    private ?\DateTimeInterface $dateCreation = null;
+
     public function __construct()
     {
         $this->Categories = new ArrayCollection();
         $this->types = new ArrayCollection();
+        $this->dateCreation = new DateTime();
         
     }
 
@@ -165,4 +172,20 @@ class Jeux
         return $this;
     }
 
+    public function getDateCreation(): ?\DateTimeInterface
+    {
+        return $this->dateCreation;
+    }
+
+    public function setDateCreation(\DateTimeInterface $dateCreation): self
+    {
+        $this->dateCreation = $dateCreation;
+
+        return $this;
+    }
+
+    public function getSlug(SlugifyInterface $slugify): string
+    {
+        return $slugify->slugify($this->libelle);
+    }
 }

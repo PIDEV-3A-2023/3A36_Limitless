@@ -169,7 +169,7 @@
                             <div class="store-list-item">
                                 <div>
                                     <a href="product.html">
-                                        <img src="{{asset('JeuxImages/'~jeux.ImageJeux)}}" />
+                                        <img src="{{asset('JeuxImages/'~jeux.ImageJeux)}}" width="60" height="350"/>
                                     </a>
                                     <div class="info">
                                         <span class="name"> {{jeux.libelle }}</span>
@@ -177,8 +177,7 @@
                                         
                                         <div class="btn-wrap">
                                             
-                                            <a href="{{ path('app_jeux_show', {'id': jeux.id}) }}" class="btn small">Consulter
-                                            </a>
+                                            <a href="{{ path('app_jeux_show', { 'id': jeux.id,'slug': jeux.getSlug(slugify) }) }}" class="btn small">Consulter</a>
                                         </div>
                                     </div>
 

@@ -10,7 +10,7 @@ use Doctrine\Migrations\AbstractMigration;
 /**
  * Auto-generated Migration: Please modify to your needs!
  */
-final class Version20230214092337 extends AbstractMigration
+final class Version20230219172517 extends AbstractMigration
 {
     public function getDescription(): string
     {
@@ -20,14 +20,15 @@ final class Version20230214092337 extends AbstractMigration
     public function up(Schema $schema): void
     {
         // this up() migration is auto-generated, please modify it to your needs
-        $this->addSql('ALTER TABLE jeux CHANGE ref ref VARCHAR(8) NOT NULL');
-        $this->addSql('CREATE UNIQUE INDEX UNIQ_3755B50D146F3EA3 ON jeux (ref)');
+        $this->addSql('SET SQL_MODE=\'ALLOW_INVALID_DATES\'');
+
+        $this->addSql('ALTER TABLE jeux ADD date_creation DATE NOT NULL');
     }
 
     public function down(Schema $schema): void
     {
         // this down() migration is auto-generated, please modify it to your needs
-        $this->addSql('DROP INDEX UNIQ_3755B50D146F3EA3 ON jeux');
-        $this->addSql('ALTER TABLE jeux CHANGE ref ref VARCHAR(255) NOT NULL');
+        $this->addSql('ALTER TABLE jeux DROP date_creation');
+        $this->addSql('SET SQL_MODE=\'\'');
     }
 }

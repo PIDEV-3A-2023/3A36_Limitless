@@ -21,6 +21,7 @@ class CategorieJeuxRepository extends ServiceEntityRepository
         parent::__construct($registry, CategorieJeux::class);
     }
 
+    
     public function save(CategorieJeux $entity, bool $flush = false): void
     {
         $this->getEntityManager()->persist($entity);
@@ -63,4 +64,6 @@ class CategorieJeuxRepository extends ServiceEntityRepository
 //            ->getOneOrNullResult()
 //        ;
 //    }
+
+
 }
