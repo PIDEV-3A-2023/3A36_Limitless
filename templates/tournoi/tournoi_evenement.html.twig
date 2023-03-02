@@ -1,0 +1,553 @@
+{% extends 'base.html.twig' %}
+{% block title %}Table Tournoi{% endblock %}
+
+{% block body %}
+
+
+
+    <!--BREADCRUMBS BEGIN-->
+    <section class="image-header">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="info">
+                        <div class="wrap">
+                            <h1>{{tournoi.Jeu}}</h1>
+                        </div>
+                    </div>
+                </div>	
+            </div>
+        </div>
+    </section>
+  
+	<div class="preloader-wrapper" id="preloader">
+    <div class="motion-line dark-big"></div>
+    <div class="motion-line yellow-big"></div>
+    <div class="motion-line dark-small"></div>
+    <div class="motion-line yellow-normal"></div>
+    <div class="motion-line yellow-small1"></div>
+    <div class="motion-line yellow-small2"></div>
+</div>
+
+    
+<div class="top-bar">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-7 hidden-sm hidden-xs">
+                <div class="top-contacts">
+                    <ul class="contacts">
+                        <li><a href="https://www.facebook.com/sharer/sharer.php?u={{absolute_url(path('app_tournoi_evenement',{slug: tournoi.slug}))}}"><i class="fa fa-facebook-square" aria-hidden="true"></i></a></li>
+                        <li><a href="http://www.twitter.com/share?url={{absolute_url(path('app_tournoi_evenement',{slug: tournoi.slug}))}}"><i class="fa fa-twitter" aria-hidden="true"></i></a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+    
+        <!--ESPORT CHAMPIONSHIP STORE CONTAINER BEGIN-->
+<div class="container">
+    <div class="row">
+        <div class="col-md-12">
+        </div>	
+        <div class="col-md-12">
+       
+            <div class="col-md-12"><h6>Options</h6></div>
+            <div class="col-md-12">
+                <ul class="tab-filters" role="tablist">
+                    <li class="active"><a href="#nationalcup" role="tab" data-toggle="tab">Informations</a></li>
+                    <li><a href="#championship" role="tab" data-toggle="tab">Matchs</a></li>
+                    <li><a href="#friendlies" role="tab" data-toggle="tab">Classement</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>                            
+        
+<!--ESPORT CHAMPIONSHIP STORE CONTAINER BEGIN-->
+    
+        <!--ESPORT CHAMPIONSHIP STORE BEGIN-->
+<div class="esport-championship-store">
+    <div class="container">
+        <div class="tab-content">
+            <div id="nationalcup" class="tab-pane fade in active">
+                <div class="row">
+           {% for flash_message in app.session.flashbag.get('message') %}
+        <div class="alert alert-success">{{ flash_message }}</div>
+                {% endfor %}       
+    <!-- ESPORT CHAMPIONSHIP ABOUT TROPHEY BEGIN -->
+<div id="about" class="esport-championship-about-trophey">  <!-- change this for background image -->
+    <div class="container">
+        <div class="row">
+            <div class="col-md-5">
+                <h5 class="esport-landing-header">Apprendre Plus</h5>
+                <div class="trophey-wrap">
+                    <span>
+                    <img src="{{asset('uploads/images/'~tournoi.imageTournoi)}}" class="background-team" alt="background">
+                    </span>
+                    <span>
+                        <span class="name">{{tournoi.nomTournoi}}</span>
+                        <span class="date">{{ tournoi.dateDebut ? tournoi.dateDebut|date('Y-m-d') : '' }} à {{ tournoi.dateDebut ? tournoi.dateDebut|date(' H:i') : '' }} </span>
+                     <label>    
+                <span>{{ form_start(form,{'attr': {'class': 'form-sample', 'novalidate': 'novalidate'}} ) }}
+
+                <button type="submit" class="btn btn-primary mr-2">{{ button_label|default("S'inscrire") }}</button></span>
+
+                        {{ form_end(form) }}
+
+            </label>
+                    </span>
+                </div>
+            </div>
+            <div class="col-md-7">
+                <h5 class="esport-landing-header"><br></h5>
+                <div class="row">
+  
+                    <div class="col-sm-6">
+                        <div class="wrap">
+                            <span class="head">Organisateur</span>
+                            <span class="info">{{tournoi.nomHote}}</span>
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="wrap">
+                            <span class="head">Type</span>
+                            <span class="info">{{tournoi.typeTournoi}}</span>
+                        </div>
+                    </div>
+                                      <div class="col-sm-6">
+                        <div class="wrap">
+                            <span class="head">Cagnotte</span>
+                            <span class="info">{{tournoi.prix}} dt</span>
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="wrap">
+                            <span class="head">Participants</span>
+                            <span class="info">{{tournoi.participantTotal}}</span>
+                        </div>
+                    </div>
+            
+                </div>
+<br><br>
+                        <div class="tab-pane fade in active" id="2017" role="tabpanel">
+                            <table class="standing-full">
+                                <tr>
+                                    <th>Participant</th>
+
+                                </tr>
+                                <tr>
+                                    <td class="up">
+                                    1 Haythem
+                                    </td>
+
+                                </tr>
+                            </table>
+                        </div>
+            <!--CHAMPIONSHIP MATCH WRAP END -->
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ESPORT CHAMPIONSHIP ABOUT TROPHEY END -->
+    
+<!-- ESPORT CHAMPIONSHIP ABOUT TROPHEY END -->
+    
+
+    </div>
+</div>
+
+                       
+<div id="championship" class="tab-pane fade">
+    <div class="row">
+
+            <!--CHAMPIONSHIP MATCH WRAP BEGIN -->
+            <div class="tab-item match-wrap tab-pane" id="matches">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <div class="main-lates-matches">
+                            <h3>Finale</h3>
+                            {% for match in tournoi.getMatches() %}
+                                {% if match.tourActuel=="Finale" %}
+               
+
+<div class="match-live-info-bg">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="title">{{ match.tourActuel}}</div>
+                <div class="match-info">
+                    <div class="team">
+                        <div class="avatar"></div>
+                        <div class="text">{{ match.equipe1 }} <span> {{match.idTournoi }}</span></div> 
+                    </div>
+                    <div class="score">{{ match.scoreEquipeA }} : {{ match.scoreEquipeB }}</div>
+                    <div class="team right">
+                        <div class="text">{{ match.equipe2 }}<span>{{ match.idTournoi }}</span></div>
+                        <div class="avatar"></div>
+                    </div>
+                </div>
+                <div class="title"></div>
+            </div>
+        </div>
+    </div>
+</div>
+                                <br>
+                                {% endif %}
+                                {% endfor %}
+                                    <h3>Demi-Finale</h3>
+                            {% for match in tournoi.getMatches() %}
+                                {% if match.tourActuel=="Demi-Finale" %}
+                                <a class="item">
+                                    <span class="championship">{{ match.tourActuel}}</span>
+                                    <span class="teams-wrap">
+                                        <span class="team"><span>{{ match.equipe1 }}</span></span>
+                                        <span class="score"><span> {{ match.scoreEquipeA }} : {{ match.scoreEquipeB }}</span></span>
+                                        <span class="team1"><span>{{ match.equipe2 }}</span></span>
+                                    </span>
+                                    <span class="game-result"> {{ match.idTournoi }}</span>
+                                </a>
+                                <br>
+                                {% endif %}
+                                {% endfor %}
+                            <h3>Quart de Finale</h3>
+                            {% for match in tournoi.getMatches() %}
+                                {% if match.tourActuel=="Quart de Finale" %}
+                                <a class="item">
+                                    <span class="championship">{{ match.tourActuel}}</span>
+                                    <span class="teams-wrap">
+                                        <span class="team"><span>{{ match.equipe1 }}</span></span>
+                                        <span class="score"><span> {{ match.scoreEquipeA }} : {{ match.scoreEquipeB }}</span></span>
+                                        <span class="team1"><span>{{ match.equipe2 }}</span></span>
+                                    </span>
+                                    <span class="game-result"> {{ match.idTournoi }}</span>
+                                </a>
+                                <br>
+                                {% endif %}
+                                {% endfor %}
+                                    <h3>Phase de Groupes</h3>
+                            {% for match in tournoi.getMatches() %}
+                                {% if match.tourActuel=="Phase de Groupes"%}
+                                <a class="item">
+                                    <span class="championship">{{ match.tourActuel}}</span>
+                                    <span class="teams-wrap">
+                                        <span class="team"><span>{{ match.equipe1 }}</span></span>
+                                        <span class="score"><span> {{ match.scoreEquipeA }} : {{ match.scoreEquipeB }}</span></span>
+                                        <span class="team1"><span>{{ match.equipe2 }}</span></span>
+                                    </span>
+                                    <span class="game-result"> {{ match.idTournoi }}</span>
+                                </a>
+                                <br>
+                                {% endif %}
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!--CHAMPIONSHIP MATCH WRAP END -->
+
+                            </div>
+                        </div>
+                       
+                    <div id="friendlies" class="tab-pane fade">
+                        <div class="row">
+                            <div class="col-md-6">
+
+                           
+    <!--MAIN PLAYERS STAT BEGIN-->
+
+    <!-- <section class="main-players-stat bg-cover">  change this for background pic -->
+        <div class="container">
+            <div class="row">
+                <div class="col-md-7">
+                    <h4 class="hockey-stats-h4">Classement</h4>
+                    
+
+    <div class="player-stat-slider tab-content">      
+        <div id="slider" class="carousel slide" data-ride="carousel">
+            <div class="carousel-inner tab-content" role="listbox">
+                <div class="item active tab-pane" id="goalkeepers">
+
+                    <div class="wrap">
+                        <div class="stat">
+                            <div class="top-info with_number">
+                                <div class="number"></div>
+                               
+<div class="single-player-stats players_statistic_slider">
+    <div class="club-standings overflow-scroll">
+        <table class="table-standings">
+            <tr>
+                <th>Pos</th>
+                <th>Equipe</th>
+                <th>Match Gagné</th>
+            </tr>
+            {% set myVal = 0 %}
+            {% for classement in classement %}
+            {% set myVal = myVal + 1 %}
+            
+            <tr>
+                <td>{{myVal}}</td>
+                <td class="up">
+                     <span class="team"> <span>{{classement.team}}</span></td>
+                <td><span>{{classement.score}}</span></td>
+            </tr>
+        {% endfor %}
+        </table>
+</div>
+                            </div>
+                            <div class="position">
+                            </div>
+                            <div class="progress-wrap">
+                                <div class="progress-item">
+                                    <div class="bar-label">
+                                  
+                                    </div>
+                                    <div class="progress-line">
+                                        <div class="bar bar-1" ></div>
+                                    </div>
+                                </div>
+                                <div class="progress-item">
+                                    <div class="bar-label">
+                                  
+                                    </div>
+                                
+                                </div>
+                                <div class="progress-item">
+                              
+                                 
+                                </div>
+                            </div>
+                        </div>
+                        <div class="image">
+                           
+                        </div>	
+                    </div>
+                </div>
+                <div class="item tab-pane" id="defenders">
+                    <div class="wrap">
+                        <div class="stat">
+                            <div class="top-info with_number">
+                                <div class="number"></div>
+                             
+                            </div>
+                            <div class="top-info">
+                            
+                            </div>
+                            <div class="position">
+                            </div>
+                            <div class="progress-wrap">
+                                <div class="progress-item">
+                                    <div class="bar-label">
+                                    
+                                    </div>
+                                    <div class="progress-line">
+                                        <div class="bar bar-4" ></div>
+                                    </div>
+                                </div>
+                                <div class="progress-item">
+                                    <div class="bar-label">
+                                       
+                                    </div>
+                                    <div class="progress-line">
+                                        <div class="bar bar-5" ></div>
+                                    </div>
+                                </div>
+                                <div class="progress-item">
+                                    <div class="bar-label">
+                                       
+                                    </div>
+                                    <div class="progress-line">
+                                        <div class="bar bar-6" ></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="image">
+                        </div>	
+                    </div>
+                </div>
+
+
+                <div class="arrow-wrap">
+                    <!-- Controls -->
+                </div>  
+            </div>
+        </div>
+    </div>
+</div>
+                </div>
+                <div class="col-md-5">
+                    <h4 class = "hockey-stats-h4">Gagnants</h4>
+                    <div class="team-best-player">
+
+    <div class="tab-content">
+        <div class="best-players-list tab-pane active" id="goals">
+            {% set i = 0 %}
+            {% set resultat = 0 %}
+            {% for classement in classement |slice (0,3)%}
+                {% set i = i + 1 %}
+                {% if i == 1 %}
+                    {% set resultat = (tournoi.prix) / 2 %} 
+                {% elseif i == 2 %}
+                    {% set resultat = (tournoi.prix * 35) / 100 %} 
+                {% elseif i == 3 %}
+                    {% set resultat = (tournoi.prix * 15) / 100 %}
+            {% endif %}
+            <a href="player-second-page.html" class="item">
+                <span class="number">{{i}}</span>
+                <span>{{classement.team}}</span>
+                <span class="achievement">{{resultat|round}} dt</span>
+            </a>
+            
+            {% endfor %}
+        </div>
+    </div>
+</div>
+
+
+<h3>Le saviez vous ?</h3>
+<h6>La plupart des tournois ont    
+{% set max = 0 %}
+{% for stat in stat %}
+{% if stat.count > max %}
+    {% set max = stat.participantTotal %}
+{% endif %}
+{% endfor %}
+{{max}}      
+participants            
+</h6>
+
+<div>
+  <canvas id="myChart"></canvas>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script>
+  const ctx = document.getElementById('myChart');
+
+  new Chart(ctx, {
+    type: 'doughnut',
+    data: {
+      labels: {{type|raw}},
+      datasets: [{
+        label: 'Nombre de Tournoi de Ce Genre',
+        data: {{count|raw}},
+        borderWidth: 1
+      }]
+    },
+    options: {
+      scales: {
+        y: {
+          beginAtZero: true
+        }
+      }
+    }
+  });
+</script>
+</div></div>
+                </div>
+            </div>
+        </div>
+    </section>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+            </div>
+            </div>
+
+
+<br><br><br><br>
+<!--CHAMPIONSHIP NAVIGATION BEGIN -->
+<div class="container">
+    <div class="row">
+        <div class="col-md-12">
+        </div>	
+        <div class="col-md-12">
+            <div class="col-md-12"><h6>Les Tournois Similaires</h6></div>
+            <div class="col-md-12">
+            </div>
+        </div>
+    </div>
+</div>
+ 
+<!--CHAMPIONSHIP PART WRAP END -->
+
+        
+<div class="main-award-slider">
+    <div id="main-award-slider" class="carousel slide" data-ride="carousel">
+        <div class="carousel-inner" role="listbox">  
+            <div class="item active">
+               <div class="container">
+                        <div class="row">
+                            <div class="col-xs-4 text-center">
+                              <div class="tab-item part-wrap tab-pane active" id="participants">
+                                <div class="part-list">
+                                    <div class="container">
+                                        <div class="row">
+                                            {% for similaire in similaire|slice (0,4) %}
+                                            <div class="col-md-3">
+                                                <a href="{{ path('app_tournoi_evenement', {'slug': similaire.slug}) }}"  class="item">
+                                                    <span class="logo"><img src="{{asset('uploads/images/'~similaire.imageTournoi)}}" class="background-team" alt="background"></span>
+                                                    <span class="name">{{similaire.nomTournoi}}</span>
+                                                    <span class="name">{{similaire.typeTournoi}}</span>
+                                                </a>
+                                            </div>
+                                            {% else %}
+                                            {# mettre un query ici peut etre #}
+                                            rien pour le moment
+                                                {% endfor %}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% if similaire|length > 7 %}
+                <div class="item">
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-xs-4 text-center">
+                              <div class="tab-item part-wrap tab-pane active" id="participants">
+                                <div class="part-list">
+                                    <div class="container">
+                                        <div class="row">
+                                            {% for similaire in similaire|slice (4,4) %}
+                                            <div class="col-md-3">
+                                                <a href="{{ path('app_tournoi_evenement', {'slug': similaire.slug}) }}"class="item">
+                                                    <span class="logo"><img src="{{asset('uploads/images/'~similaire.imageTournoi)}}" class="background-team" alt="background"></span>
+                                                    <span class="name">{{similaire.nomTournoi}}</span>
+                                                    <span class="name">{{similaire.typeTournoi}}</span>
+                                                </a>
+                                            </div>
+                                            {% endfor %}
+                                            {% endif %}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+        <!-- Controls -->
+        <a class="nav-arrow left-arrow" href="#main-award-slider" role="button" data-slide="prev">
+            <i class="fa fa-angle-left" aria-hidden="true"></i>
+            <span class="sr-only">Previous</span>
+        </a>
+        <a class="nav-arrow right-arrow" href="#main-award-slider" role="button" data-slide="next">
+            <i class="fa fa-angle-right" aria-hidden="true"></i>
+            <span class="sr-only">Next</span>
+        </a>
+    </div>
+</div>
+    </div>
+
+{% endblock %}

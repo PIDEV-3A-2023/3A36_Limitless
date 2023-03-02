@@ -1,0 +1,121 @@
+{% extends 'back.html.twig' %} 
+{% block title  %} Matches {% endblock %}
+        {% block body %}
+        <div class="main-panel">
+          <div class="content-wrapper">
+            <div class="page-header">
+              <h3 class="page-title"> Matchs </h3>
+              <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                  <li class="breadcrumb-item"><a href="#">Tables</a></li>
+                </ol>
+              </nav>
+            </div>
+  {% for flash_message in app.session.flashbag.get('message') %}
+    <div class="alert alert-success">{{ flash_message }}</div>
+                {% endfor %}
+              <div class="col-lg-12 grid-margin stretch-card">
+                <div class="card">
+                  <div class="card-body">
+                    <h4 class="card-title">Table de Matchs</h4>
+                    <div class="d-flex justify-content-end mt-3 mb-3">
+                        <a href="{{ path('app_matches_new') }}" class="btn btn-success">Ajout</a>
+                        </div>
+                    <div class="table-responsive">
+                      <table class="table table-striped">
+                        <thead>
+                        <tr>
+                        <th>Nom du Tournoi</th>
+                        <th>Score</th>
+                        <th>Tour Actuel</th>
+                        <th> Date de Creation</th>
+                        <th>Actions</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for match in matches|reverse %}
+                          <tr>
+                            <td>{{ match.idTournoi}}</td>
+                                <td>{{ match.equipe1}} {{ match.scoreEquipeA }}:{{ match.scoreEquipeB }} {{ match.equipe2}}</td>
+                                <td>{{ match.tourActuel}}</td>
+                                <td>{{ match.dateCreation? match.dateCreation|date('Y-m-d h:i')}}
+                                </td>
+                                <td>
+                              
+                              <a href="{{ path('app_matches_edit', {'slug': match.slug}) }}" class="btn btn-primary">
+                                  <i class="mdi mdi-pencil"></i>
+                              </a>
+                             <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#deleteModal{{ loop.index }}">
+                                <i class="mdi mdi-delete"></i>
+                              </button>
+<!-- Delete Modal -->
+<div class="modal fade" id="deleteModal{{ loop.index }}" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel" aria-hidden="true">    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+        
+            <div class="modal-header">
+                <h5 class="modal-title" id="deleteModalLabel">Confirmation du supprission</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+
+            <div class="modal-body">
+                Êtes-vous sûr de vouloir supprimer cet élément?
+            </div>
+
+            <div class="modal-footer">
+                <form method="post" action="{{ path('app_matches_delete', {'id': match.id}) }}">
+                    <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ match.id) }}">
+                    <button type="submit" class="btn btn-danger">oui</button>
+                </form>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Non</button>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+                            </td>
+                          </tr>
+                          {% else %}
+                              <tr>
+                              <td colspan="5">rien</td>
+                            </tr>
+                          {% endfor %}
+                          
+
+<style>
+.pagination {
+  display: inline-block;
+}
+
+.pagination a {
+  color: black;
+  float: left;
+  padding: 8px 16px;
+  text-decoration: none;
+}
+</style>
+<div class="pagination">
+
+  {{ knp_pagination_render(matches) }}
+
+</div>
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+        </div>
+        <!-- content-wrapper ends -->
+        <!-- partial:../../partials/_footer.html -->
+      
+        <!-- partial -->
+        </div>
+        		{% block js %}
+        <script src="{{asset('assets/vendors/js/vendor.bundle.base.js')}}"></script>
+                  {% endblock %}
+        <!-- main-panel ends -->
+          {% endblock %}
