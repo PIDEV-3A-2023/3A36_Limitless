@@ -12,42 +12,40 @@ use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Form\Extension\Core\Type\DateType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Validator\Constraints\GreaterThanOrEqual;
+use Doctrine\ORM\EntityManagerInterface;
 
 class SearchType extends AbstractType
 {
+    private $entityManager;
+    public function __construct(EntityManagerInterface $entityManager)
+    {
+        $this->entityManager = $entityManager;
+    }
+
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            
-        ->add('libelle', TextType::class, [
-            'label' => 'Libelle de jeux',
-            'required' => false,
-        ])
-        ->add('categories', EntityType::class, [
-            'label' => 'Categories',
-            'class' => CategorieJeux::class,
-            'choice_label' => 'NomCat',
-            'required' => false,
-            'multiple' => true,
-        ])
-        ->add('types', EntityType::class, [
-            'label' => 'Types',
-            'class' => TypeJeux::class,
-            'choice_label' => 'NomType',
-            'required' => false,
-            'multiple' => true,
-        ])
-        ->add('search', SubmitType::class, [
-            'label' => 'Rechercher',
-        ])
-    ;
-}
+        ->add('nom',TextType::class)
 
-public function configureOptions(OptionsResolver $resolver)
-{
-    $resolver->setDefaults([
-        'method' => 'GET',
-    ]);
-}
-}
+        ->add('cat', ChoiceType::class, [
+            'choices' => $this->getCategories(),
+        ]);
+    }
+    private function getCategories()   
+    {      
+          $query = $this->entityManager->createQuery('SELECT c.NomCat FROM App\Entity\CategorieJeux c');
+           $categories = $query->getArrayResult();
+            $choices = [];
     
+            foreach ($categories as $category) {
+                $choices[$category['NomCat']] = $category['NomCat'];
+            }
+    
+            return $choices;
+// return $categories;
+    }
+
+}

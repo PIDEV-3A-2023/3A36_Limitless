@@ -5,6 +5,9 @@ namespace App\Controller;
 use Cocur\Slugify\SlugifyInterface;
 use App\Entity\Jeux;
 use App\Form\Jeux1Type;
+use App\Form\SearchType;
+use App\Entity\CategorieJeux;
+use App\Repository\CategorieJeuxRepository;
 use App\Repository\JeuxRepository;
 use Cocur\Slugify\Slugify;
 use Doctrine\ORM\Tools\Pagination\Paginator;
@@ -15,7 +18,7 @@ use Symfony\Component\Routing\Annotation\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 use Knp\Component\Pager\PaginatorInterface;
-
+use App\Form\NoteType;
 
 #[Route('/jeux')]
 class JeuxController extends AbstractController
@@ -23,14 +26,44 @@ class JeuxController extends AbstractController
 
     //* partie web 
     
-    #[Route('/', name: 'app_jeux_index', methods: ['GET'])]
-public function index(JeuxRepository $jeuxRepository, SlugifyInterface $slugify): Response
-{
-    return $this->render('jeux/front.html.twig', [
-        'jeuxes' => $jeuxRepository->findAll(),
-        'slugify' => $slugify,
-    ]);
-}
+    #[Route('/', name: 'app_jeux_index')]
+    public function index(JeuxRepository $jeuxRepository, Request $req, SlugifyInterface $slugify, PaginatorInterface $paginator): Response
+    {
+        $form = $this->createForm(SearchType::class);
+        $form->handleRequest($req);
+    
+        if ($form->isSubmitted() && $form->isValid()) {
+            $donnees = $jeuxRepository->rechercherJeux($form->get('nom')->getData());
+    
+            if (is_countable($donnees) && count($donnees) === 0) {
+                $this->addFlash('warning', 'Pas de jeux Trouvés');
+            } else {
+                $jeuxRechercher = $paginator->paginate(
+                    $donnees,
+                    $req->query->getInt('page', 1),
+                    8
+                );
+    
+                return $this->renderForm('jeux/front.html.twig', [
+                    'jeuxes' => $jeuxRechercher,
+                    'slugify' => $slugify,
+                    'form' => $form,
+                ]);
+            }
+        }
+    
+        return $this->renderForm('jeux/front.html.twig', [
+            'jeuxes' => $paginator->paginate(
+                $jeuxRepository->findAll(),
+                $req->query->getInt('page', 1),
+                8
+            ),
+            'slugify' => $slugify,
+            'form' => $form,
+        ]);
+    }
+    
+    
     #[Route('/backend', name: 'app_backend_jeux', methods: ['GET'])]
     public function table(Request $request ,JeuxRepository $jeuxRepository, PaginatorInterface $paginator): Response
     {
@@ -100,12 +133,39 @@ public function new(Request $request, JeuxRepository $jeuxRepository): Response
 
  *  @ParamConverter("jeux", class="App\Entity\Jeux")
  */
-#[Route('/{id}/{slug}', name: 'app_jeux_show', methods: ['GET'])]
-public function show(Jeux $jeux, SlugifyInterface $slugify): Response
+//#[Route('/{id}/{slug}', name: 'app_jeux_show', methods: ['GET'])]
+//public function show(Jeux $jeux, SlugifyInterface $slugify ,JeuxRepository $jeuxrep, CategorieJeux $category, $id): Response
+//{
+ //   $category = $this->getDoctrine()->getRepository(CategorieJeux::class)->find($id);
+
+ //   $similaire=$jeuxrep->getJeuxSimilaires($category,$jeux);
+//
+   // return $this->render('jeux/show.html.twig', [
+   //     'jeux' => $jeux,
+     //   'similaire' => $similaire,
+   //     'slugify' => $slugify,
+   // ]);
+//}
+
+
+
+#[Route('/{id}/{slug}', name: 'app_jeux_show', methods: ['GET','POST'])]
+public function show(Jeux $jeux, SlugifyInterface $slugify, Request $request): Response
 {
+    $form = $this->createForm(NoteType::class, $jeux);
+    $form->handleRequest($request);
+
+    if ($form->isSubmitted() && $form->isValid()) {
+        $jeux = $form->getData();
+        $em = $this->getDoctrine()->getManager();
+        $em->persist($jeux);
+        $em->flush();
+    }
+
     return $this->render('jeux/show.html.twig', [
         'jeux' => $jeux,
         'slugify' => $slugify,
+        'note_form' => $form->createView(),
     ]);
 }
 

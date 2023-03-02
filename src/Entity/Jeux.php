@@ -11,6 +11,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 use Cocur\Slugify\SlugifyInterface;
+use App\Entity\InvalidArgumentException;
 
 #[ORM\Entity(repositoryClass: JeuxRepository::class)]
 class Jeux
@@ -46,6 +47,15 @@ class Jeux
 
     #[ORM\Column(type: Types::DATE_MUTABLE)]
     private ?\DateTimeInterface $dateCreation = null;
+
+    #[ORM\Column]
+    private ?float $note = null;
+
+    #[ORM\Column]
+    private ?int $noteCount = null;
+
+    #[ORM\Column]
+    private ?float $noteMyonne = null;
 
     public function __construct()
     {
@@ -187,5 +197,61 @@ class Jeux
     public function getSlug(SlugifyInterface $slugify): string
     {
         return $slugify->slugify($this->libelle);
+    }
+
+    public function getNote(): ?float
+    {
+        return $this->note;
+    }
+
+  
+    public function getNoteCount(): ?int
+    {
+        return $this->noteCount;
+    }
+
+    public function setNoteCount(int $noteCount): self
+    {
+        $this->noteCount = $noteCount;
+
+        return $this;
+    }
+
+    public function getNoteMyonne(): ?float
+    {
+        return $this->noteMyonne;
+    }
+
+    public function setNoteMyonne(float $noteMyonne): self
+    {
+        $this->noteMyonne = $noteMyonne;
+
+        return $this;
+    }
+
+
+    #[ORM\Column]
+    private ?float $totalNote = null;
+    public function setNote(float $note): self
+    {
+        
+        $this->noteCount++;
+        $this->totalNote += $note;
+        $this->noteMyonne = $this->totalNote / $this->noteCount;
+        $this->note = $note;
+    
+        return $this;
+    }
+
+    public function getTotalNote(): ?float
+    {
+        return $this->totalNote;
+    }
+
+    public function setTotalNote(float $totalNote): self
+    {
+        $this->totalNote = $totalNote;
+
+        return $this;
     }
 }

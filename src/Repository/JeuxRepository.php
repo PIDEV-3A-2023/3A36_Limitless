@@ -5,7 +5,7 @@ namespace App\Repository;
 use App\Entity\Jeux;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
-
+use App\Entity\CategorieJeux;
 /**
  * @extends ServiceEntityRepository<Jeux>
  *
@@ -72,4 +72,37 @@ class JeuxRepository extends ServiceEntityRepository
             ->getQuery()
             ->getResult();
     }
+
+    public function getJeuxSimilaires(CategorieJeux $category, Jeux $jeu)
+    {
+        return $this->createQueryBuilder('j')
+            ->leftJoin('j.Categories', 'c')
+            ->where('c.id = :categorie_id')
+            ->andWhere('j.id != :jeux_id')
+            ->setParameter('categorie_id', $category->getId())
+            ->setParameter('jeux_id', $jeu->getId())
+            ->setMaxResults(3)
+            ->getQuery()
+            ->getResult();
+    }
+
+    public function rechercherJeux($libelle)
+    {   $libelleExists=null;
+        $jeuExists=null;
+    
+        if($libelle!=null)
+        {$libelleExists= $this->createQueryBuilder('j')
+        ->where('j.libelle LIKE :libelle')
+        ->setParameter('libelle','%'.$libelle.'%')  
+        ->getQuery()
+        ->getResult()
+        ;}  //checks existence of nom 
+    
+
+//var_dump($jeuExists);
+//var_dump($nomExists);
+        
+        
+    
+}
 }
