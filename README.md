@@ -72,6 +72,7 @@ To use the full functionality of Ggaming, please make sure to install the follow
 | knplabs/knp-paginator-bundle| composer require knplabs/knp-paginator-bundle:* |
 | gedmo/doctrine-extensions   | composer require gedmo/doctrine-extensions|
 | liip/imagine-bundle         | composer require liip/imagine-bundle     |
+| cocur/slugify               | composer require cocur/slugify           |
 
 ## Usage
 
