@@ -5,33 +5,68 @@ namespace App\Controller;
 use App\Entity\Sponsor;
 use App\Form\SponsorType;
 use App\Repository\SponsorRepository;
+use App\Form\SearchSponsorType;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Knp\Component\Pager\PaginatorInterface;
+use Doctrine\ORM\EntityManagerInterface;    
 
 #[Route('/sponsor')]
 class SponsorController extends AbstractController
 {
-    #[Route('/', name: 'app_sponsor_index', methods: ['GET'])]
+    #[Route('/', name: 'app_sponsor_index', methods: ['GET', 'POST'])]
     public function index(
         SponsorRepository $sponsorRepository,
         PaginatorInterface $paginator,
-        Request $request
-    
+        Request $request,
+        EntityManagerInterface $em
     ): Response
     {
+        $form = $this->createForm(SearchSponsorType::class);
+        $form->handleRequest($request);
+
+        $sortOrder = $request->query->get('sort_order', 'asc');
+        $sortBy = $request->query->get('sort_by', 'nom_sponsor');
+
+        // Create the query builder and add the orderBy clause
+        $queryBuilder = $this->getDoctrine()->getRepository(Sponsor::class)->createQueryBuilder('s');
+        $queryBuilder->orderBy("s.$sortBy", $sortOrder);
         $data = $sponsorRepository->findAll();
         $sponsors = $paginator->paginate (
 
-          $data,
+          $queryBuilder,
           $request->query->getInt('page',1),
           2
 
         );
+        if($form->isSubmitted() && $form->isValid()){
+            $data = $form->getData();
+            $query = $em->getRepository(Sponsor::Class)
+                ->createQueryBuilder('s')
+                ->where('s.nom_sponsor LIKE :query')
+                ->setParameter('query', "%{$data['query']}%")
+                ->getQuery();
+
+            $sponsors= $paginator->paginate(
+                $query,
+                $request->query->getInt('page', 1),
+                2
+            );
+            return $this->render('sponsor/index.html.twig', [
+                'form' => $form->createView(),
+                'sponsors' => $sponsors,
+                'sort_order' => $sortOrder,
+            'sort_by' => $sortBy,   
+            ]);
+        }
+
         return $this->render('sponsor/index.html.twig', [
+            'form' => $form->createView(),
             'sponsors' => $sponsors,
+            'sort_order' => $sortOrder,
+            'sort_by' => $sortBy,
         ]);
     }
 

@@ -5,6 +5,9 @@ namespace App\Controller;
 use App\Entity\Equipe;
 use App\Form\Equipe1Type;
 use App\Entity\Likeseq;
+use App\Form\SearchEquipeType;
+use App\Form\SearchJoueurType;
+use Doctrine\ORM\EntityManagerInterface; 
 use App\Repository\EquipeRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -12,28 +15,138 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Form\FormInterface;
 use phpDocumentor\Reflection\DocBlock\Tags\Var_;
+use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
+use Symfony\Component\Serializer\Annotation\Groups;
+use Knp\Component\Pager\PaginatorInterface;
+
 #[Route('/equipeback')]
 class EquipebackController extends AbstractController
 {
-    #[Route('/', name: 'app_equipeback_index', methods: ['GET'])]
-    public function index(EquipeRepository $equipeRepository): Response
+ ////mobile
+ #[Route('/allequipes', name: 'json_allequipes')]
+ public function getEquipes(NormalizerInterface $normalizer, EquipeRepository $equipeRepository ): Response
+ {
+     $equipe=$equipeRepository->findAll();
+     $equipeNormalizer=$normalizer->normalize($equipe,'json',['groups'=>"equipes"]);
+     $json=json_encode($equipeNormalizer);
+     return new Response($json);
+ }
+
+ #[Route('/addequipe/new', name: 'json_addequipe')]
+    public function addEquipe(NormalizerInterface $normalizer, Request $req): Response
     {
-        $equipe = $equipeRepository->findAll();
-        $nbJoueurs = [];
-       $nbJoueursCounts = [];
+        $em=$this->getDoctrine()->getManager();
+        $equipe=new Equipe();
+
+        $equipe->setNomEquipe($req->get('nom_equipe'));        
+        $equipe->setDescriptionEquipe($req->get('description_equipe'));
+        $equipe->setNbJoueurs($req->get('nb_joueurs'));
+        $equipe->setLogoEquipe($req->get('logo_equipe'));
+        $equipe->setSiteWeb($req->get('site_web'));
+        $equipe->setRating($req->get('rating'));
+        $date = new \DateTime('now');
+        $equipe->setDateCreation($date);
+        
 
 
-       foreach ($equipe as $equipes) {
-        $nbJoueurs = $equipes->getNbJoueurs();
-        if (!isset($nbJoueursCounts[$nbJoueurs])) {
-            $nbJoueursCounts[$nbJoueurs] = 0;
-        }
-        $nbJoueursCounts[$nbJoueurs]++;
+        $em->persist($equipe);
+        $em->flush();
+        $equipeNormalizer=$normalizer->normalize($equipe,'json',['groups'=>"equipe"]);
+        $json=json_encode($equipeNormalizer);
+        return new Response($json);
+    }    
+
+    #[Route('/modequipe/{id}', name: 'json_modequipe')]
+    public function modifyequipe(NormalizerInterface $normalizer,$id, Request $req): Response
+    {
+        $em=$this->getDoctrine()->getManager();
+        $equipe=$em->getRepository(Equipe::class)->find($id);
+     
+        $equipe->setNomEquipe($req->get('nom_equipe'));        
+        $equipe->setDescriptionEquipe($req->get('description_equipe'));
+        $equipe->setNbJoueurs($req->get('nb_joueurs'));
+        $equipe->setLogoEquipe($req->get('logo_equipe'));
+        $equipe->setSiteWeb($req->get('site_web'));
+        
+     
+        $equipe->setDateCreation($req->get('date_creation'));
+        $equipe->setRating($req->get('rating'));
+        $em->flush();
+        $equipeNormalizer=$normalizer->normalize($equipe,'json',['groups'=>"equipe"]);
+        $json=json_encode($equipeNormalizer);
+        return new Response("Modification avec success".$json);
+    }    
+
+    #[Route('/delequipe/{id}', name: 'json_delequipe')]
+    public function delequipe(NormalizerInterface $normalizer, Request $req, $id): Response
+    {
+        $em=$this->getDoctrine()->getManager();
+        $equipe=$em->getRepository(Equipe::class)->find($id);
+        $em->remove($equipe);
+        $em->flush();
+        $equipeNormalizer=$normalizer->normalize($equipe,'json',['groups'=>"equipe"]);
+        $json=json_encode($equipeNormalizer);
+        return new Response("Suppression avec success".$json);
     }
+
+
+
+
+
+
+    ////symfony
+    #[Route('/', name: 'app_equipeback_index', methods: ['GET', 'POST'])]
+    public function index( EquipeRepository $equipeRepository,
+    PaginatorInterface $paginator,
+    Request $request,
+    EntityManagerInterface $em): Response
+    {
+
+        $form = $this->createForm(SearchEquipeType::class);
+        $form->handleRequest($request);
+
+        $sortOrder = $request->query->get('sort_order', 'asc');
+        $sortBy = $request->query->get('sort_by', 'nom_equipe');
+
+        // Create the query builder and add the orderBy clause
+        $queryBuilder = $this->getDoctrine()->getRepository(Equipe::class)->createQueryBuilder('e');
+        $queryBuilder->orderBy("e.$sortBy", $sortOrder);
+        
+        $data = $equipeRepository->findAll();
+        $equipes = $paginator->paginate (
+
+            $queryBuilder,
+            $request->query->getInt('page',1),
+            4
+  
+          );
+
+        if($form->isSubmitted() && $form->isValid()){
+            $data = $form->getData();
+            $query = $em->getRepository(Equipe::Class)
+                ->createQueryBuilder('e')
+                ->where('e.nom_equipe LIKE :query OR e.nb_joueurs LIKE :query')
+                ->setParameter('query', "%{$data['query']}%")
+                ->getQuery();
+
+            $equipes= $paginator->paginate(
+                $query,
+                $request->query->getInt('page', 1),
+                4
+            );
+            return $this->render('equipeback/index.html.twig', [
+                'form' => $form->createView(),
+                'equipes' => $equipes,
+                'sort_order' => $sortOrder,
+            'sort_by' => $sortBy,   
+            ]);
+        }
+
         return $this->render('equipeback/index.html.twig', [
-            'equipes' => $equipeRepository->findAll(),
-            'nbJoueurs'=>json_encode($nbJoueurs),
-            'nbJoueursCounts'=>json_encode($nbJoueursCounts)
+            'form' => $form->createView(),
+            'equipes' => $equipes,
+            'sort_order' => $sortOrder,
+            'sort_by' => $sortBy,
         ]);
     }
 
@@ -89,6 +202,9 @@ class EquipebackController extends AbstractController
             }
             $equipe->setDateCreation(new \DateTime());
             $equipeRepository->save($equipe, true);
+            $session = $this->get('session');
+             $session->getFlashBag()->clear();
+             $this->addFlash('success','Ajout effectué');
             return $this->redirectToRoute('app_equipeback_index', [], Response::HTTP_SEE_OTHER);
         }
         return $this->renderForm('equipeback/new.html.twig', [
@@ -130,7 +246,9 @@ class EquipebackController extends AbstractController
                  $equipe->setLogoEquipe($filename);
              }
             $equipeRepository->save($equipe, true);
-
+            $session = $this->get('session');
+            $session->getFlashBag()->clear();
+            $this->addFlash('update','Modification effectué');  
             return $this->redirectToRoute('app_equipeback_index', [], Response::HTTP_SEE_OTHER);
         }
 
@@ -145,6 +263,9 @@ class EquipebackController extends AbstractController
     {
         if ($this->isCsrfTokenValid('delete'.$equipe->getId(), $request->request->get('_token'))) {
             $equipeRepository->remove($equipe, true);
+            $session = $this->get('session');
+            $session->getFlashBag()->clear();
+            $this->addFlash('delete','Suppression effectué');
         }
 
         return $this->redirectToRoute('app_equipeback_index', [], Response::HTTP_SEE_OTHER);

@@ -1,0 +1,104 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+     <main class="main">
+            <nav aria-label="breadcrumb" class="breadcrumb-nav border-0 mb-0">
+                <div class="container d-flex align-items-center">
+                    
+
+                    <nav class="product-pager ml-auto" aria-label="Product">
+                       
+                    </nav><!-- End .pager-nav -->
+                </div><!-- End .container -->
+            </nav><!-- End .breadcrumb-nav -->
+
+            <div class="page-content">
+                <div class="container">
+                    <div class="product-details-top mb-2">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="product-gallery">
+                                    <figure class="product-main-image">
+                                         <figure class="product-main-image">
+                                
+                                     
+
+                                        
+                                    </figure><!-- End .product-main-image -->
+
+                                  
+                                </div><!-- End .product-gallery -->
+                            </div><!-- End .col-md-6 -->
+
+                            <div class="col-md-6">
+                                <div class="product-details">
+                                  <h3>{{equipe.nom_equipe}}</h3><!-- End .product-title -->
+
+                                    <div class="ratings-container">
+                                        <div class="ratings">
+                                            <div class="ratings-val" style="width: 80%;"></div><!-- End .ratings-val -->
+                                        </div><!-- End .ratings -->
+                                        <a class="ratings-text" href="#product-review-link" id="review-link">( 2 Reviews )</a>
+                                    </div><!-- End .rating-container -->
+
+                                    <div class="product-price">
+                                       
+                                        <div class="product-price">
+                                          
+                                           &nbsp;
+                                           &nbsp;                                   
+                                          
+                                             </div>
+                                           
+                                            
+                                             <div class="product-price">
+                                            
+                                              </div><!-- End .product-price -->
+                                         
+                                       <div class="product-price">
+                                         
+
+                                           
+                                              </div>
+                                        {% endif %}      
+                                    </div><!-- End .product-price -->
+
+                                    <div class="product-content">
+                                        <p>{{equipe.description_equipe}} </p>
+                                    </div><!-- End .product-content -->
+
+
+
+                                    <div class="product-details-action">
+                                   
+
+                                        <div class="details-action-wrapper">
+                                            <a href="#" class="btn-product btn-wishlist" title="Wishlist"><span>Add to Wishlist</span></a>
+                                           
+                                        </div><!-- End .details-action-wrapper -->
+                                    </div><!-- End .product-details-action -->
+
+                                    <div class="product-details-footer">
+                                        <div class="product-cat">
+                                          
+            
+                                        </div><!-- End .product-cat -->
+
+                                        
+                                    </div><!-- End .product-details-footer -->
+                                </div><!-- End .product-details -->
+                            </div><!-- End .col-md-6 -->
+                        </div><!-- End .row -->
+                    </div><!-- End .product-details-top -->
+                </div><!-- End .container -->
+
+                
+                            </div><!-- End .product-body -->
+                        </div><!-- End .product -->
+                    </div><!-- End .owl-carousel -->
+                </div><!-- End .container -->
+            </div><!-- End .page-content -->
+        </main><!-- End .main -->
+
+        
+{% endblock %}

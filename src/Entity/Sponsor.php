@@ -21,22 +21,26 @@ class Sponsor
 
     #[ORM\Column(length: 255)]
     #[Assert\NotBlank(message:"veuillez choisir un nom de sponsor")]
+    #[Groups("sponsor")]
     private ?string $nom_sponsor = null;
 
     #[ORM\Column(length: 255)]
     #[Assert\NotBlank(message:"veuillez choisir une description du sponsor")]
+    #[Groups("sponsor")]
     private ?string $description_sponsor = null;
 
     #[ORM\Column(length: 255)]
-     
+    #[Groups("sponsor")]
     private ?string $logo_sponsor = null;
 
     #[ORM\Column(length: 255)]
     #[Assert\NotBlank(message:"veuillez choisir un site web")]
+    #[Groups("sponsor")]
     private ?string $site_webs = null;
 
     #[ORM\ManyToOne(inversedBy: 'sponsors')]
     #[Assert\NotBlank(message:"veuillez choisir une equipe à sponsoriser")]
+    #[Groups("sponsor")]
     private ?Equipe $id_equipe = null;
 
     #[ORM\Column(type: Types::DATE_MUTABLE)]

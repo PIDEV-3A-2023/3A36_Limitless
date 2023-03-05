@@ -3,7 +3,7 @@
 {% block title %}Equipe index{% endblock %}
 
 {% block body %}
-
+ 
 <script language="javascript" src="{{ asset('https://code.jquery.com/jquery-2.2.4.min.js')}}"></script>
 
 			<script language="javascript">
@@ -29,20 +29,61 @@
 				
 			</script>
 	<div class="main-panel">
-   
+    {% if app.flashes('success') is not empty %}
+    <div class="alert alert-success notification" role="alert">
+       <center>equipe ajoutée avec succès</center>
+         
+        <script>
+            setTimeout(function() {
+                document.querySelector('.alert').style.display = 'none';
+            }, 3000);
+        </script>
+    </div>
+{% endif %}
+{% if app.flashes('update') is not empty %}
+    <div class="alert alert-success notification" role="alert">
+       <center>equipe modifiée avec succès</center>
+         
+        <script>
+            setTimeout(function() {
+                document.querySelector('.alert').style.display = 'none';
+            }, 3000);
+        </script>
+    </div>
+{% endif %}
+ {% if app.flashes('delete') is not empty %}
+    <div class="alert alert-success notification" role="alert">
+       <center>equipe supprimée avec succès</center>
+         
+        <script>
+            setTimeout(function() {
+                document.querySelector('.alert').style.display = 'none';
+            }, 3000);
+        </script>
+    </div>
+{% endif %}
 
     <div class="main-panel">
           <div class="content-wrapper">
             <div class="page-header">
               <h3 class="page-title"> Equipes </h3>
-<a id="triequipe" class="btn btn-primary" href="{{ path('tri_equipe')}}">Trier</a>
+              
+                 <th><a href="{{ path('app_equipeback_index', {'sort_by': 'nom_equipe', 'sort_order': sort_order == 'asc' ? 'desc' : 'asc' }) }}" class="btn btn-primary" >trier par nom</a></th>
+                    <th><a href="{{ path('app_equipeback_index', {'sort_by': 'nb_joueurs', 'sort_order': sort_order == 'asc' ? 'desc' : 'asc' }) }}" class="btn btn-primary" >trier par Nombre de joueurs</a></th>
+<th><a href="{{ path('app_equipeback_index', {'sort_by': 'date_creation', 'sort_order': sort_order == 'asc' ? 'desc' : 'asc' }) }}" class="btn btn-primary" >trier par date</a></th>
               <nav aria-label="breadcrumb">
                 <ol class="breadcrumb">
-                  <li class="breadcrumb-item"><a href="#">Tables</a></li>
+                  <li class="breadcrumb-item"><a href="#"></a></li>
                 </ol>
               </nav>
             </div>
-            
+ {{form_start(form)}}
+                    {{form_widget(form.query)}}
+                    <button class="btn btn-primary"  type="submit" >chercher</button>
+                {{form_end(form)}}
+                  
+ 
+             <div><p> </p> </div>
               <div class="col-lg-12 grid-margin stretch-card">
                 <div class="card">
                   <div class="card-body">
@@ -181,7 +222,11 @@
                 </div>
             </div>
         </div>
-    </section>
+   
+        <div class="moved">
+ {% do equipes.setPageRange(5) %}
+ {{knp_pagination_render(equipes , 'equipeback/pagination.html.twig')}}
+ </div>
                   </div>
                 </div>
               </div>

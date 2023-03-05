@@ -5,6 +5,8 @@ namespace App\Controller;
 use App\Entity\Equipe;
 use App\Form\EquipeType;
 use App\Form\DateType;
+use App\Form\SearchEquipeType;
+use App\Form\SearchJoueurType;
 use App\Entity\Likeseq;
 use App\Repository\EquipeRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -12,28 +14,69 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Knp\Component\Pager\PaginatorInterface;
+use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
+use Symfony\Component\HttpFoundation\JsonResponse;
+use Doctrine\ORM\EntityManagerInterface;    
 
 #[Route('/equipe')]
 class EquipeController extends AbstractController
 {
-    #[Route('/', name: 'app_equipe_index', methods: ['GET'])]
+
+    
+    #[Route('/', name: 'app_equipe_index', methods: ['GET', 'POST'])]
     public function index(
         EquipeRepository $equipeRepository,
         PaginatorInterface $paginator,
-        Request $request
+        Request $request,
+        EntityManagerInterface $em
         ): Response
     {
+        //search form
+        $form = $this->createForm(SearchEquipeType::class);
+        $form->handleRequest($request);
+
+        $sortOrder = $request->query->get('sort_order', 'asc');
+        $sortBy = $request->query->get('sort_by', 'nom_equipe');
+
+        // Create the query builder and add the orderBy clause
+        $queryBuilder = $this->getDoctrine()->getRepository(Equipe::class)->createQueryBuilder('e');
+        $queryBuilder->orderBy("e.$sortBy", $sortOrder);
+        
         $data = $equipeRepository->findAll();
         $equipes = $paginator->paginate (
 
-          $data,
+          $queryBuilder,
           $request->query->getInt('page',1),
           4
 
         );
 
+        if($form->isSubmitted() && $form->isValid()){
+            $data = $form->getData();
+            $query = $em->getRepository(Equipe::Class)
+                ->createQueryBuilder('e')
+                ->where('e.nom_equipe LIKE :query OR e.nb_joueurs LIKE :query')
+                ->setParameter('query', "%{$data['query']}%")
+                ->getQuery();
+
+            $equipes= $paginator->paginate(
+                $query,
+                $request->query->getInt('page', 1),
+                4
+            );
+            return $this->render('equipe/index.html.twig', [
+                'form' => $form->createView(),
+                'equipes' => $equipes,
+                'sort_order' => $sortOrder,
+            'sort_by' => $sortBy,   
+            ]);
+        }
+
         return $this->render('equipe/index.html.twig', [
-            'equipes' => $equipes  ,
+            'form' => $form->createView(),
+            'equipes' => $equipes,
+            'sort_order' => $sortOrder,
+            'sort_by' => $sortBy,
         ]);
     }
 
@@ -43,7 +86,7 @@ class EquipeController extends AbstractController
     // Récupérer l'utilisateur connecté
     //$user = $this->getUser();
 
-    // Récupérer l equipe correspondant à $productId
+        
     $equipe =$equipeRepository->find($equipeId);
 
     // Récupérer la session de l'utilisateur
@@ -61,8 +104,8 @@ class EquipeController extends AbstractController
 
     // Ajouter un nouveau like
     $likeq = new Likeseq();
-    $likeq->setEquipe($equipe)
-         ->setTypel(1);
+    $likeq->setEquipe($equipe);
+    $likeq->setTypel(1);
 
     $entityManager = $this->getDoctrine()->getManager();
     $entityManager->persist($likeq);
@@ -74,10 +117,108 @@ class EquipeController extends AbstractController
 
     $this->addFlash('success', 'Merci pour votre like !');
 
-    // Rediriger l'utilisateur vers la page du produit
+    
     return $this->redirectToRoute('app_equipe_index', ['id' => $equipeId]);
     }
 
+
+
+    #[Route('/adddislikeq/{equipeId}', name: 'app_adddislikeq', methods: ['GET'])]
+    public function addDisLikeq(Request $request, $equipeId, EquipeRepository $equipeRepository)
+    {
+ 
+    // Récupérer l'utilisateur connecté
+    //$user = $this->getUser();
+
+   
+    $equipe = $this->getDoctrine()
+        ->getRepository(Equipe::class)
+        ->find($equipeId);
+
+    // Créer une instance de Like
+    $likeq = new Likeseq();
+    //$like->setUser($user);
+    $likeq->setEquipe($equipe);
+    $likeq->setTypel(0); // 1 pour like, 0 pour dislike
+
+    // Ajouter le like à la base de données
+    $entityManager = $this->getDoctrine()->getManager();
+    $entityManager->persist($likeq);
+    $entityManager->flush();
+
+    // Rediriger l'utilisateur vers la page du produit
+    return $this->redirectToRoute('app_equipe_index', ['id' => $equipeId]);
+
+    
+   }
+   
+
+    #[Route('/search', name: 'search', methods: ['GET'])]
+    public function search(Request $request, EquipeRepository $equipeRepository): JsonResponse
+    {
+        $criteria = $request->get('criteria');
+        $searchTerm = $request->get('query');
+
+        //$JoueurRepository = $this->getDoctrine()->getRepository(Joueur::class);
+
+        switch ($criteria) {
+            case 'name':
+                $results = $equipeRepository->findByNom($searchTerm);
+                break;
+            case 'description':
+                $results = $equipeRepository->findByEmail($searchTerm);
+                break;
+            
+            default:
+                $results = [];
+        }
+
+        $data = [];
+
+        foreach ($results as $result) {
+            $data[] = [
+                'id' => $result->getId(),
+                'name' => $result->getNomEquipe(),
+                'description' => $result->getDescriptionEquipe(),
+                
+            ];
+        }
+
+        return new JsonResponse($data);
+    }
+
+
+    #[Route('/recherche/{id}', name: 'app_equipe_recherche', methods: ['GET'])]
+    public function searchaction (Request $request)
+    {
+        
+            $entityManager = $this->getDoctrine()->getManager();
+            $requestString = $request->query->get('q');
+            $equipe =  $entityManager->getRepository(Equipe::class)->findEntitiesByString($requestString);
+            
+            if (!$equipe) {
+                $result['equipe']['error'] = "equipe introuvable :( ";
+            } else {
+                $result['equipe'] = $this->getRealEntities($equipe);
+            }
+            
+            return new Response(json_encode($result));
+        }
+        
+        private function getRealEntities($equipe)
+        {
+            foreach ($equipe as $equipes) {
+                $realEntities[$equipes->getId()] = [$equipes->getLogoEquipe(), $equipes->getNomEquipe()];
+            }
+            
+            return $realEntities;
+        }
+
+
+
+
+
+    
 
 
 

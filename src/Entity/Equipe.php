@@ -10,7 +10,11 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Validator\Constraints\NotBlank;
+
+
+
 #[ORM\Entity(repositoryClass: EquipeRepository::class)]
+#[ORM\Index(name: 'equipe', columns: ['nom_equipe', 'description_equipe'], flags: ['fulltext'])]
 #[UniqueEntity(fields: ['nom_equipe'], message: 'nom d equipe déja utilisé')]
 class Equipe
 {
@@ -21,10 +25,12 @@ class Equipe
 
     #[ORM\Column(length: 255)] 
     #[Assert\NotBlank(message:"veuillez choisir un nom d equipe")]
+    #[Groups("equipe")]
     private ?string $nom_equipe = null;
 
     #[ORM\Column(length: 255)]
     #[Assert\NotBlank(message:"veuillez choisir une description d'equipe")]
+    #[Groups("equipe")]
     private ?string $description_equipe = null;
 
     #[ORM\Column]
@@ -37,11 +43,13 @@ class Equipe
     private ?int $nb_joueurs = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups("equipe")]
     private ?string $logo_equipe = null;
 
     #[ORM\Column(length: 255)]
     
     #[Assert\NotBlank(message:"veuillez choisir un site web")]
+    #[Groups("equipe")]
     private ?string $site_web = null;
 
     #[ORM\OneToMany(mappedBy: 'id_equipe', targetEntity: Sponsor::class, cascade: ["remove"], orphanRemoval: true)]
@@ -51,10 +59,15 @@ class Equipe
      /**
      * @ORM\Column(type="datetime")
      */
+    #[Groups("equipe")]
     private ?\DateTimeInterface $date_creation = null;
 
-    #[ORM\OneToMany(mappedBy: 'equipe', targetEntity: Likeseq::class)]
+    #[ORM\OneToMany(mappedBy: 'equipe', targetEntity: Likeseq::class, cascade: ["remove"], orphanRemoval: true)]
     private Collection $likeseqs;
+
+    #[ORM\Column]
+    #[Groups("equipe")]
+    private ?int $rating = null;
 
     public function __construct()
     {
@@ -206,4 +219,40 @@ class Equipe
 
         return $this;
     }
+
+    public function getRating(): ?int
+    {
+        return $this->rating;
+    }
+
+    public function setRating(int $rating): self
+    {
+        $this->rating = $rating;
+
+        return $this;
+    }
+
+    public function getRatingg(): float
+    {
+     $likeseqs = $this->getLikeseqs()->filter(function (Likeseq $likeseq) {
+         return $likeq->getType() === 1;
+     })->count();
+ 
+     $dislikeseqs = $this->getLikeseqs()->filter(function (Likeseq $likeseq) {
+         return $likeq->getType() === 0;
+     })->count();
+ 
+     $totals = $likeseqs + $dislikeseqs;
+ 
+     if ($totals == 0) {
+         return 0;
+     }
+ 
+     $zz = 1.96; // z-score de 95% de confiance
+     $pp = $likeseqs / $totals;
+     $starss = ($pp + $zz * $zz / (2 * $totals) - $zz * sqrt(($pp * (1 - $pp) + $zz * $zz / (4 * $totals)) / $totals)) / (1 + $zz * $zz / $totals);
+ 
+     return round($starss * 5);
+   }
+    
 }
