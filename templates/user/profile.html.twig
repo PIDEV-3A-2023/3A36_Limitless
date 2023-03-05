@@ -1,0 +1,78 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}User
+{% endblock %}
+
+{% block body %}
+	<section class="player-single-wrap">
+		<div class="container">
+			<div class="row">
+				<div class="col-md-12">
+					<div class="captain-bage">Joueur</div>
+					<h4 class="player-name">{{ app.user.prenom }}
+						{{ app.user.nom }}</h4>
+				</div>
+				<div class="col-md-6">
+
+					<div class="player-photo">
+						<div class="number">16</div>
+						<img class="img-responsive" src="{{ asset('userImages/' ~ app.user.pprofile) }}" alt="player">
+					</div>
+				</div>
+				<div class="col-md-6">
+					<div class="player-info">
+						<h6 class="player-info-title">Profil de
+							<span class="text-warning">{{ app.user.nom }}</span></h6>
+						<div class="summary">
+							<div class="row">
+								
+								<div class="col-md-3 col-sm-3 col-xs-3">
+									<div class="item">Email:</div>
+								</div>
+								<div class="col-md-9 col-sm-9 col-xs-9">{{ app.user.email }}</div>
+								<div class="col-md-3 col-sm-3 col-xs-3">
+									{% set userBirthdate = app.user.datenai %}
+									{% set now = "now"|date("Y-m-d") %}
+									{% set userAge = now|date("Y") - userBirthdate|date("Y") %}
+									{% if userBirthdate|date("m-d") > now|date("m-d") %}
+										{% set userAge = userAge - 1 %}
+									{% endif %}
+
+									<div class="item">Âge:</div>
+								</div>
+								<div class="col-md-9 col-sm-9 col-xs-9">{{ userAge }}</div>
+
+                                
+                                <div class="col-md-3 col-sm-3 col-xs-3">
+									<div class="item">In game name:</div>
+								</div>
+								<div class="col-md-9 col-sm-9 col-xs-9" style="color: blue;">{{ app.user.ign }}</div>
+                                <div class="col-md-3 col-sm-3 col-xs-3">
+									<div class="item">Wins:</div>
+								</div>
+								<div class="col-md-9 col-sm-9 col-xs-9" style="color: green;">{{ app.user.wins }}</div>
+								<br>
+                                <div class="col-md-3 col-sm-3 col-xs-3">
+									<div class="item">Losses:</div>
+								</div>
+								<div class="col-md-9 col-sm-9 col-xs-9" style="color: red;">{{ app.user.loses }}</div></b>
+                             
+							</div>
+						</div>
+
+
+					</div>
+				</div>
+                <br>
+                <center><div class="col-md-12">
+				
+				
+				
+             
+			</div>
+            </center>
+		</div>
+	</section>
+
+
+{% endblock %}

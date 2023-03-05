@@ -1,0 +1,110 @@
+{% extends 'back.html.twig' %}
+{% block title %}Utilisateurs{% endblock %}
+
+
+{% block body %}
+<div class="main-panel">
+          <div class="content-wrapper">
+            <div class="page-header">
+              <h3 class="page-title"> Section Utilisateur </h3>
+              <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                  <li class="breadcrumb-item"><a href="#">Forms</a></li>
+                  <li class="breadcrumb-item active" aria-current="page">Utilisateurs</li>
+                </ol>
+              </nav>
+            </div>
+            
+              
+              <div class="col-12 grid-margin stretch-card">
+                <div class="card">
+                  <div class="card-body">
+                    <h4 class="card-title">Ajout des utilisateurs</h4>
+                    
+                    {{ form_start(form, {'attr': {'class': 'form-sample'}}) }}
+                      <div class="form-group">
+                        <label for="exampleInputName1">Nom</label>
+                        
+                        {{ form_widget(form.nom, {'attr': {'class': 'form-control'}}) }}
+                      </div>
+                      <div class="form-group">
+                        <label for="exampleInputName1">Prenom</label>
+                        {{ form_widget(form.prenom, {'attr': {'class': 'form-control'}}) }}
+                      </div>
+                      <div class="form-group">
+                        <label for="exampleInputEmail3">Email</label>
+                        {{ form_widget(form.email, {'attr': {'class': 'form-control'}}) }}
+                      </div>
+                      <div class="form-group">
+                        <label for="exampleInputPassword4">Mot de passe</label>
+                        {{ form_widget(form.mdp, {'attr': {'class': 'form-control'}}) }}
+                      </div>
+                      
+                      <div class="form-group">
+                        <label>File upload</label>
+                        <input type="file" name="img[]" class="file-upload-default">
+                        <div class="input-group col-xs-12">
+                          
+                          {{ form_widget(form.pprofile, {'attr': {'class': 'form-control file-upload-info'}}) }}
+                          
+                        </div>
+                      </div>
+                      <div class="form-group">
+                        <label for="exampleInputCity1">Pays</label>
+                        
+                        {{ form_widget(form.pays, {'attr': {'class': 'form-control'}}) }}
+                      </div>
+                      <div class="form-group">
+                        <label for="exampleTextarea1">Date de naissance</label>
+                        <{{ form_widget(form.datenai, {'attr': {'class': 'form-control'}}) }}
+                      </div>
+                      <button type="submit" class="btn btn-primary mr-2">Creer</button>
+                    {{ form_end(form) }}
+                  </div>
+                </div>
+              </div>
+              
+              <div class="col-md-6 grid-margin stretch-card">
+                
+              </div>
+              <div class="col-md-6 grid-margin stretch-card">
+                
+              </div>
+              <div class="col-md-6 grid-margin stretch-card">
+                
+              </div>
+              <div class="col-12 grid-margin stretch-card">
+                
+              </div>
+              <div class="col-12 grid-margin">
+                
+                
+              </div>
+              <div class="col-md-6 grid-margin stretch-card">
+                
+                
+              </div>
+              <div class="col-md-6 grid-margin stretch-card">
+                
+                    
+               
+              </div>
+            </div>
+          </div>
+          <!-- content-wrapper ends -->
+          <!-- partial:../../partials/_footer.html -->
+          
+          <!-- partial -->
+          <script src="{{asset('assets/vendors/js/vendor.bundle.base.js')}}"></script>
+    <!-- endinject -->
+    <!-- Plugin js for this page -->
+    <!-- End plugin js for this page -->
+    <!-- inject:js -->
+    <script src="{{asset('js/off-canvas.js')}}"></script>
+    <script src="{{asset('js/hoverable-collapse.js')}}"></script>
+    <script src="{{asset('js/misc.js')}}"></script>
+    <script src="{{asset('js/settings.js')}}"></script>
+    <script src="{{asset('js/todolist.js')}}"></script>
+{% endblock %}
+
+

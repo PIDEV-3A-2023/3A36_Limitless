@@ -1,0 +1,56 @@
+{% extends 'back.html.twig' %}
+{% block title %}Utilisateurs
+{% endblock %}
+
+{% block usernav %}{% endblock %}
+{% block body %}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.min.css" integrity="sha512-/zs32ZEJh+/EO2N1b0PEdoA10JkdC3zJ8L5FTiQu82LR9S/rOQNfQN7U59U9BC12swNeRAz3HSzIL2vpp4fv3w==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+	<div class="main-panel">
+		<div class="content-wrapper">
+			<div class="page-header">
+				<h3 class="page-title">
+					Statistiques des Joueurs
+				</h3>
+				
+				<nav aria-label="breadcrumb">
+					<ol class="breadcrumb">
+						<li class="breadcrumb-item">
+							<a href="#">Statistiques    </a>
+						</li>
+						<li class="breadcrumb-item active" aria-current="page">Joueurs</li>
+					</ol>
+				</nav>
+			</div>
+			<div class="row">
+
+
+				<div class="col-lg-4 grid-margin stretch-card">
+					<div class="card">
+						<div class="card-body">
+
+						<canvas id="chart" width="100" height="100"></canvas>
+
+					</div>
+				</div>
+			</div>
+
+
+		</div>
+	</div>
+	<!-- content-wrapper ends -->
+	<!-- partial:../../partials/_footer.html -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.min.js" integrity="sha512-s+xg36jbIujB2S2VKfpGmlC3T5V2TF3lY48DX7u2r9XzGzgPsa6wTpOQA7J9iffvdeBN0q9tKzRxVxw1JviZPg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script>
+    
+
+</script>
+	<!-- partial --><script src="{{asset('assets/vendors/js/vendor.bundle.base.js')}}"> </script>
+	<!-- endinject -->
+	<!-- Plugin js for this page -->
+	<!-- End plugin js for this page -->
+	<!-- inject:js --><script src="{{asset('js/off-canvas.js')}}"> </script>
+	<script src="{{asset('js/hoverable-collapse.js')}}"></script>
+	<script src="{{asset('js/misc.js')}}"></script>
+	<script src="{{asset('js/settings.js')}}"></script>
+	<script src="{{asset('js/todolist.js')}}"></script>
+{% endblock %}

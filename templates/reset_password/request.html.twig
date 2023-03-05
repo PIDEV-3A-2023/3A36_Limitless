@@ -1,0 +1,44 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Reset your password{% endblock %}
+
+
+
+{% block body %}
+	<section class="player-single-wrap">
+		<div class="container">
+			<div class="row">
+				<div class="col-md-12">
+					<div class="captain-bage">Utilisateur</div>
+					<h4 class="player-name">Mot de passe oublier</h4>
+				</div>
+				
+				<div class="col-md-12">
+					<div class="player-info">
+						
+						<div class="summary">
+							<div class="row">
+								{{ form_start(requestForm) }}
+								<div class="col-md-6">
+									<div class="item">Email:</div>
+								</div>
+								<div class="col-md-12">{{ form_widget(requestForm.email) }}</div>
+								<b><span style="color: red;">{{ form_errors(requestForm.email) }}</span></b>
+								<center><button class="btn btn-primary">Send password reset email</button></center>
+                                {{ form_end(requestForm) }}
+								<div class="col-md-12">
+									
+								</div></center>	
+							</div>
+						</div>
+
+
+					</div>
+				</div>
+				<br>
+				
+			</div>
+		</section>
+
+
+	{% endblock %}

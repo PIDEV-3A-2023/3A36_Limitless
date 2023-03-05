@@ -1,0 +1,366 @@
+{% extends 'back.html.twig' %}
+{% block title %}Utilisateurs
+{% endblock %}
+
+
+{% block body %}
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.min.css" integrity="sha512-/zs32ZEJh+/EO2N1b0PEdoA10JkdC3zJ8L5FTiQu82LR9S/rOQNfQN7U59U9BC12swNeRAz3HSzIL2vpp4fv3w==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+	<div class="main-panel">
+	<script>
+  var advancedOptionsDiv = document.getElementById("advanced_options");
+  var moreOptionsBtn = document.getElementById("more_options_btn");
+  
+  moreOptionsBtn.addEventListener("click", function() {
+    if (advancedOptionsDiv.style.display === "none") {
+      advancedOptionsDiv.style.display = "block";
+      moreOptionsBtn.textContent = "Less stats";
+    } else {
+      advancedOptionsDiv.style.display = "none";
+      moreOptionsBtn.textContent = "More Stats";
+    }
+  });
+  
+</script>
+		<div class="content-wrapper">
+		<div class="row">
+              <div class="col-xl-3 col-sm-6 grid-margin stretch-card">
+                <div class="card">
+                  <div class="card-body">
+                    <div class="row">
+                      <div class="col-9">
+                        <div class="d-flex align-items-center align-self-start">
+                          <h3 class="mb-0 text-success">{{ nbUsers }}</h3>
+                          
+                        </div>
+                      </div>
+                      <div class="col-3">
+                        
+                      </div>
+                    </div>
+                    <h6 class="text-muted font-weight-normal">Nombre de joueurs inscrits au cours du dernier mois</h6>
+                  </div>
+                </div>
+              </div>
+              <div class="col-xl-3 col-sm-6 grid-margin stretch-card">
+                <div class="card">
+                  <div class="card-body">
+                    <div class="row">
+                      <div class="col-9">
+                        <div class="d-flex align-items-center align-self-start">
+                          <h3 class="mb-0 text-warning">{{ percUser }}%</h3>
+                          
+                        </div>
+                      </div>
+                      <div class="col-3">
+                        
+                      </div>
+                    </div>
+                    <h6 class="text-muted font-weight-normal">Pourcentage de joueurs qui sont vérifiés</h6>
+                  </div>
+                </div>
+              </div>
+              <div class="col-xl-3 col-sm-6 grid-margin stretch-card">
+                <div class="card">
+                  <div class="card-body">
+                    <div class="row">
+                      <div class="col-9">
+                        <div class="d-flex align-items-center align-self-start">
+                          <h3 class="mb-0 text-danger">{{banUser}}%</h3>
+                          
+                        </div>
+                      </div>
+                      <div class="col-3">
+                        
+                      </div>
+                    </div>
+                    <h6 class="text-muted font-weight-normal">Pourcentage de joueurs qui sont bannis</h6>
+                  </div>
+                </div>
+              </div>
+              <div class="col-xl-3 col-sm-6 grid-margin stretch-card">
+                <div class="card">
+                  <div class="card-body">
+                    <div class="row">
+                      <div class="col-9">
+                        <div class="d-flex align-items-center align-self-start">
+                          <h3 class="mb-0">{{username}}</h3>
+                          <p class="text-success ml-2 mb-0 font-weight-medium"></p>
+                        </div>
+                      </div>
+                      <div class="col-3">
+                        <div class="icon icon-box-success ">
+                          <span class="icon-item">{{WinsUser}}</span>
+                        </div>
+                      </div>
+                    </div>
+                    <h6 class="text-muted font-weight-normal">Joueur avec les plus hauts victoires</h6>
+                  </div>
+                </div>
+				
+              </div>
+			  
+            </div>
+			
+			
+			
+			<div class="page-header">
+				<h3 class="page-title">
+					Table des Joueurs
+				</h3>
+				
+				<nav aria-label="breadcrumb">
+					<ol class="breadcrumb">
+						<li class="breadcrumb-item">
+							<a href="#">Tables</a>
+						</li>
+						<li class="breadcrumb-item active" aria-current="page">Joueurs</li>
+					</ol>
+				</nav>
+			</div>
+			<div class="row">
+
+
+				<div class="col-lg-12 grid-margin stretch-card">
+					<div class="card">
+						<div class="card-body"></p>
+						<div class="table-responsive">
+							<table class="table table-striped">
+								
+								<thead>
+									<tr>
+
+										<th>
+											Joueur
+										</th>
+										<th>
+											Nom
+										</th>
+										<th>
+											Prenom
+										</th>
+										<th>
+											Email
+										</th>
+
+										<th>
+											IGN
+										</th>
+										<th>
+											Victoires
+										</th>
+										<th>
+											Défaites
+										</th>
+										<th>
+											Age
+										</th>
+										<th>
+											État
+										</th>
+										<th>
+											Vérifié ?
+										</th>
+
+
+									</tr>
+								</thead>
+								<tbody id="Joueurs">
+									{% for user in users %}
+
+										<tr class="text-light">
+
+											<td class="py-1"><img src="{{ asset('userImages/' ~ user.pprofile) }}"></td>
+											<td class="bg-warning font-weight-bold text-dark">{{ user.nom }}</td>
+											<td class="text-capitalize text-success">{{ user.prenom }}</td>
+											<td>{{ user.email }}</td>
+
+											<td>{{ user.ign }}</td>
+
+											<td class="text-success">{{ user.wins }}</td>
+											<td class="text-danger">{{ user.loses }}</td>
+											{% set userBirthdate = user.datenai %}
+											{% set now = "now"|date("Y-m-d") %}
+											{% set userAge = now|date("Y") - userBirthdate|date("Y") %}
+											{% if userBirthdate|date("m-d") > now|date("m-d") %}
+												{% set userAge = userAge - 1 %}
+											{% endif %}
+											<td>{{ userAge }}</td>
+
+											{% if user.isIsBanned %}
+												<td class="text-danger">Banni</td>
+											{% else %}
+												<td class="text-success">Actif</td>
+											{% endif %}
+											{% if user.isVerified %}
+												<td class="text-center">
+													✔️
+												</td>
+											{% else %}
+												<td class="text-center">
+													❌
+												</td>
+											{% endif %}
+
+
+											<td>
+
+												{% if user.isIsBanned %}
+													<a class="btn btn-success" href="{{ path('back_joueur_ban', {'id': user.id}) }}">
+														Débanner</a>
+												{% else %}
+													<button id="ban-btn" class="btn btn-danger" data-toggle="modal" data-target="#confirm-ban-modal{{ loop.index }}">Bannir le joueur</button>
+													<div class="modal fade" id="confirm-ban-modal{{ loop.index }}" tabindex="-1" role="dialog" aria-labelledby="confirm-ban-modal-label" aria-hidden="true">
+														<div class="modal-dialog modal-dialog-centered" role="document">
+															<div class="modal-content">
+																<div class="modal-header">
+																	<h5 class="modal-title" id="confirm-ban-modal-label">Êtes-vous sûr de vouloir bannir cet Joueur ?</h5>
+																	<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+																		<span aria-hidden="true">&times;</span>
+																	</button>
+																</div>
+																<div class="modal-footer">
+																	<form method="post" action="{{ path('back_joueur_ban', {'id': user.id}) }}">
+																		<button type="button" class="btn btn-secondary" data-dismiss="modal">Annuler</button>
+																		<button type="submit" id="confirm-ban-btn" class="btn btn-danger">Bannir</button>
+																	</form>
+																</div>
+															</div>
+														</div>
+													</div>
+												{% endif %}
+
+
+											</td>
+
+
+										</tr>
+
+									{% else %}
+										<tr>
+											<td colspan="9">Aucun utilisateur trouvé</td>
+										</tr>
+										<tr>
+
+										{% endfor %}
+									</tbody>
+								</tbody>
+								
+							</table>
+							
+							<br>
+
+
+						</div>
+						
+					</div>
+					<nav aria-label="Page navigation example">
+									<ul class="pagination justify-content-center">
+										{% if CurrentPage > 1 %}
+											<li class="page-item">
+												<a hidden class="page-link" href="{{ path('joueur_back', { 'page': CurrentPage - 1 }) }}">Précédent</a>
+												<a class="page-link" href="{{ path('joueur_back', { 'page': CurrentPage - 1 }) }}" aria-label="Previous">
+													<span aria-hidden="true">&laquo;</span>
+													<span class="sr-only">Previous</span>
+												</a>
+											</li>
+										{% endif %}
+										{% for page in 1..pagesCount %}
+											{% if page == CurrentPage %}
+												<li class="page-item active">
+													<span class="page-link">{{ page }}</span>
+												</li>
+											{% else %}
+												<li class="page-item">
+													<a class="page-link" href="{{ path('joueur_back', {'page': page}) }}">{{ page }}</a>
+												</li>
+											{% endif %}
+										{% endfor %}
+										{% if CurrentPage < pagesCount %}
+											<li class="page-item">
+												<a hidden class="page-link" href="{{ path('joueur_back', { 'page': CurrentPage + 1 }) }}">Next</a>
+												<a class="page-link" href="{{ path('joueur_back', { 'page': CurrentPage + 1 }) }}" aria-label="Next">
+													<span aria-hidden="true">&raquo;</span>
+													<span class="sr-only">Next</span>
+												</a>
+											</li>
+										{% endif %}
+									</ul>
+								</nav>
+					
+				</div>
+				
+			</div>
+			
+
+
+		</div>
+		<div id="advanced_options">
+					<div class="row justify-content-center">
+						<div class="col-lg-4 grid-margin stretch-card ">
+							<div class="card">
+								<div class="card-body">
+
+									<canvas id="chart" width="100" height="100"></canvas>
+
+								</div>
+							</div>
+						</div>
+					</div>
+		</div>
+		
+		
+	</div>
+	
+	<!-- content-wrapper ends -->
+	<!-- partial:../../partials/_footer.html -->
+
+	<!-- partial --><script src="{{asset('assets/vendors/js/vendor.bundle.base.js')}}"> </script>
+	<!-- endinject -->
+	<!-- Plugin js for this page -->
+	<!-- End plugin js for this page -->
+	<!-- inject:js --><script src="{{asset('js/off-canvas.js')}}"> </script>
+	<script src="{{asset('js/hoverable-collapse.js')}}"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.min.js" integrity="sha512-s+xg36jbIujB2S2VKfpGmlC3T5V2TF3lY48DX7u2r9XzGzgPsa6wTpOQA7J9iffvdeBN0q9tKzRxVxw1JviZPg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+	<script>
+	
+	let users = document.querySelector('#chart');
+    let usersGraph = new Chart(users, {
+        type: 'bar',
+        data: {
+            labels: ["16 - 24", "25 - 34", "35 - 44", "45 +"],
+            datasets: [{
+			barPercentage: 1,
+        	barThickness: 25,
+        	maxBarThickness: 25,
+        	minBarLength: 2,
+			 backgroundColor: [
+          "rgba(255, 99, 132, 0.2)",
+          "rgba(255, 159, 64, 0.2)",
+          "rgba(255, 205, 86, 0.2)",
+          "rgba(75, 192, 192, 0.2)",
+          
+        ],
+		borderColor: [
+          "rgb(255, 99, 132)",
+          "rgb(255, 159, 64)",
+          "rgb(255, 205, 86)",
+          "rgb(75, 192, 192)",
+          
+        ],
+		borderWidth: 1,
+		 fill: false,
+		 borderWidth: 1,
+                label: "Nombre de joueurs par tranche d'âge",
+                data: [{{joueur1624}}, {{joueur2534}}, {{joueur3544}}, {{joueur45}}],
+                //backgroundColor: ["red", "blue", "green", "yellow"]
+        }]
+        },
+		options: { scales: { yAxes: [{ ticks: { beginAtZero: true } }] } },
+    })
+	
+	</script>
+	<script src="{{asset('js/misc.js')}}"></script>
+	<script src="{{asset('js/settings.js')}}"></script>
+	<script src="{{asset('js/todolist.js')}}"></script>
+{% endblock %}
