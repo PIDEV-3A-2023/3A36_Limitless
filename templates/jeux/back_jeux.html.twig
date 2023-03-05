@@ -28,6 +28,8 @@
                             <th> Logo </th>
                             <th> Reference </th>
                             <th> Nom </th>
+                            <th> Evaluation </th>
+                            <th>Evaluer <span class="text-primary">/ views</span></th>
                             <th> Catgories </th>
                             <th> Type </th>
                             <th> Date de Creation</th>
@@ -42,6 +44,12 @@
                             </td>
                             <td>{{ jeux.ref }}</td>
                             <td>{{ jeux.libelle }}</td>
+                           <td class="{{ jeux.noteMyonne >= 5 ? 'text-success' : 'text-danger' }}">{{ jeux.noteMyonne }}</td>
+               <td class="{{ jeux.noteCount >= jeux.views/2 ? 'text-success' : 'text-danger' }}">
+  <span class="{{ jeux.noteCount >= jeux.views/2 ? 'text-success' : 'text-danger' }}">{{ jeux.noteCount }}</span>
+  <span class="text-primary">/ {{ jeux.views }}</span>
+</td>
+
                             <td>
                             {% for categorie in jeux.categories %}
                             {{ categorie.NomCat }}{% if not loop.last %}, {% endif %}
@@ -99,6 +107,9 @@
               </div>
             </div>
         </div>
+        <div class="pagination-wrap">
+    {{ knp_pagination_render(jeuxes, 'jeux/pagination.html.twig') }}
+</div>
         <!-- content-wrapper ends -->
         <!-- partial:../../partials/_footer.html -->
         <!-- partial -->

@@ -14,7 +14,7 @@ class NoteType extends AbstractType
     {
         $builder
             ->add('note', NumberType::class, [
-                'label' => 'Note (out of 10):',
+                'label' => 'Evaluer le jeux (out of 10):',
                 'attr' => [
                     'min' => 0,
                     'max' => 10,

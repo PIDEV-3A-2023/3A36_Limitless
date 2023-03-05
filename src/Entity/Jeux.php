@@ -10,7 +10,7 @@ use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
-use Cocur\Slugify\SlugifyInterface;
+
 use App\Entity\InvalidArgumentException;
 
 #[ORM\Entity(repositoryClass: JeuxRepository::class)]
@@ -37,24 +37,31 @@ class Jeux
     private Collection $Categories;
 
     #[ORM\ManyToMany(targetEntity: TypeJeux::class)]
+    #[Groups("jeuxes")]
     private Collection $types;
 
     #[ORM\Column(length: 255)]
+    #[Groups("jeuxes")]
     private ?string $LogoJeux = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups("jeuxes")]
     private ?string $ImageJeux = null;
 
     #[ORM\Column(type: Types::DATE_MUTABLE)]
+    #[Groups("jeuxes")]
     private ?\DateTimeInterface $dateCreation = null;
 
     #[ORM\Column]
+    #[Groups("jeuxes")]
     private ?float $note = null;
 
     #[ORM\Column]
+    #[Groups("jeuxes")]
     private ?int $noteCount = null;
 
     #[ORM\Column]
+    #[Groups("jeuxes")]
     private ?float $noteMyonne = null;
 
     public function __construct()
@@ -194,11 +201,7 @@ class Jeux
         return $this;
     }
 
-    public function getSlug(SlugifyInterface $slugify): string
-    {
-        return $slugify->slugify($this->libelle);
-    }
-
+    
     public function getNote(): ?float
     {
         return $this->note;
@@ -228,10 +231,21 @@ class Jeux
 
         return $this;
     }
-
+    public function setNoteBack(): self
+    {
+        $this->note = 0;
+        $this->views = 0;
+        $this->noteCount = 0;
+        $this->noteMyonne = 0;
+        $this->totalNote = 0;
+        return $this;
+    }
 
     #[ORM\Column]
     private ?float $totalNote = null;
+
+    #[ORM\Column]
+    private ?int $views = null;
     public function setNote(float $note): self
     {
         
@@ -253,5 +267,21 @@ class Jeux
         $this->totalNote = $totalNote;
 
         return $this;
+    }
+
+    public function getViews(): ?int
+    {
+        return $this->views;
+    }
+
+    public function setViews(int $views): self
+    {
+        $this->views = $views;
+
+        return $this;
+    }
+    public function incrementViews(): void
+    {
+        $this->views++;
     }
 }

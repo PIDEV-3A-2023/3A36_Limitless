@@ -1,13 +1,23 @@
 {{ form_start(form,{'attr': {'class': 'form-sample', 'novalidate': 'novalidate'}} ) }}
 <div class="leave-comment-wrap">
-   <div class="row">
-    <div class="col-md-6">
-        <div class="item">
-            <label>
-                <span>{{ form_widget(form)}}</span>
-                <span><button class="btn btn-primary mr-2">{{ button_label|default('Save') }}</button></span>
-            </label>
-            </div>	
+    <div class="row">
+        <div class="col-md-6">
+            <div class="form-group">
+                {{ form_label(form.nom) }}
+                {{ form_widget(form.nom) }}
+            </div>
         </div>
-    </div> 
+        <div class="col-md-6">
+            <div class="form-group">
+                {{ form_label(form.cat) }}
+                {{ form_widget(form.cat) }}
+            </div>
+        </div>
+        <div class="col-md-12">
+            <div class="form-group">
+                {{ form_widget(form.search) }}
+            </div>
+        </div>
+    </div>
+</div>
 {{ form_end(form) }}

@@ -86,23 +86,32 @@ class JeuxRepository extends ServiceEntityRepository
             ->getResult();
     }
 
-    public function rechercherJeux($libelle)
-    {   $libelleExists=null;
-        $jeuExists=null;
+    public function rechercherJeux($libelle = null, $categorie = null)
+    {
+        $qb = $this->createQueryBuilder('j')
+            ->leftJoin('j.Categories', 'c');
     
-        if($libelle!=null)
-        {$libelleExists= $this->createQueryBuilder('j')
-        ->where('j.libelle LIKE :libelle')
-        ->setParameter('libelle','%'.$libelle.'%')  
-        ->getQuery()
-        ->getResult()
-        ;}  //checks existence of nom 
+        if ($libelle) {
+            $qb->andWhere('j.libelle LIKE :libelle')
+                ->setParameter('libelle', '%'.$libelle.'%');
+        }
+    
+        if ($categorie) {
+            $qb->andWhere('c.NomCat LIKE :categorie')
+                ->setParameter('categorie', '%'.$categorie.'%');
+        }
+    
+        return $qb->getQuery()->getResult();
+    }
+    
     
 
-//var_dump($jeuExists);
-//var_dump($nomExists);
-        
-        
-    
+public function findByNoteMyonneDesc(): array
+{
+    return $this->createQueryBuilder('j')
+        ->orderBy('j.noteMyonne', 'DESC')
+        ->getQuery()
+        ->getResult();
 }
+
 }

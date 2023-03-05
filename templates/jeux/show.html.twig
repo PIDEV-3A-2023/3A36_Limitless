@@ -35,8 +35,8 @@
                                 </div>
                                 <div class="col-md-9 col-sm-9 col-xs-9">5vs5</div>
                             </div>
-                            <p>Note: {{ jeux.note ?? 'N/A' }}/10</p>
-
+                            <p>Evaluation du jeux : {{ jeux.noteMyonne ?? 'N/A' }}/10</p>
+                            <p>Nombre de personnes qui ont evalué le jeux : {{ jeux.noteCount ?? 'N/A' }}</p>
     {{ form_start(note_form) }}
         {{ form_row(note_form.note) }}
         <button type="submit" class="btn btn-primary">Set Note</button>
@@ -156,37 +156,35 @@
         </div>
     </div>           
 
+    {% if message is not empty %}
+    <p>{{ message }}</p>
+{% else %}
     <div class="tab-content">
         <div class="tab-pane active" id="managers" role="tabpanel">
-            <div id="managers_carousel" class="carousel slide main-stuff-slider" data-ride="carousel" >
-                <div class="carousel-inner" role="listbox" >
+            <div id="managers_carousel" class="carousel slide main-stuff-slider" data-ride="carousel">
+                <div class="carousel-inner" role="listbox">
                     <div class="item active">
                         <div class="container">
                             <div class="row">
-                            
-                                <div class="col-md-4">
-                                    <div class="staff-item">
-                                        <a href="staff.html">
-                                            
-                                            <img src="{{asset('images/soccer/apex.jpg')}}"  alt="person-slider">
-                                        </a>	
+                                {% for jeu in similarJeux %}
+                                    <div class="col-md-4">
+                                        <div class="staff-item">
+                                            <a href="{{ path('app_jeux_show', {'id': jeu.id}) }}">
+                                                <img src="{{ asset('images/soccer/apex.jpg') }}" alt="person-slider">
+                                            </a>
+                                        </div>
                                     </div>
-                                </div>                    
-                                <div class="col-md-4">
-                                    <div class="staff-item">
-                                        <a href="staff.html">
-                                            <img src="{{asset('images/soccer/Fortnite.jpg')}}"  alt="person-slider">
-                                        </a>	
-                                    </div>
-                                </div>
-                                
+                                {% endfor %}
                             </div>
                         </div>
                     </div>
-                    
-                            </div>
-                        </div>
-                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endif %}
+
+
                     <!-- Controls -->
                     <a class="nav-arrow left-arrow" href="#managers_carousel" role="button" data-slide="prev">
                         <i class="fa fa-angle-left" aria-hidden="true"></i>

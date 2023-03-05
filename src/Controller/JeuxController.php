@@ -2,21 +2,20 @@
 
 namespace App\Controller;
 
-use Cocur\Slugify\SlugifyInterface;
+
 use App\Entity\Jeux;
 use App\Form\Jeux1Type;
 use App\Form\SearchType;
 use App\Entity\CategorieJeux;
 use App\Repository\CategorieJeuxRepository;
 use App\Repository\JeuxRepository;
-use Cocur\Slugify\Slugify;
-use Doctrine\ORM\Tools\Pagination\Paginator;
+
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
-use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
+use Symfony\Component\Serializer\SerializerInterface;
 use Knp\Component\Pager\PaginatorInterface;
 use App\Form\NoteType;
 
@@ -27,51 +26,67 @@ class JeuxController extends AbstractController
     //* partie web 
     
     #[Route('/', name: 'app_jeux_index')]
-    public function index(JeuxRepository $jeuxRepository, Request $req, SlugifyInterface $slugify, PaginatorInterface $paginator): Response
+    public function index(JeuxRepository $jeuxRepository, Request $req, PaginatorInterface $paginator): Response
     {
         $form = $this->createForm(SearchType::class);
         $form->handleRequest($req);
     
+        // Get all games
+        $jeuxAll = $paginator->paginate(
+            $jeuxRepository->findBy([], ['dateCreation' => 'DESC']),
+            $req->query->getInt('page', 1),
+            3
+        );
+        $message = '';
+        // Get games ordered by noteMyonne in descending order
+        $top3jeux = $jeuxRepository->findByNoteMyonneDesc(3);
+    
         if ($form->isSubmitted() && $form->isValid()) {
-            $donnees = $jeuxRepository->rechercherJeux($form->get('nom')->getData());
-    
-            if (is_countable($donnees) && count($donnees) === 0) {
-                $this->addFlash('warning', 'Pas de jeux Trouvés');
-            } else {
-                $jeuxRechercher = $paginator->paginate(
-                    $donnees,
-                    $req->query->getInt('page', 1),
-                    8
-                );
-    
+            $nom = $form->get('nom')->getData();
+            $categorie = $form->get('cat')->getData();
+            $donnees = $jeuxRepository->rechercherJeux($nom, $categorie);
+            
+            if (count($donnees) === 0) {
+                $message = 'Rien trouve';
                 return $this->renderForm('jeux/front.html.twig', [
-                    'jeuxes' => $jeuxRechercher,
-                    'slugify' => $slugify,
+                    'jeuxAll' => [],
+                    'top3Jeux' => $top3jeux,
+                    'message' => $message,
+                    'form' => $form,
+                ]);
+            } else {
+                return $this->renderForm('jeux/front.html.twig', [
+                    'jeuxAll' => $donnees,
+                    'top3Jeux' => $top3jeux,
+                    'message' => $message,
                     'form' => $form,
                 ]);
             }
         }
     
         return $this->renderForm('jeux/front.html.twig', [
-            'jeuxes' => $paginator->paginate(
-                $jeuxRepository->findAll(),
-                $req->query->getInt('page', 1),
-                8
-            ),
-            'slugify' => $slugify,
+            'jeuxAll' => $jeuxAll,
+            'top3Jeux' => $top3jeux,
+            'message' => $message,
             'form' => $form,
         ]);
     }
     
-    
     #[Route('/backend', name: 'app_backend_jeux', methods: ['GET'])]
-    public function table(Request $request ,JeuxRepository $jeuxRepository, PaginatorInterface $paginator): Response
+    public function table(Request $request, JeuxRepository $jeuxRepository, PaginatorInterface $paginator): Response
     {
-        $jeuxes = $paginator->paginate($jeuxRepository->findAll(),$request->query->getInt('page',1),5);
+        // Retrieve games sorted by dateCreation field
+        $jeuxes = $paginator->paginate(
+            $jeuxRepository->findBy([], ['dateCreation' => 'DESC']),
+            $request->query->getInt('page', 1),
+            5
+        );
+    
         return $this->render('jeux/back_jeux.html.twig', [
             'jeuxes' => $jeuxes,
         ]);
     }
+    
 
 
 
@@ -115,6 +130,7 @@ public function new(Request $request, JeuxRepository $jeuxRepository): Response
             $jeux->setImageJeux($filename2);
             
         }
+        $jeux->setNoteBack();
         $jeuxRepository->save($jeux, true);
 
         return $this->redirectToRoute('app_backend_jeux', [], Response::HTTP_SEE_OTHER);
@@ -127,31 +143,14 @@ public function new(Request $request, JeuxRepository $jeuxRepository): Response
 }
 
 
-
-
-/**
-
- *  @ParamConverter("jeux", class="App\Entity\Jeux")
- */
-//#[Route('/{id}/{slug}', name: 'app_jeux_show', methods: ['GET'])]
-//public function show(Jeux $jeux, SlugifyInterface $slugify ,JeuxRepository $jeuxrep, CategorieJeux $category, $id): Response
-//{
- //   $category = $this->getDoctrine()->getRepository(CategorieJeux::class)->find($id);
-
- //   $similaire=$jeuxrep->getJeuxSimilaires($category,$jeux);
-//
-   // return $this->render('jeux/show.html.twig', [
-   //     'jeux' => $jeux,
-     //   'similaire' => $similaire,
-   //     'slugify' => $slugify,
-   // ]);
-//}
-
-
-
-#[Route('/{id}/{slug}', name: 'app_jeux_show', methods: ['GET','POST'])]
-public function show(Jeux $jeux, SlugifyInterface $slugify, Request $request): Response
+#[Route('/{id}', name: 'app_jeux_show', methods: ['GET','POST'])]
+public function show(Jeux $jeux, Request $request, JeuxRepository $jeuxRepository): Response
 {
+    $views = $jeux->getViews() + 1;
+    $jeux->setViews($views);
+    $em = $this->getDoctrine()->getManager();
+    $em->persist($jeux);
+    $em->flush();
     $form = $this->createForm(NoteType::class, $jeux);
     $form->handleRequest($request);
 
@@ -162,10 +161,20 @@ public function show(Jeux $jeux, SlugifyInterface $slugify, Request $request): R
         $em->flush();
     }
 
+    // Get similar games
+    $similarJeux = $jeuxRepository->getJeuxSimilaires($jeux->getCategories()[0], $jeux);
+
+    // Check if there are similar games or not
+    $message = '';
+    if (empty($similarJeux)) {
+        $message = 'Pas encore des jeux de meme categorie.';
+    }
+
     return $this->render('jeux/show.html.twig', [
         'jeux' => $jeux,
-        'slugify' => $slugify,
         'note_form' => $form->createView(),
+        'similarJeux' => $similarJeux,
+        'message' => $message,
     ]);
 }
 
@@ -238,7 +247,7 @@ public function show(Jeux $jeux, SlugifyInterface $slugify, Request $request): R
     
     }
 
-    #[Route('/{id}', name: 'app_jeux_delete', methods: ['POST'])]
+    #[Route('/delete/{id}', name: 'app_jeux_delete', methods: ['POST'])]
     public function delete(Request $request, Jeux $jeux, JeuxRepository $jeuxRepository): Response
     {
         if ($this->isCsrfTokenValid('delete'.$jeux->getId(), $request->request->get('_token'))) {
@@ -259,18 +268,19 @@ public function show(Jeux $jeux, SlugifyInterface $slugify, Request $request): R
         ]);
     }
 
-    //* partie mobile 
-    /**
+/**
 
  *  @ParamConverter("jeux", class="App\Entity\Jeux")
  */
-    #[Route('/affallM', name: 'app_jeux_show_mobile', methods: ['GET'])]
-    public function getJeux(JeuxRepository $rep, NormalizerInterface $normalizer){
-        
-        $jeux =$rep->findAll();
-        $jeuxNormalises = $normalizer->normalize($jeux, 'json', ['groups' => "jeuxes"]);
-        $json = json_encode($jeuxNormalises);
+#[Route('/All', name: 'app_jeux_liste')]
+    public function ListeJeux(JeuxRepository $jeuxRep, SerializerInterface $serializer)
+    {
+        $Jeux = $jeuxRep->findAll();
+        $jeuxNormailize = $serializer->serialize($Jeux, 'json', ['groups' => "jeuxes"]);
 
-        return new Response($json);
+        $json = json_encode($jeuxNormailize);
+        return  new response($json);
     }
+
+    
 }
