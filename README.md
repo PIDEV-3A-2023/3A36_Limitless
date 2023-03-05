@@ -4,28 +4,74 @@
 
 Ggaming is a PiDev project created by the group Limitless which consists of:
 
-- Ben Amor Sameh
-- Uwobikundiye Dhiaeddine
-- Khiari Ons
-- Keita Balla Moussa
-- Ben Khaled Haytham
-- Ben Aissa Nour
+| Name              | Role         |
+| -----------------| ------------ |
+| Ben Amor Sameh    | Developer    |
+| Uwobikundiye Dhia | Developer    |
+| Khiari Ons        | Developer    |
+| Keita Balla Moussa| Developer    |
+| Ben Khaled Haytham| Developer    |
+| Ben Aissa Nour    | Developer    |
 
 ## Installation
 
-You can install our project by cloning it and then running the command `symfony serve`.
+To install Ggaming, follow these steps:
+
+1. Clone the repository using the following command:
+
+    ```
+    git clone https://github.com/limitless-coding/Ggaming.git
+    ```
+
+2. Install Composer dependencies:
+
+    ```
+    composer install
+    ```
+
+3. Create a `.env.local` file and add your database configuration:
+
+    ```
+    # example database configuration
+    DATABASE_URL=mysql://db_user:db_password@127.0.0.1:3306/db_name
+    ```
+
+4. Create the database schema:
+
+    ```
+    php bin/console doctrine:database:create
+    php bin/console doctrine:migrations:migrate
+    ```
+
+5. Load the fixtures to populate the database with initial data:
+
+    ```
+    php bin/console doctrine:fixtures:load
+    ```
+
+6. Start the development server:
+
+    ```
+    symfony serve
+    ```
+
+You can now access the application at `http://localhost:8000`.
+
 
 ### External Bundles
 
 To use the full functionality of Ggaming, please make sure to install the following external bundles:
 
-- symfony/mailer: `composer require symfony/mailer`
-- symfony/messenger: `composer require symfony/messenger`
-- symfony/google-mailer: `composer require symfony/google-mailer`
-- stof/doctrine-extensions-bundle: `composer require stof/doctrine-extensions-bundle`
-- knplabs/knp-paginator-bundle: `composer require knplabs/knp-paginator-bundle:*`
-- gedmo/doctrine-extensions: `composer require gedmo/doctrine-extensions`
-- liip/imagine-bundle: `composer require liip/imagine-bundle`
+
+| Bundle Name                 | Command to Install                       |
+| ---------------------------| ---------------------------------------- |
+| symfony/mailer              | composer require symfony/mailer          |
+| symfony/messenger           | composer require symfony/messenger       |
+| symfony/google-mailer       | composer require symfony/google-mailer   |
+| stof/doctrine-extensions-bundle | composer require stof/doctrine-extensions-bundle |
+| knplabs/knp-paginator-bundle| composer require knplabs/knp-paginator-bundle:* |
+| gedmo/doctrine-extensions   | composer require gedmo/doctrine-extensions|
+| liip/imagine-bundle         | composer require liip/imagine-bundle     |
 
 ## Usage
 
