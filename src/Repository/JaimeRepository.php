@@ -41,7 +41,7 @@ class JaimeRepository extends ServiceEntityRepository
     {
         
         return $this->createQueryBuilder('l')
-            ->select('e.id , COUNT(l.id) as likeCount')
+            ->select('e.id , e.nom_equipe , COUNT(l.id) as likeCount')
             ->join('l.equipe', 'e')
             ->groupBy('e.id')
             ->orderBy('likeCount', 'DESC')

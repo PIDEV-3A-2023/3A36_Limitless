@@ -69,14 +69,17 @@ class Equipe
     #[Groups("equipe")]
     private ?int $rating = null;
 
-    #[ORM\OneToMany(mappedBy: 'equipe', targetEntity: Jaime::class)]
+    #[ORM\OneToMany(mappedBy: 'equipe', targetEntity: Jaime::class, cascade:["persist","remove","merge"], orphanRemoval:true)]
     private Collection $jaimes;
 
-    #[ORM\OneToMany(mappedBy: 'equipe', targetEntity: Jaimepas::class)]
+    #[ORM\OneToMany(mappedBy: 'equipe', targetEntity: Jaimepas::class, cascade:["persist","remove","merge"], orphanRemoval:true)]
     private Collection $jaimepas;
 
     #[ORM\ManyToOne(inversedBy: 'equipes')]
     private ?Joueur $joueur = null;
+
+    #[ORM\ManyToOne(inversedBy: 'equipes')]
+    private ?User $user = null;
 
     public function __construct()
     {
@@ -304,22 +307,22 @@ class Equipe
         return $this->jaimepas;
     }
 
-    public function addJaimepa(Jaimepas $jaimepa): self
+    public function addJaimepa(Jaimepas $jaimepas): self
     {
-        if (!$this->jaimepas->contains($jaimepa)) {
-            $this->jaimepas->add($jaimepa);
-            $jaimepa->setEquipe($this);
+        if (!$this->jaimepas->contains($jaimepas)) {
+            $this->jaimepas->add($jaimepas);
+            $jaimepas->setEquipe($this);
         }
 
         return $this;
     }
 
-    public function removeJaimepa(Jaimepas $jaimepa): self
+    public function removeJaimepa(Jaimepas $jaimepas): self
     {
-        if ($this->jaimepas->removeElement($jaimepa)) {
+        if ($this->jaimepas->removeElement($jaimepas)) {
             // set the owning side to null (unless already changed)
-            if ($jaimepa->getEquipe() === $this) {
-                $jaimepa->setEquipe(null);
+            if ($jaimepas->getEquipe() === $this) {
+                $jaimepas->setEquipe(null);
             }
         }
 
@@ -340,7 +343,7 @@ class Equipe
 
     public function getTotalJaimes(): int
     {
-        return count($this->jaime);
+        return count($this->jaimes);
     }
  
     public function getTotaljaimepas(): int
@@ -348,10 +351,10 @@ class Equipe
         return count($this->jaimepas);
     }
 
-    public function isLikedByJoueur(Joueur $joueur): bool
+    public function isLikedByJoueur(User $user): bool
     {
-        foreach ($this->jaime as $jaime) {
-            if ($jaime->getJoueur() === $joueur) {
+        foreach ($this->jaimes as $jaimes) {
+            if ($jaimes->getUser() === $user) {
                 return true;
             }
         }
@@ -359,10 +362,10 @@ class Equipe
         return false;
     }
 
-    public function isDislikedByJoueur(Joueur $joueur): bool
+    public function isDislikedByJoueur(User $user): bool
     {
-        foreach ($this->jaimepa as $dislikeBlogs) {
-            if ($jaimepa->getJoueur() === $joueur) {
+        foreach ($this->jaimepas as $jaimepas) {
+            if ($jaimepas->getUser() === $user) {
                 return true;
             }
         }
@@ -371,26 +374,38 @@ class Equipe
     }
 
 
-    public function like(Joueur $joueur): void
+    public function like(User $user): void
     {
-        if (!$this->isLikedByJoueur($joueur)) {
-            $jaime = new Jaime();
-            $jaime->setEquipe($this);
-            $jaime->setJoueur($joueur);
-            $this->jaime[] = $jaime;
+        if (!$this->isLikedByJoueur($user)) {
+            $jaimes = new Jaime();
+            $jaimes->setEquipe($this);
+            $jaimes->setUser($user);
+            $this->jaimes[] = $jaimes;
         }
     }
 
 
-    public function dislike(Joueur $joueur): void
+    public function dislike(User $user): void
     {
-        if (!$this->isDislikedByJoueur($joueur)) {
-            $Jaimepa = new Jaimepas();
-            $Jaimepa->setBlog($this);
-            $Jaimepa->setJoueur($joueur);
+        if (!$this->isDislikedByJoueur($user)) {
+            $Jaimepas = new Jaimepas();
+            $Jaimepas->setEquipe($this);
+            $Jaimepas->setUser($user);
 
-            $this->jaimepa[] = $Jaimepa;
+            $this->jaimepas[] = $Jaimepas;
         }
+    }
+
+    public function getUser(): ?User
+    {
+        return $this->user;
+    }
+
+    public function setUser(?User $user): self
+    {
+        $this->user = $user;
+
+        return $this;
     }
     
 }

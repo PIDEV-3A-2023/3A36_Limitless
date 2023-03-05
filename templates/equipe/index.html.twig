@@ -77,7 +77,21 @@
                     {{form_widget(form.query)}}
                     <button class="btn"  type="submit" >chercher</button>
                 {{form_end(form)}}
-            
+              <div class="sidebar-menu-wrap">
+        <h6>Meilleurs equipes par likes</h6>
+
+        {% set number = 0 %}
+        {% for hotequipes in hotequipes %}
+       
+        {% set number = number + 1 %}
+        <ul class="categories-list">
+            <li>
+                <a href="{{path('app_equipe_show', {'id': hotequipes.id}) }}"><span class="count">{{ number }}</span>{{ hotequipes.nom_equipe}}</a>
+            </li>
+        </ul>
+       
+        {% endfor %}
+          </div>
                 <div class="champ-tab-wrap tab-content">
                 <div class="tab-item part-wrap tab-pane active" id="participants">
                 <div class="col-md-3">

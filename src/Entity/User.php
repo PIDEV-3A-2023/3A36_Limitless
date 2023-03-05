@@ -3,72 +3,51 @@
 namespace App\Entity;
 
 use App\Repository\UserRepository;
-use Doctrine\DBAL\Types\Types;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
-class User
+class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
-    //const IMAGE_DIRECTORY = '%kernel.project_dir%/public/images';
-
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column(length: 50)]
-    private ?string $nom = null;
-
-    #[ORM\Column(length: 50)]
-    private ?string $prenom = null;
-
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(length: 180, unique: true)]
     private ?string $email = null;
 
-    #[ORM\Column(length: 32)]
-    private ?string $mdp = null;
-
-    #[ORM\Column(type: Types::DATE_MUTABLE, nullable: true)]
-    private ?\DateTimeInterface $datenai = null;
-
-    #[ORM\Column(length: 255, nullable: true)]
-    private ?string $pays = null;
-
-    #[ORM\Column(length: 255, nullable: true)]
-    private ?string $pprofile = null;
+    #[ORM\Column]
+    private array $roles = [];
 
     /**
-     * @ORM\OneToOne(targetEntity="Player", mappedBy="user")
+     * @var string The hashed password
      */
-    private $player;
+    #[ORM\Column]
+    private ?string $password = null;
+
+    #[ORM\OneToMany(mappedBy: 'user', targetEntity: Equipe::class)]
+    private Collection $equipes;
+
+    #[ORM\OneToMany(mappedBy: 'user', targetEntity: Jaime::class)]
+    private Collection $jaimes;
+
+    #[ORM\OneToMany(mappedBy: 'user', targetEntity: Jaimepas::class)]
+    private Collection $jaimepas;
+
+    public function __construct()
+    {
+        $this->equipes = new ArrayCollection();
+        $this->jaimes = new ArrayCollection();
+        $this->jaimepas = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
         return $this->id;
-    }
-
-    public function getNom(): ?string
-    {
-        return $this->nom;
-    }
-
-    public function setNom(string $nom): self
-    {
-        $this->nom = $nom;
-
-        return $this;
-    }
-
-    public function getPrenom(): ?string
-    {
-        return $this->prenom;
-    }
-
-    public function setPrenom(string $prenom): self
-    {
-        $this->prenom = $prenom;
-
-        return $this;
     }
 
     public function getEmail(): ?string
@@ -83,50 +62,164 @@ class User
         return $this;
     }
 
-    public function getMdp(): ?string
+    /**
+     * A visual identifier that represents this user.
+     *
+     * @see UserInterface
+     */
+    public function getUserIdentifier(): string
     {
-        return $this->mdp;
+        return (string) $this->email;
     }
 
-    public function setMdp(string $mdp): self
+    /**
+     * @deprecated since Symfony 5.3, use getUserIdentifier instead
+     */
+    public function getUsername(): string
     {
-        $this->mdp = $mdp;
+        return (string) $this->email;
+    }
+
+    /**
+     * @see UserInterface
+     */
+    public function getRoles(): array
+    {
+        $roles = $this->roles;
+        // guarantee every user at least has ROLE_USER
+        $roles[] = 'ROLE_USER';
+
+        return array_unique($roles);
+    }
+
+    public function setRoles(array $roles): self
+    {
+        $this->roles = $roles;
 
         return $this;
     }
 
-    public function getDatenai(): ?\DateTimeInterface
+    /**
+     * @see PasswordAuthenticatedUserInterface
+     */
+    public function getPassword(): string
     {
-        return $this->datenai;
+        return $this->password;
     }
 
-    public function setDatenai(?\DateTimeInterface $datenai): self
+    public function setPassword(string $password): self
     {
-        $this->datenai = $datenai;
+        $this->password = $password;
 
         return $this;
     }
 
-    public function getPays(): ?string
+    /**
+     * Returning a salt is only needed, if you are not using a modern
+     * hashing algorithm (e.g. bcrypt or sodium) in your security.yaml.
+     *
+     * @see UserInterface
+     */
+    public function getSalt(): ?string
     {
-        return $this->pays;
+        return null;
     }
 
-    public function setPays(?string $pays): self
+    /**
+     * @see UserInterface
+     */
+    public function eraseCredentials()
     {
-        $this->pays = $pays;
+        // If you store any temporary, sensitive data on the user, clear it here
+        // $this->plainPassword = null;
+    }
+
+    /**
+     * @return Collection<int, Equipe>
+     */
+    public function getEquipes(): Collection
+    {
+        return $this->equipes;
+    }
+
+    public function addEquipe(Equipe $equipe): self
+    {
+        if (!$this->equipes->contains($equipe)) {
+            $this->equipes->add($equipe);
+            $equipe->setUser($this);
+        }
 
         return $this;
     }
 
-    public function getPprofile(): ?string
+    public function removeEquipe(Equipe $equipe): self
     {
-        return $this->pprofile;
+        if ($this->equipes->removeElement($equipe)) {
+            // set the owning side to null (unless already changed)
+            if ($equipe->getUser() === $this) {
+                $equipe->setUser(null);
+            }
+        }
+
+        return $this;
     }
 
-    public function setPprofile(?string $pprofile): self
+    /**
+     * @return Collection<int, Jaime>
+     */
+    public function getJaimes(): Collection
     {
-        $this->pprofile = $pprofile;
+        return $this->jaimes;
+    }
+
+    public function addJaime(Jaime $jaime): self
+    {
+        if (!$this->jaimes->contains($jaime)) {
+            $this->jaimes->add($jaime);
+            $jaime->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeJaime(Jaime $jaime): self
+    {
+        if ($this->jaimes->removeElement($jaime)) {
+            // set the owning side to null (unless already changed)
+            if ($jaime->getUser() === $this) {
+                $jaime->setUser(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Jaimepas>
+     */
+    public function getJaimepas(): Collection
+    {
+        return $this->jaimepas;
+    }
+
+    public function addJaimepa(Jaimepas $jaimepa): self
+    {
+        if (!$this->jaimepas->contains($jaimepa)) {
+            $this->jaimepas->add($jaimepa);
+            $jaimepa->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeJaimepa(Jaimepas $jaimepa): self
+    {
+        if ($this->jaimepas->removeElement($jaimepa)) {
+            // set the owning side to null (unless already changed)
+            if ($jaimepa->getUser() === $this) {
+                $jaimepa->setUser(null);
+            }
+        }
 
         return $this;
     }

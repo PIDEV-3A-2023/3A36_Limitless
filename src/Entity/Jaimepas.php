@@ -19,6 +19,11 @@ class Jaimepas
     #[ORM\ManyToOne(inversedBy: 'jaimepas')]
     private ?Joueur $joueur = null;
 
+    #[ORM\ManyToOne(inversedBy: 'jaimepas')]
+    private ?User $user = null;
+
+    
+
     public function getId(): ?int
     {
         return $this->id;
@@ -36,15 +41,19 @@ class Jaimepas
         return $this;
     }
 
-    public function getJoueur(): ?Joueur
+    
+
+    public function getUser(): ?User
     {
-        return $this->joueur;
+        return $this->user;
     }
 
-    public function setJoueur(?Joueur $joueur): self
+    public function setUser(?User $user): self
     {
-        $this->joueur = $joueur;
+        $this->user = $user;
 
         return $this;
     }
+
+    
 }

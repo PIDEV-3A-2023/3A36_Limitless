@@ -84,10 +84,11 @@ class EquipeController extends AbstractController
             'sort_by' => $sortBy,   
             ]);
         }
-
+        $hotequipes= $em->getRepository(Jaime::class)->findTopLikedEquipes();
         return $this->render('equipe/index.html.twig', [
             'form' => $form->createView(),
             'equipes' => $equipes,
+            'hotequipes' => $hotequipes,
             'sort_order' => $sortOrder,
             'sort_by' => $sortBy,
         ]);
@@ -97,29 +98,30 @@ class EquipeController extends AbstractController
 
     #[Route('/equipelike/{id}', name: 'app_equipe_like', methods: ['POST', 'GET', 'DELETE'])]
     public function likeEquipe(Request $request, Equipe $equipe, EntityManagerInterface $entityManager,$id): Response{
-        
-        $joueur = $this->getUser();
-        if (!$joueur) {
+      
+        $user = $this->getUser();
+        if (!$user) {
             throw new AccessDeniedHttpException();
         }
+      
         //Check if the user has already liked this blog
-        $jaime = $entityManager->getRepository(Jaime::class)->findOneBy(['equipe' => $equipe, 'joueur' => $joueur]);
+        $jaime = $entityManager->getRepository(Jaime::class)->findOneBy(['equipe' => $equipe, 'user' => $user]);
 
         if ($jaime) {
             //If the user has already liked the blog remove the like
             $entityManager->remove($jaime);
         } else {
             //Create a new Like entity with the value llike in the type column
-            $equipe->like($joueur);
+            $equipe->like($user);
         }
 
         //Check if the user has already disliked this blog
-        $jaimepa = $entityManager->getRepository(Jaimepas::class)->findOneBy(['equipe' => $equipe, 'joueur' => $joueur]);
+        $jaimepa = $entityManager->getRepository(Jaimepas::class)->findOneBy(['equipe' => $equipe, 'user' => $user]);
 
         if ($jaimepa) {
             //If the user has already disliked the blog, remove the dislike
             $entityManager->remove($jaimepa);
-            $equipe->like($joueur);
+            $equipe->like($user);
         }
         $entityManager->flush();
 
@@ -132,24 +134,25 @@ class EquipeController extends AbstractController
     #[Route('/equipedislike/{id}', name: 'app_equipe_dislike', methods: ['POST', 'GET', 'DELETE'])]
     public function dislikeequipe(Request $request,$id,Equipe $equipe, EntityManagerInterface $entityManager): Response
     {
-        $joueur = $this->getUser();
-        if (!$joueur) {
+
+        $user = $this->getUser();
+        if (!$user) {
             throw new AccessDeniedHttpException();
         }
 
-        $jaimepa = $entityManager->getRepository(Jaimepas::class)->findOneBy(['equipe' => $equipe, 'joueur' => $joueur]);
+        $jaimepa = $entityManager->getRepository(Jaimepas::class)->findOneBy(['equipe' => $equipe, 'user' => $user]);
 
         if ($jaimepa) {
             $entityManager->remove($jaimepa);
         } else {
-            $equipe->dislike($joueur);
+            $equipe->dislike($user);
         }
 
-        $jaime = $entityManager->getRepository(Jaime::class)->findOneBy(['equipe' => $equipe, 'joueur' => $joueur]);
+        $jaime = $entityManager->getRepository(Jaime::class)->findOneBy(['equipe' => $equipe, 'user' => $user]);
 
         if ($jaime) {
             $entityManager->remove($jaime);
-            $equipe->dislike($joueur);
+            $equipe->dislike($user);
         }
         $entityManager->flush();
 
@@ -238,7 +241,7 @@ class EquipeController extends AbstractController
         $criteria = $request->get('criteria');
         $searchTerm = $request->get('query');
 
-        //$JoueurRepository = $this->getDoctrine()->getRepository(Joueur::class);
+        //$userRepository = $this->getDoctrine()->getRepository(Joueur::class);
 
         switch ($criteria) {
             case 'name':
@@ -348,11 +351,11 @@ class EquipeController extends AbstractController
           $jaime = $entityManager->getRepository(Jaime::class);
           $numberLikes= $jaime->numberLikesByEquipe($id);
 
-          $hotequipes= $entityManager->getRepository(Jaime::class)->findTopLikedEquipes();
+          
 
         return $this->render('equipe/show.html.twig', [
             'equipe' => $equipe,
-            'hotequipes' => $hotequipes,
+            
             'numberLikes' => $numberLikes,
             'numberDislikes' => $numberDislikes,
         ]);
