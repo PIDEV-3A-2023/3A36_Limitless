@@ -1,0 +1,191 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Equipe index{% endblock %}
+
+{% block body %}
+     <section class="club-wrap club-champ">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-9">
+                    <h4>Les équipes</h4>
+
+                </div>
+            </div>
+            </div>
+            </section>
+                <div class="champ-tab-wrap tab-content">
+                <div class="tab-item part-wrap tab-pane active" id="participants">
+    <div class="part-list">
+        <div class="container">
+            <div class="row">
+           {% for equipe in equipes %}
+
+            <!--CHAMPIONSHIP PART WRAP BEGIN -->
+
+                <div class="col-md-3">
+                    <a href="{{ path('app_equipe_show', {'id': equipe.id}) }}" class="item">
+                        <span class="logo"><img src="{{asset('equipeImages/'~equipe.logoEquipe)}}" width="80" height="80" alt="team-logo"></span>
+                        <span class="name">{{equipe.nomEquipe}}</span>
+     <a href="{{path('app_addlikeq',{'equipeId':equipe.id})}}"><button class="btn-like" onclick="likeButtoneq()" id="like"><i class="fa fa-thumbs-up"></i></button></a>
+        <button class="btn-dislike" onclick="dislikeButtoneq()" id="dislike"><i class="fa fa-thumbs-down"></i></button>
+                    </a>
+                </div>
+               
+            
+
+ {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>
+ <div class="moved">
+ {% do equipes.setPageRange(2) %}
+ {{knp_pagination_render(equipes , 'equipe/pagination.html.twig')}}
+ </div>
+
+  <style>
+        .btn-like,
+.btn-dislike {
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+  display: inline-block;
+  font-size: 16px;
+  margin-right: 10px;
+  padding: 0;
+}
+.btn-like:focus,
+.btn-dislike:focus {
+  outline: none;
+}
+.btn-like i,
+.btn-dislike i {
+  margin-right: 5px;
+}
+.btn-like i.fa-thumbs-up,
+.btn-dislike i.fa-thumbs-down {
+  color: gray;
+}
+.btn-like.active i.fa-thumbs-up,
+.btn-dislike.active i.fa-thumbs-down {
+  color: blue;
+}
+    </style>
+    <script>
+        function likeButtoneq() {
+            var likeBtn = document.getElementById("like");
+            var dislikeBtn = document.getElementById("dislike");
+            if (likeBtn.classList.contains("active")) {
+                likeBtn.classList.remove("active");
+                likeBtn.querySelector(".fa-thumbs-up").style.color = "gray";
+            } else {
+                likeBtn.classList.add("active");
+                dislikeBtn.classList.remove("active");
+                likeBtn.querySelector(".fa-thumbs-up").style.color = "blue";
+                dislikeBtn.querySelector(".fa-thumbs-down").style.color = "gray";
+            }
+        }
+        function dislikeButtoneq() {
+            var dislikeBtn = document.getElementById("dislike");
+            var likeBtn = document.getElementById("like");
+            if (dislikeBtn.classList.contains("active")) {
+                dislikeBtn.classList.remove("active");
+                dislikeBtn.querySelector(".fa-thumbs-down").style.color = "gray";
+            } else {
+                dislikeBtn.classList.add("active");
+                likeBtn.classList.remove("active");
+                dislikeBtn.querySelector(".fa-thumbs-down").style.color = "red";
+                likeBtn.querySelector(".fa-thumbs-up").style.color = "gray";
+            }
+        }
+    </script>
+{% endblock %}
+
+{#{% extends 'base.html.twig' %}
+
+{% block title %}Equipe index{% endblock %}
+
+{% block body %}
+     <section class="club-wrap club-champ">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-9">
+                    <h4>EQUIPE </h4>
+                    <div class="champ-date"><i class="fa fa-calendar" aria-hidden="true"></i></div>
+                </div>
+           {% for equipe in equipes %}
+               
+            </div>
+        </div>
+        
+<div class="championship-header-wrapper">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-5">
+                <div class="club-logo">
+                 <div> <p> </p> </div>
+                    <img src="{{asset('equipeImages/'~equipe.logoEquipe)}}" class="img-responsive" alt="champ image">   
+                     <div> <p> </p> </div>             
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="club-info">
+                    <div class="item"><span>Nom equipe : </span>{{equipe.nomEquipe}}</div>
+                    
+                    <div class="item"><span>Date de creation :     </span>{{equipe.dateCreation|date("m/d/y")}}</div>
+                    
+                    <div class="col-md-7">
+
+                   <div class="item"><button type="button" class="btn btn-danger" data-toggle="modal" data-target="#deleteModal{{ loop.index }}">
+                supprimer
+            </button>
+<!-- Delete Modal -->
+<div class="modal fade" id="deleteModal{{ loop.index }}" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+        
+            <div class="modal-header">
+                <h5 class="modal-title" id="deleteModalLabel">Confirmation du supprission</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+
+            <div class="modal-body">
+                Êtes-vous sûr de vouloir supprimer cet élément?
+            </div>
+
+            <div class="modal-footer">
+                <form method="post" action="{{ path('app_equipe_delete', {'id': equipe.id}) }}">
+                    <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ equipe.id) }}">
+                    <button type="submit" class="btn btn-danger">oui</button>
+                </form>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Non</button>
+            </div>
+
+        </div>
+    </div>
+</div> </div>
+<div> <p> </p> </div>
+                   <div class="item"> <a href="{{ path('app_equipe_edit', {'id': equipe.id}) }}" class="btn btn-danger">modifier</a> </div>
+                   <div> <p> </p> </div>
+                 <div class="item"> <a href="{{ path('app_equipe_show' ,{'id': equipe.id}) }}" class="btn btn-danger">Détails</a> </div> 
+                </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+             
+              {#  <div class="club-info">
+                  {#  <div class="item">Description equipe : </div>
+                    <p>{{equipe.descriptionEquipe}}</p>
+                </div>	
+            </div>
+        </div>	
+    </div>	
+</div>
+    </section>
+
+ {% endfor %}
+ 
+{% endblock %}
+                    #}

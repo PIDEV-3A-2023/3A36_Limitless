@@ -1,0 +1,45 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Sponsor{% endblock %}
+
+{% block body %}
+  <section class="club-wrap club-champ">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-9">
+                    <h4>Détails du sponsor </h4>
+                    
+                </div>
+                <div class="col-md-3">
+                    <a href="{{ path('app_sponsor_index') }}" class="btn small club-top-btn">retour</a>
+                </div>
+            </div>
+        </div>
+        
+<div class="championship-header-wrapper">
+    <div class="container">
+        <div class="row">
+           
+            <div class="col-md-3">
+                <div class="club-info">
+                    <div class="item"><span>Nom du sponsor: </span>{{ sponsor.nomSponsor }}</div>
+                    <div class="item"><span>Nom équipe sponsoriseé: </span>{{ sponsor.IdEquipe }}</div>
+                    <div class="item"><span>Site web: </span><a href="{{ sponsor.siteWebs }}">{{ sponsor.siteWebs }}</a></div>
+                    <div class="item"><span>Date de creation: </span>{{ sponsor.dateCreationn|date("m/d/y") }}</div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="club-info">
+                    <div class="item">Description du sponsor: </div>
+                    <p>{{ sponsor.descriptionSponsor }}</p>
+                </div>	
+            </div>
+        </div>	
+    </div>	
+</div>
+    </section>
+
+
+   
+{% endblock %}
+

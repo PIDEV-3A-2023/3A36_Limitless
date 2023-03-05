@@ -1,0 +1,98 @@
+{% extends 'base.html.twig' %}
+{% block title  %} Edit Commentaire {% endblock %}
+{% block body %}
+<link href="{{asset('css-min/soccer.min.css')}}" rel="stylesheet" type="text/css" />
+
+<!--************************************************************************************************************************************************** -->
+<!--************************************************************************************************************************************************** -->
+<!--************************************************************************************************************************************************** -->
+<!--************************************************************************************************************************************************** -->
+    <!--CONTENT BEGIN-->
+    <div class="content">
+        <div class="container">
+            <div class="row row-offcanvas row-offcanvas-left">
+
+                <!--SIEDBAR BEGIN-->
+
+
+                <!--NEWS SINGLE BEGIN-->
+
+                <section class="news-single col-xs-12 col-sm-12 col-md-9">
+                    <p class="hidden-md hidden-lg">
+                        <button type="button" class="btn sidebar-btn" data-toggle="offcanvas" title="Toggle sidebar">sidebar</button>
+                    </p>
+                    <div class="item">
+                        <div class="top-info">
+                            <div class="date"><a >{{ blog.dateCreation|date("m/d/Y") }}</a> Par <a >Mason Carrington</a></div>
+                            <div class="comment-quantity"> {{ number }} Commentaires</div>
+                        </div>
+
+                        <h1>{{ blog.titre }}</h1>
+                        <div class="img-wrap">
+                            <img src="{{ asset('blogImages/' ~ blog.imageBlog) }}">
+                        </div>
+
+
+                        <div class="post-text">
+                            <p>{{ blog.contenu }}</p>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="tags">
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <ul class="share-bar">
+                                        <li class="facebook"><a href="#"><i class="fa fa-facebook-square" aria-hidden="true"></i></a></li>
+                                        <li class="twitter"><a href="#"><i class="fa fa-twitter" aria-hidden="true"></i></a></li>
+                                        <li class="google"><a href="#"><i class="fa fa-google" aria-hidden="true"></i></a></li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <div class="comments-wrap">
+                            <h4>Commentaires</h4>
+                            {{ form_start(form, {'attr': {'novalidate': 'novalidate'}}) }}
+                            <div class="comment-item">
+                                <div class="avatar"><img src="{{ asset('blogImages/user.png') }}"></div>
+                                <div class="info">
+                                    <div class="date">
+                                        <a>{{ commentaire.dateCreation|date("m/d/Y") }}</a> Par <a>Ian Finch</a> Modifier le <a>{{ commentaire.dateModification|date("m/d/Y") }}</a> 
+                                    </div>
+                                    <p>{{ commentaire.contenu }}</p>
+                                </div>
+                            </div>
+                            {{ form_widget(form.contenu) }}
+                            <div class="text-danger" > {{ form_errors(form.contenu) }} </div>
+                            <div class="tags">
+                                <a class="comment-submit"><button type='submit' style="background:none; boarder:none; color: inherit;
+                                                            border: none;
+                                                            padding: 0;
+                                                            font: inherit;
+                                                            cursor: pointer;
+                                                            outline: inherit;"> Editer</button></a>
+                            </div>
+                            {{ form_end(form) }}
+                            <br>
+                            <br>
+                            <br>
+                            
+                        </div>
+                    </div>
+                </section>
+
+                <!--NEWS SINGLE END-->
+
+            </div>
+        </div>
+    </div>
+
+<!--************************************************************************************************************************************************** -->
+<!--************************************************************************************************************************************************** -->
+<!--************************************************************************************************************************************************** -->
+<!--************************************************************************************************************************************************** -->
+<!--************************************************************************************************************************************************** -->
+
+
+{% endblock %}

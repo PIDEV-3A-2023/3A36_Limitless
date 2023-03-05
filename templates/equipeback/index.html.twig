@@ -1,0 +1,218 @@
+{% extends 'back.html.twig' %}
+
+{% block title %}Equipe index{% endblock %}
+
+{% block body %}
+
+<script language="javascript" src="{{ asset('https://code.jquery.com/jquery-2.2.4.min.js')}}"></script>
+
+			<script language="javascript">
+				
+				$('#triequipe').click(function(response) {
+				$.ajax({
+				url: '/equipeback/triequipe',
+				type: 'POST',
+				dataType: 'json',
+				async: true,
+				//console.log(response);
+				success: function (response) {
+					//console.log();
+					$('#equipes').empty();
+					$.each(response, function (index, equipe) {
+						var row='<tr><td class="py-1"><img src="{{ asset("equipeImages/" ~ 'equipe.logoEquipe')}}</td><td class="bg-warning font-weight-bold text-dark">' + equipe.nomEquipe + '</td><td class="text-capitalize text-success">' + equipe.nbJoueurs + '</td><td>' + equipe.siteWeb + '</td><td>' + equipe.dateCreation  + '</td></tr>';
+						$('#equipes').append(row);
+
+					});
+				}
+				});
+				});
+				
+			</script>
+	<div class="main-panel">
+   
+
+    <div class="main-panel">
+          <div class="content-wrapper">
+            <div class="page-header">
+              <h3 class="page-title"> Equipes </h3>
+<a id="triequipe" class="btn btn-primary" href="{{ path('tri_equipe')}}">Trier</a>
+              <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                  <li class="breadcrumb-item"><a href="#">Tables</a></li>
+                </ol>
+              </nav>
+            </div>
+            
+              <div class="col-lg-12 grid-margin stretch-card">
+                <div class="card">
+                  <div class="card-body">
+                    <h4 class="card-title">Table d'équipe</h4>
+                    <div class="d-flex justify-content-end mt-3 mb-3">
+                        <a href="{{ path('app_equipeback_new') }}" class="btn btn-success">Ajout</a>
+                        </div>
+                    <div class="table-responsive">
+                      <table class="table table-striped">
+                        <thead>
+            <tr>
+                
+                <th>Logo de l'equipe</th>
+                <th>Nom de l'equipe</th>               
+                <th>Nombre de joueurs</th>                
+                <th>Site web</th>
+                <th>Date de creation</th>
+                <th>actions</th>
+                <th>Détails</th>
+            </tr>
+
+
+        </thead>
+        
+        {% for equipe in equipes %}
+        <tbody>
+
+
+
+
+            <tr>
+                
+               
+                <td><a  class="custom-logo-link"><img src="{{asset('equipeImages/'~equipe.logoEquipe)}}" alt="logo" class="custom-logo"></a></td>          
+                 <td>{{ equipe.nomEquipe }}</td> 
+                <td>{{ equipe.nbJoueurs }}</td>            
+                <td>{{ equipe.siteWeb }}</td>
+                <td>{{equipe.dateCreation ? equipe.dateCreation|date('Y-m-d ') }}</td>
+                <td>
+                    
+                    <a class="btn btn-primary" href="{{ path('app_equipeback_edit', {'id': equipe.id}) }}"><i class="mdi mdi-pencil"></i></a>
+                     <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#deleteModal{{ loop.index }}">
+                <i class="mdi mdi-delete"></i>
+            </button>
+<!-- Delete Modal -->
+<div class="modal fade" id="deleteModal{{ loop.index }}" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+        
+            <div class="modal-header">
+                <h5 class="modal-title" id="deleteModalLabel">Confirmation du supprission</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+
+            <div class="modal-body">
+                Êtes-vous sûr de vouloir supprimer cet élément?
+            </div>
+
+            <div class="modal-footer">
+                <form method="post" action="{{ path('app_equipeback_delete', {'id': equipe.id}) }}">
+                    <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ equipe.id) }}">
+                    <button type="submit" class="btn btn-danger">oui</button>
+                </form>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Non</button>
+            </div>
+
+        </div>
+    </div>
+</div>
+                </td>
+                <td>
+                  <a class="btn btn-primary" href="{{ path('app_equipeback_show', {'id': equipe.id}) }}"><i class="mdi mdi-view-headline"></i></a>
+                  </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="7">Aucun enregistrement trouvé </td>
+            </tr>
+    
+        </tbody>
+        {% endfor %}
+    </table>
+    
+                     </div>
+        <div>
+    {#    
+<div>
+  <canvas id="myChart"></canvas>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script>
+  const ctx = document.getElementById('myChart');
+  new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels: {{nbJoueursCounts|keys|json_encode|raw}},
+      datasets: [{
+        label: 'Nombre de joueurs',
+        data: {{nbJoueursCounts|raw}},
+          backgroundColor: [
+          'rgba(255, 99, 132, 0.2)', // Couleur pour nbJoueurs=1
+          'rgba(54, 162, 235, 0.2)', // Couleur pour nbJoueurs=2
+          'rgba(255, 206, 86, 0.2)', // Couleur pour nbJoueurs=3
+          'rgba(75, 192, 192, 0.2)', // Couleur pour nbJoueurs=4
+          'rgba(153, 102, 255, 0.2)', // Couleur pour nbJoueurs=5
+          'rgba(255, 159, 64, 0.2)' // Couleur pour nbJoueurs=6
+        ],
+        borderColor: [
+          'rgba(255, 99, 132, 1)', // Couleur de bordure pour nbJoueurs=1
+          'rgba(54, 162, 235, 1)', // Couleur de bordure pour nbJoueurs=2
+          'rgba(255, 206, 86, 1)', // Couleur de bordure pour nbJoueurs=3
+          'rgba(75, 192, 192, 1)', // Couleur de bordure pour nbJoueurs=4
+          'rgba(153, 102, 255, 1)', // Couleur de bordure pour nbJoueurs=5
+          'rgba(255, 159, 64, 1)' // Couleur de bordure pour nbJoueurs=6
+        ],
+        borderWidth: 1
+      }]
+    },
+    options: {
+      scales: {
+        y: {
+          beginAtZero: true
+        }
+      }
+    }
+  });
+</script>
+</div>
+#}
+</div>
+
+                </div>
+            </div>
+        </div>
+    </section>
+                  </div>
+                </div>
+              </div>
+            </div>
+        </div>
+       <script src="{{asset('assets/vendors/js/vendor.bundle.base.js')}}"> </script>
+	<!-- endinject -->
+	<!-- Plugin js for this page -->
+	<!-- End plugin js for this page -->
+	<!-- inject:js --><script src="{{asset('js/off-canvas.js')}}"> </script>
+	<script src="{{asset('js/hoverable-collapse.js')}}"></script>
+<script src="{{asset('js/misc.js')}}"></script>
+	<script src="{{asset('js/settings.js')}}"></script>
+	<script src="{{asset('js/todolist.js')}}"></script>
+    <script src="{{asset('assets/vendorsassets/js/vendor.bundle.base.js')}}"></script>
+			<!-- endinject -->
+			<!-- Plugin js for this page -->
+			<script src="{{asset('assets/vendors/chart.js/Chart.min.js')}}"></script>
+			<script src="{{asset('assets/vendors/progressbar.js/progressbar.min.js')}}"></script>
+			<script src="{{asset('assets/vendors/jvectormap/jquery-jvectormap.min.js')}}"></script>
+			<script src="{{asset('assets/vendors/jvectormap/jquery-jvectormap-world-mill-en.js')}}"></script>
+			<script src="{{asset('assets/vendors/owl-carousel-2/owl.carousel.min.js')}}"></script>
+			<!-- End plugin js for this page -->
+			<!-- inject:js -->
+			<script src="{{asset('assets/js/off-canvas.js')}}"></script>
+			<script src="{{asset('assets/js/hoverable-collapse.js')}}"></script>
+			<script src="{{asset('assets/js/misc.js')}}"></script>
+			<script src="{{asset('assets/js/settings.js')}}"></script>
+			<script src="{{asset('assets/js/todolist.js')}}"></script>
+			<!-- endinject -->
+			<!-- Custom js for this page -->
+			<script src="{{asset('assets/js/dashboard.js')}}"></script>
+{% endblock %}
+

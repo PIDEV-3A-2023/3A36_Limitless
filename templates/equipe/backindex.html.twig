@@ -1,0 +1,43 @@
+{% extends 'back.html.twig' %}
+
+{% block title %}Equipe index{% endblock %}
+
+{% block body %}
+    <h1>Equipe index</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Nom_equipe</th>
+                <th>Description_equipe</th>
+                <th>Nb_joueurs</th>
+                <th>Logo_equipe</th>
+                <th>Site_web</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for equipe in equipes %}
+            <tr>
+                <td>{{ equipe.id }}</td>
+                <td>{{ equipe.nomEquipe }}</td>
+                <td>{{ equipe.descriptionEquipe }}</td>
+                <td>{{ equipe.nbJoueurs }}</td>
+                <td>{{ equipe.logoEquipe }}</td>
+                <td>{{ equipe.siteWeb }}</td>
+                <td>
+                    <a href="{{ path('app_equipe_show', {'id': equipe.id}) }}">show</a>
+                    <a href="{{ path('app_equipe_edit', {'id': equipe.id}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="7">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_equipe_new') }}">Create new</a>
+{% endblock %}

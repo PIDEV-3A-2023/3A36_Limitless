@@ -1,0 +1,212 @@
+
+{% extends 'jeux/front.html.twig' %} 
+
+{% block body %}
+    <!--CLUB WRAP BEGIN-->
+    <section class="club-wrap">
+        <div class="club-top-info">
+            <div class="organisation-header-wrapper">
+    <div class="container">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="captain-bage">Jeux</div>
+                    <h4 class="player-name">{{ jeux.libelle }}</h4>
+                </div>
+                <div class="col-md-6">
+                    
+                <div class="player-photo">
+                    <img class="img-responsive" src="{{asset('JeuxImages/'~jeux.ImageJeux)}}" alt="player">
+                </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="player-info">	
+                        <div class="summary">
+                            <div class="row">
+                                <div class="col-md-3 col-sm-3 col-xs-3">
+                                    <div class="item">Logo : </div>
+                                </div>
+                                <div class="col-md-9 col-sm-9 col-xs-9"><img src="{{asset('JeuxImages/'~jeux.LogoJeux)}}" width="40" height="30" alt="flag"></div>
+                                <div class="col-md-3 col-sm-3 col-xs-3">
+                                    <div class="item">Categorie : </div>
+                                </div>
+                                <div class="col-md-9 col-sm-9 col-xs-9"> FPS</div>
+                                <div class="col-md-3 col-sm-3 col-xs-3">
+                                    <div class="item">Type : </div>
+                                </div>
+                                <div class="col-md-9 col-sm-9 col-xs-9">5vs5</div>
+                            </div>
+                            <p>Evaluation du jeux : {{ jeux.noteMyonne ?? 'N/A' }}/10</p>
+                            <p>Nombre de personnes qui ont evalué le jeux : {{ jeux.noteCount ?? 'N/A' }}</p>
+
+    {{ form_start(note_form) }}
+        {{ form_row(note_form.note) }}
+        <button type="submit" class="btn btn-primary">Set Note</button>
+    {{ form_end(note_form) }}
+                        </div>
+                        <h6>Tournois en cours</h6>
+                        <div class="overflow-scroll">
+                            <table>
+                                <tr>
+                                    <th>Date debut</th>
+                                    <th class="club">Nom</th>
+                                    <th>Temps restant</th>
+                                    <th>Matches</th>
+                                </tr>
+                                <tr>
+                                    <td>20/02/23 08:30</td>
+                                    <td class="club"><img src="{{asset('images/soccer/team-logo1.png')}}" width="30" height="30" > Finals</td>
+                                    <td>120min</td>
+                                    <td><span>16</span></td>
+                                </tr>
+                                <tr>
+                                    <td>19/02/23 20:30</td>
+                                    <td class="club"><img src="{{asset('images/soccer/team-logo2.png')}}"  width="30" height="30" > Semi-Final</td>
+                                    <td>1jrs</td>
+                                    <td><span>5</span></td>
+                                </tr>
+                            </table>
+                        </div>
+                        <h6>Description</h6>
+                        <p>Pabst irony tattooed, synth sriracha selvage pok pok. Wayfarers kinfolk sartorial, helvetica you </p>
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+        </div>	
+    </div>	
+</div>
+        </div>
+    </section>
+
+    <!--CLUB WRAP END-->
+
+    <!--MAIN BREAKING NEWS BEGIN-->
+<div class="main-breaking-news">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-2 col-sm-3 col-xs-12">
+                <div class="break-title"><span>Nouvautes</span></div>
+            </div>
+            <div class="col-md-10 col-sm-9 col-xs-12">
+                <div id="main-breaking-list" class="carousel slide main-breaking-list" data-ride="carousel">
+                    <div class="carousel-inner" role="listbox">
+                        <div class="item active">
+                            <a href="news-single.html">
+                                <span class="date">20 Fev 2023 <span>/</span></span>	
+                                <span class="news">Nouveau tournois: Beacoup a gagner</span>
+                            </a>
+                        </div>
+                        <div class="item">
+                            <a href="news-single.html">
+                                <span class="date">20 Mars 2023 <span>/</span></span>	
+                                <span class="news">UPDATE: {{ jeux.libelle }} va avoir un grand update  </span>
+                            </a>
+                        </div>
+                    </div>	
+                    <div class="arrow-wrap">
+                        <!-- Controls -->
+                        <a class="nav-arrow left-arrow" href="#main-breaking-list" role="button" data-slide="prev">
+                            <i class="fa fa-caret-left" aria-hidden="true"></i>
+                            <span class="sr-only">Previous</span>
+                        </a>
+                        <a class="nav-arrow right-arrow" href="#main-breaking-list" role="button" data-slide="next">
+                            <i class="fa fa-caret-right" aria-hidden="true"></i>
+                            <span class="sr-only">Next</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!--MAIN BREAKING NEWS END-->
+
+<!--CLUB MAIN STAT BEGIN-->
+<section class="club-main-stat">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <h6>Match en cours</h6>
+                <div class="last-match">
+                    <div class="team">
+                        <a href="about-club.html"><img src="{{asset('images/soccer/team-logo1.png')}}" width="40" height="40" alt="team-logo"></a>
+                        <a href="about-club.html" class="name">Team 1</a>
+                    </div>
+                    <div class="score"><span>2</span>:<span>0</span></div>
+                    <div class="team right">
+                        <a href="about-club.html" class="name">Team 2</a>
+                        <a href="about-club.html"><img src="{{asset('images/soccer/team-logo2.png')}}" width="40" height="40" alt="team-logo"></a>
+                    </div>
+                </div>
+            </div>
+            
+            
+
+</section>
+
+
+<!--CLUB MAIN STAT END-->
+    <!--MAIN CLUB STAFF BEGIN-->
+<section class="main-club-stuff">    
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <h4 class="soccer-h4">Jeux du meme categorie</h4>  
+            </div>
+        </div>
+    </div>           
+
+    <div class="tab-content">
+        <div class="tab-pane active" id="managers" role="tabpanel">
+            <div id="managers_carousel" class="carousel slide main-stuff-slider" data-ride="carousel" >
+                <div class="carousel-inner" role="listbox" >
+                    <div class="item active">
+                        <div class="container">
+                            <div class="row">
+                            
+                                <div class="col-md-4">
+                                    <div class="staff-item">
+                                        <a href="staff.html">
+                                            
+                                            <img src="{{asset('images/soccer/apex.jpg')}}"  alt="person-slider">
+                                        </a>	
+                                    </div>
+                                </div>                    
+                                <div class="col-md-4">
+                                    <div class="staff-item">
+                                        <a href="staff.html">
+                                            <img src="{{asset('images/soccer/Fortnite.jpg')}}"  alt="person-slider">
+                                        </a>	
+                                    </div>
+                                </div>
+                                
+                            </div>
+                        </div>
+                    </div>
+                    
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Controls -->
+                    <a class="nav-arrow left-arrow" href="#managers_carousel" role="button" data-slide="prev">
+                        <i class="fa fa-angle-left" aria-hidden="true"></i>
+                        <span class="sr-only"></span>
+                    </a>
+                    <a class="nav-arrow right-arrow" href="#managers_carousel" role="button" data-slide="next">
+                        <i class="fa fa-angle-right" aria-hidden="true"></i>
+                        <span class="sr-only"></span>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<!--MAIN CLUB STAFF END-->
+    
+
+{% endblock %}

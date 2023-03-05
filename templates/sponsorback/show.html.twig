@@ -1,0 +1,51 @@
+{% extends 'back.html.twig' %}
+
+{% block title %}Sponsor{% endblock %}
+
+{% block body %}
+<div class="col-12 grid-margin stretch-card">
+    <div class="card">
+        <div class="card-body">
+        <h4 class="card-title"></h4>
+        <p class="card-description"> <br></p>
+
+    <h1>Détails Sponsor</h1>
+<div> <p> </p> </div>
+    <div> <p> </p> </div>
+    <table class="table">
+        <tbody>
+           
+            <tr>
+                <th>Logo_sponsor</th>
+                <td><a  class="custom-logo-link"><img src="{{asset('sponsorImages/'~sponsor.logoSponsor)}}" alt="logo" class="custom-logo"></a></td>
+            </tr>
+            <tr>
+                <th>Nom_sponsor</th>
+                <td>{{ sponsor.nomSponsor }}</td>
+            </tr>
+            <tr>
+                <th>Description_sponsor</th>
+                <td>{{ sponsor.descriptionSponsor }}</td>
+            </tr>
+            <tr>
+                <th>Site_web</th>
+                   <td><a href="{{ sponsor.siteWebs }}">{{ sponsor.siteWebs }}</a></td>
+            </tr>
+<tr>
+                <th>Nom équipe sponsoriseé</th>
+                <td>{{ sponsor.IdEquipe }}</td>
+            </tr>
+            <tr>
+                <th>Date_creation</th>
+                <td>{{ sponsor.dateCreationn|date('Y-m-d ') }}</td>
+            </tr>
+        </tbody>
+    </table>
+<div> <p> </p> </div>
+    <div> <p> </p> </div>
+    <a class="btn btn-primary mr-2" href="{{ path('app_sponsorback_index') }}">Retour à la liste</a>
+
+    
+
+    
+{% endblock %}

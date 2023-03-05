@@ -1,0 +1,271 @@
+{% extends 'back.html.twig' %} 
+{% block title  %} BOUTIQUE {% endblock %}
+        {% block body %}
+    {% if app.flashes('success') is not empty %}
+    <div class="alert alert-success notification" role="alert">
+       <center>Produit Ajouté avec succès...</center>
+         
+        <script>
+            setTimeout(function() {
+                document.querySelector('.alert').style.display = 'none';
+            }, 3000);
+        </script>
+    </div>
+{% endif %}
+ {% if app.flashes('delete') is not empty %}
+    <div class="alert alert-success notification" role="alert">
+       <center>Produit Supprimé avec succès...</center>
+         
+        <script>
+            setTimeout(function() {
+                document.querySelector('.alert').style.display = 'none';
+            }, 3000);
+        </script>
+    </div>
+{% endif %}
+{% if app.flashes('update') is not empty %}
+    <div class="alert alert-success notification" role="alert">
+       <center>Produit Modifié avec succès...</center>
+         
+        <script>
+            setTimeout(function() {
+                document.querySelector('.alert').style.display = 'none';
+            }, 3000);
+        </script>
+    </div>
+{% endif %}
+        <div class="main-panel">
+          <div class="content-wrapper">
+            <div class="page-header">
+              <h3 class="page-title"> Boutique </h3>
+              
+            </div>
+
+            
+            <select id="type-carte" name="type-carte" required onchange="redirectToPage(this)">
+            <option value="{{path('app_produit_showProduit')}}"> Choisissez</option>
+                    {% for categorie in categories%}
+                            <option value="{{path('app_showProduitByCategoryAdmin',{'id':categorie.id})}}">
+                                  
+                            {{categorie.nom}}
+
+                            </option>
+                     {%endfor%}
+            <option value="{{path('app_produit_showProduit')}}"> Toutes les categories</option>
+            </select>
+
+            <script>
+                function redirectToPage(select) {
+                var selectedOption = select.options[select.selectedIndex];
+                window.location.href = selectedOption.value;
+                }
+            </script>
+<!--
+            <div class="navbar-menu-wrapper flex-grow d-flex align-items-stretch">    
+            <ul class="navbar-nav navbar-nav-right">    
+            <li class="nav-item dropdown d-none d-lg-block">
+                <a class="nav-link btn btn-success create-new-button" id="createbuttonDropdown" data-toggle="dropdown" aria-expanded="false" href="#">Rechercher</a>
+                <div class="dropdown-menu dropdown-menu-right navbar-dropdown preview-list" aria-labelledby="createbuttonDropdown">
+                  {% for categorie in categories%}
+                  <a class="dropdown-item preview-item">
+                    <div class="preview-thumbnail">
+                      <div class="preview-icon bg-dark rounded-circle">
+                        <i class="mdi mdi-file-outline text-primary"></i>
+                      </div>
+                    </div>
+                    <div class="preview-item-content">
+                      <p class="preview-subject ellipsis mb-1">{{categorie.nom}}</p>
+                    </div>
+                  </a>
+                  {%endfor%}
+                </div>
+                  
+                  
+                
+              </li>
+            </ul>
+            </div>
+-->
+
+              <div class="col-lg-12 grid-margin stretch-card">
+                <div class="card">
+                  <div class="card-body">
+                    <h4 class="card-title">Table de Produits</h4>
+                    <div class="d-flex justify-content-end mt-3 mb-3">
+                        <a href="{{ path('app_produit_new') }}" class="btn btn-success">+Ajout</a>
+                        </div>
+                    <div class="table-responsive">
+                      <table class="table table-striped">
+                        <thead>
+                          <tr>
+                            <th class="h3 text-primary">REFERENCE</th>
+                            <th class="h3 text-primary">IMAGE</th>
+                            <th class="h3 text-primary">CATEGORIE</th>
+                            <th class="h3 text-primary">NOM</th>
+                            <th class="h3 text-primary">QUANTITE</th>
+                            <th class="h3 text-primary">PRIX</th>
+                            
+                            <th class="h3 text-primary">DATE</th>
+                            <th class="h3 text-primary">ACTIONS</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                        {% for produit in produits %}
+                          <tr>
+                            <td>{{ produit.refer }}</td>
+                            <td><img class="img-xs rounded-circle " src="{{asset('images/common/'~produit.image)}}" alt=""></td>
+                            <td>{{ produit.categorieProduit.nom }}</td>
+                            <td>{{ produit.nom }}</td>
+                            <td>{{ produit.quantite }}</td>
+                            <td>{{ produit.prix }}</td>
+                            
+                            <td>{{ produit.dateProduit|date('Y-m-d H:i')}}</td>
+                              <td>
+                              
+                              <a href="{{ path('app_produit_edit', {'id': produit.id}) }}" class="btn btn-primary">
+                                  <i class="mdi mdi-pencil"></i>
+                              </a>
+                              
+                             <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#deleteModal{{ produit.id }}">
+                <i class="mdi mdi-delete"></i>
+            </button>
+<!-- Delete Modal -->
+<div class="modal fade" id="deleteModal{{produit.id }}" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+        
+            <div class="modal-header">
+                <h5 class="modal-title" id="deleteModalLabel">Confirmation du supprission</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+
+            <div class="modal-body">
+                Êtes-vous sûr de vouloir supprimer cet élément?
+            </div>
+
+            <div class="modal-footer">
+                <form method="post" action="{{ path('app_produit_delete', {'id': produit.id}) }}">
+                    <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ produit.id) }}">
+                    <button type="submit" class="btn btn-danger">oui</button>
+                </form>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Non</button>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+                            </td>
+
+                            </tr>
+
+                          {% endfor %}
+                        </tbody>
+
+                      </table>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+        </div>
+        <!-- content-wrapper ends -->
+        <!-- partial:../../partials/_footer.html -->
+      	<!-- partial:../../partials/_footer.html -->
+
+	<!-- partial --><script src="{{asset('assets/vendors/js/vendor.bundle.base.js')}}"> </script>
+	<!-- endinject -->
+	<!-- Plugin js for this page -->
+	<!-- End plugin js for this page -->
+	<!-- inject:js --><script src="{{asset('js/off-canvas.js')}}"> </script>
+	<script src="{{asset('js/hoverable-collapse.js')}}"></script>
+<script src="{{asset('js/misc.js')}}"></script>
+	<script src="{{asset('js/settings.js')}}"></script>
+	<script src="{{asset('js/todolist.js')}}"></script>
+    <script src="{{asset('assets/vendorsassets/js/vendor.bundle.base.js')}}"></script>
+			<!-- endinject -->
+			<!-- Plugin js for this page -->
+			<script src="{{asset('assets/vendors/chart.js/Chart.min.js')}}"></script>
+			<script src="{{asset('assets/vendors/progressbar.js/progressbar.min.js')}}"></script>
+			<script src="{{asset('assets/vendors/jvectormap/jquery-jvectormap.min.js')}}"></script>
+			<script src="{{asset('assets/vendors/jvectormap/jquery-jvectormap-world-mill-en.js')}}"></script>
+			<script src="{{asset('assets/vendors/owl-carousel-2/owl.carousel.min.js')}}"></script>
+			<!-- End plugin js for this page -->
+			<!-- inject:js -->
+			<script src="{{asset('assets/js/off-canvas.js')}}"></script>
+			<script src="{{asset('assets/js/hoverable-collapse.js')}}"></script>
+			<script src="{{asset('assets/js/misc.js')}}"></script>
+			<script src="{{asset('assets/js/settings.js')}}"></script>
+			<script src="{{asset('assets/js/todolist.js')}}"></script>
+			<!-- endinject -->
+			<!-- Custom js for this page -->
+			<script src="{{asset('assets/js/dashboard.js')}}"></script>
+        <!-- partial -->
+        
+        <!-- main-panel ends -->
+<style>
+ /* Style pour la boîte de dialogue */
+.confirm-dialog {
+  padding: 20px;
+  border-radius: 5px;
+  box-shadow: 0px 0px 10px #999;
+  background-color: #fff;
+  text-align: center;
+}
+
+/* Style pour le bouton de confirmation */
+.confirm-dialog button.confirm {
+  background-color: #4CAF50;
+  color: #fff;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 3px;
+  cursor: pointer;
+}
+
+/* Style pour le bouton d'annulation */
+.confirm-dialog button.cancel {
+  background-color: #ccc;
+  color: #fff;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 3px;
+  cursor: pointer;
+}
+.hide-after-seconds {
+    animation: hide 3s;
+}
+
+@keyframes hide {
+    from { opacity: 1; }
+    to { opacity: 0; }
+}
+.notification {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 80%;
+  max-width: 400px;
+  padding: 1rem;
+  background-color: #dff0d8;
+  border: 1px solid #d6e9c6;
+  border-radius: 0.25rem;
+  box-shadow: 0 0.25rem 0.75rem rgba(0, 0, 0, 0.1);
+  z-index: 999;
+}
+</style>
+<script>
+    $(document).ready(function() {
+        var $successNotification = $('.alert-success');
+
+        if ($successNotification.length > 0) {
+            $successNotification.fadeIn().delay(3000).fadeOut();
+        }
+    });
+</script>
+
+{% endblock %}
+

@@ -1,0 +1,9 @@
+ 
+<form method="post" action="{{ path('app_equipe_delete', {'id': equipe.id}) }}" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer cet élément ?')">
+    <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ equipe.id) }}">
+    <button class="btn btn-danger" data-toggle="modal" data-target="#deleteModal"><i class="mdi mdi-delete"></i></button>
+
+
+</form>
+ 
+ 

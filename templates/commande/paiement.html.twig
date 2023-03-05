@@ -1,0 +1,110 @@
+{% extends 'base.html.twig' %}
+
+{% block body%}
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Paiement en ligne</title>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<style>
+		.payment-container {
+	width: 50%;
+	margin: 0 auto;
+	padding: 20px;
+	border: 1px solid #ccc;
+	border-radius: 5px;
+}
+label[for="type-carte"],
+select#type-carte {
+  display: block;
+  margin-top: 10px;
+}
+
+select#type-carte {
+  appearance: none;
+  -webkit-appearance: none;
+  background: #fff;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 16px;
+  padding: 10px;
+  width: 100%;
+  cursor: pointer;
+}
+
+select#type-carte option {
+  font-size: 16px;
+}
+h1 {
+	text-align: center;
+}
+
+form {
+	display: flex;
+	flex-direction: column;
+}
+
+label {
+	margin-top: 10px;
+}
+
+input {
+	padding: 10px;
+	border-radius: 5px;
+	border: 1px solid #ccc;
+	margin-top: 5px;
+}
+
+button {
+	margin-top: 10px;
+	padding: 10px;
+	background-color: #FFD500;
+	color: white;
+	border: none;
+	border-radius: 5px;
+	cursor: pointer;
+}
+
+	</style>
+</head>
+<body>
+	<div class="payment-container">
+		<h1>Paiement en ligne</h1>
+		<form action="{{path('app_paiement')}}" method="POST">
+		{% if prixTotal is defined %}
+		  <input type="hidden" value="{{prixTotal}}" name="prix">
+		 {% endif %}
+		{% if refer is defined %}
+		  <input type="hidden" value="{{refer}}" name="refer">
+		{% endif %}
+			<label for="type-carte">Type de carte:</label>
+			<select id="type-carte" name="type-carte" required>
+				<option value=""> Choisissez un type de carte</option>
+				<option value="visa">Visa</option>
+				<option value="mastercard">Mastercard</option>
+				<option value="paypal">American Express</option>
+				
+			</select>
+			<label for="nom">Nom:</label>
+			<input type="text" id="nom" name="nom" required>
+			<label for="nom">Email:</label>
+			<input type="text" id="email" name="email" required>
+
+			<label for="numero-carte">Numéro de carte:</label>
+			<input type="text" id="numero-carte" name="numero-carte" required>
+			<label for="expiration">Expiration (MM/AA):</label>
+			<input type="text" id="expiration" name="expiration" required>
+			<label for="cvv">CVV:</label>
+			<input type="text" id="cvv" name="cvv" required>
+			{% if erreur is defined %}
+			<span class="error-message">{{ erreur }}</span>
+			{% endif%}
+			<button type="submit">Payer</button>
+
+		</form>
+	</div>
+</body>
+</html>
+
+{% endblock %}

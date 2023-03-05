@@ -1,0 +1,12 @@
+{% extends 'back.html.twig' %}
+
+{% block title %}New Sponsor{% endblock %}
+
+{% block body %}
+    {{ form_start(form) }}
+
+    {{ include('sponsorback/_form.html.twig') }}
+
+    
+    {{form_end(form)}}
+{% endblock %}

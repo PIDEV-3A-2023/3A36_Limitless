@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+<meta charset="utf-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="author" content="Caleb Adeleye">
+<link rel="icon" type="image/png" href="{{ asset('images/soccer/logo.png') }}" />
+<title>FACTURE DE PAIEMENT</title>
+<script src="https://raw.githack.com/eKoopmans/html2pdf/master/dist/html2pdf.bundle.js"></script>
+<!-- Web Fonts
+======================= -->
+<link rel='stylesheet' href='https://fonts.googleapis.com/css?family=Poppins:100,200,300,400,500,600,700,800,900' type='text/css'>
+
+<!-- Stylesheet
+======================= -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css" integrity="sha384-B0vP5xmATw1+K9KRQjQERJvTumQW0nPEzvF6L/Z6nronJ3oUOFUFpCjEUQouq2+l" crossorigin="anonymous">
+<script src="https://use.fontawesome.com/65eb163cd4.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.3.2/jspdf.min.js"></script>
+<link href="{{ asset('css/invoice.css') }}" rel="stylesheet" />
+<style>
+    .nom{
+        color: #FEA116 !important;
+    }
+</style>
+</head>
+<body>
+
+   
+ <div class="col-sm-6 text-sm-right order-sm-1"> <strong> <div class="nom">GGaming Tunisia</div></strong>
+  <!-- Header -->
+  <header>
+
+  <hr style="background-color: gray;"> 
+  </header>
+  
+  <!-- Main Content -->
+  <main  id="receipt">
+
+  <div class="row">
+    <div class="col-sm-6"><strong>Date:</strong>{{ "now"|date("d/m/Y") }}</div>
+    <center><div class="col-sm-6 text-sm-right"> <h4 class="text-7 mb-0">FACTURE DE PAIEMENT</h4></div></center></center>
+    
+  </div>
+  <div class="row">
+    <center><div class="col-sm-12 text-sm-center"><h3 style="padding-top: 15px;">Commande {{reference}}</h3></div></center>
+    
+  </div>
+  <hr style="background-color: black;">
+  <div class="row">
+    <div class="col-sm-6 text-sm-right order-sm-1"> <strong> <div class="nom">GGaming Tunisia</div></strong>
+      <address>
+      Ariana<br />
+      (+216) 11 22 33 44<br />
+      ggaming@gmail.com
+
+      </address>
+    </div>
+   
+    <div class="col-sm-6 order-sm-0"> <strong>Client:</strong>
+    <input type="hidden" name="nom" value="nom_personne">
+    <input type="hidden" name="email" value="email_personne">
+
+      <address>
+      NOM: {{nom}}<br />
+      ADRESSE: 1,Rue André Ampère<br />
+      EMAIL:ballamoussa.keita@esprit.tn<br />
+      TELEPHONE: (+216) 50505050<br />
+      PAIEMENT: Carte Bancaire<br />
+      </address>
+    </div>
+  </div>
+  
+  <div class="card">
+    <div class="card-body p-0">
+      <div class="table-responsive">
+        <table class="table mb-0">
+    <thead class="card-header">
+          <tr>
+            <td class="col-2 text-right border-0"><strong>TOTAL</strong></td>
+          </tr>
+        </thead>
+          <tbody>
+                    
+            <tr>
+  
+        <td class="col-2 text-right border-1" style="background-color: #0F172B;color: #fff;">Total prix: {{montant}}</td>
+            </tr>
+                
+        
+          </tbody>
+      <tfoot class="card-footer">
+          
+     
+         </tfoot>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  </main>
+  <!-- Footer -->
+  <footer class="text-center">
+  <p class="text-1"><strong>NOTE :</strong>  Toute altération sur ce reçu sera invalidée.</p>
+ <br><br>
+ <br><br>
+ <!-- <br><br> -->
+ <br>
+  
+  </footer> 
+
+</div>
+
+  <script>
+window.onload = function(){
+  document.getElementById("download")
+  .addEventListener("click",()=> {
+   const invoice = this.document.getElementById("invoice");
+ var opt = {
+  filename:     'facture',
+  image:        { type: 'jpeg', quality: 0.98 },
+  html2canvas:  { scale: 2 },
+  jsPDF:        { unit: 'in', format: 'letter', orientation: 'portrait' }
+};
+   html2pdf().from(invoice).set(opt).save();
+
+  })
+}
+        
+    </script>
+</body>
+</html>

@@ -1,0 +1,150 @@
+{% extends 'back.html.twig' %} 
+{% block title  %} BOUTIQUE {% endblock %}
+        {% block body %}
+   
+        <div class="main-panel">
+          <div class="content-wrapper">
+            <div class="page-header">
+              <h3 class="page-title"> Boutique </h3>
+              
+            </div>
+            
+              <div class="col-lg-12 grid-margin stretch-card">
+                <div class="card">
+                  <div class="card-body">
+                    <h4 class="card-title">Table des Commandes</h4>
+                    
+                    <div class="table-responsive">
+                      <table class="table table-striped">
+                        <thead>
+                          <tr>
+                            <th class="h3 text-primary">REFERENCE</th>
+                            <th class="h3 text-primary">DATE</th>
+                            <th class="h3 text-primary">TOTAL</th>
+                            <th class="h3 text-primary">ACTIONS</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                        {% for commande in commandes %}
+                          <tr>
+                            <td>{{ commande.refer }}</td>
+                           
+                            <td>{{ commande.dateCommande|date('Y-m-d H:i') }}</td>
+                            <td>{{ commande.prixTotal }}</td>
+                            <td>
+                              
+                             <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#deleteModal{{ commande.id }}">
+                <i class="mdi mdi-delete"></i>
+            </button>
+<!-- Delete Modal -->
+<div class="modal fade" id="deleteModal{{commande.id }}" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+        
+            <div class="modal-header">
+                <h5 class="modal-title" id="deleteModalLabel">Confirmation du suppression</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+
+            <div class="modal-body">
+                Êtes-vous sûr de vouloir supprimer cet élément?
+            </div>
+
+            <div class="modal-footer">
+                <form method="post" action="{{ path('app_commande_delete', {'id': commande.id}) }}">
+                    <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ commande.id) }}">
+                    <button type="submit" class="btn btn-danger">oui</button>
+                </form>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Non</button>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+                            </td>
+
+                            </tr>
+
+                          {% endfor %}
+                        </tbody>
+
+                      </table>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+        </div>
+        <!-- content-wrapper ends -->
+        <!-- partial:../../partials/_footer.html -->
+      
+        <!-- partial -->
+        
+        <!-- main-panel ends -->
+<style>
+ /* Style pour la boîte de dialogue */
+.confirm-dialog {
+  padding: 20px;
+  border-radius: 5px;
+  box-shadow: 0px 0px 10px #999;
+  background-color: #fff;
+  text-align: center;
+}
+
+/* Style pour le bouton de confirmation */
+.confirm-dialog button.confirm {
+  background-color: #4CAF50;
+  color: #fff;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 3px;
+  cursor: pointer;
+}
+
+/* Style pour le bouton d'annulation */
+.confirm-dialog button.cancel {
+  background-color: #ccc;
+  color: #fff;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 3px;
+  cursor: pointer;
+}
+.hide-after-seconds {
+    animation: hide 3s;
+}
+
+@keyframes hide {
+    from { opacity: 1; }
+    to { opacity: 0; }
+}
+.notification {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 80%;
+  max-width: 400px;
+  padding: 1rem;
+  background-color: #dff0d8;
+  border: 1px solid #d6e9c6;
+  border-radius: 0.25rem;
+  box-shadow: 0 0.25rem 0.75rem rgba(0, 0, 0, 0.1);
+  z-index: 999;
+}
+</style>
+<script>
+    $(document).ready(function() {
+        var $successNotification = $('.alert-success');
+
+        if ($successNotification.length > 0) {
+            $successNotification.fadeIn().delay(3000).fadeOut();
+        }
+    });
+</script>
+
+{% endblock %}
+

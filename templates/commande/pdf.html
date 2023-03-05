@@ -1,0 +1,109 @@
+/////////PARTIE PDF
+<!--
+<?php
+
+namespace App\Controller;
+
+use Dompdf\Dompdf;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Routing\Annotation\Route;
+
+class PdfController extends AbstractController
+{
+    /**
+     * @Route("/pdf/{id}", name="pdf")
+     */
+    public function index($id): Response
+    {
+        // Récupérez les informations sur la commande à partir de l'ID
+        // ...
+
+        // Générez le contenu HTML pour la facture
+        $html = $this->renderView('pdf/facture.html.twig', [
+            'commande' => $commande,
+        ]);
+
+        // Générez le fichier PDF
+        $dompdf = new Dompdf();
+        $dompdf->loadHtml($html);
+        $dompdf->setPaper('A4', 'portrait');
+        $dompdf->render();
+
+        // Retournez la réponse HTTP avec le fichier PDF en pièce jointe
+        $response = new Response();
+        $response->setContent($dompdf->output());
+        $response->headers->set('Content-Type', 'application/pdf');
+        $response->headers->set('Content-Disposition', 'attachment;filename=facture.pdf');
+
+        return $response;
+    }
+}
+
+Dans cet exemple, le contrôleur reçoit l'ID de la commande en tant que paramètre dans l'URL. Le contrôleur récupère ensuite les informations sur la commande à partir de l'ID et génère le contenu HTML pour la facture en utilisant un fichier de modèle Twig nommé facture.html.twig. Le contenu HTML est ensuite transmis à Dompdf pour générer le fichier PDF. Enfin, le contrôleur retourne une réponse HTTP avec le fichier PDF en pièce jointe.
+
+    Créez le modèle Twig pour la facture. Vous pouvez utiliser les mêmes informations sur la commande que celles affichées sur la page de confirmation de paiement pour générer le contenu HTML. Par exemple :
+
+twig
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Facture</title>
+    <style>
+        /* Styles CSS pour la facture */
+    </style>
+</head>
+<body>
+    <h1>Facture</h1>
+    <table>
+        <tr>
+            <th>Nom du produit</th>
+            <td>{{ commande.nomProduit }}</td>
+        </tr>
+        <tr>
+            <th>Montant total</th>
+            <td>{{ commande.montantTotal }} €</td>
+        </tr>
+        <tr>
+            <th>Référence du produit</th>
+            <td>{{ commande.referenceProduit }}</td>
+        </tr>
+    </table>
+</body>
+</html>
+
+    Ajoutez un lien vers le contrôleur PdfController dans la page de confirmation de paiement pour permettre
+
+voufotristan207@gmail.com
+continue ta réponse
+
+à l'utilisateur de télécharger la facture en PDF. Par exemple, vous pouvez ajouter un lien dans le template Twig de la page de confirmation de paiement :
+
+twig
+
+<h1>Paiement effectué avec succès !</h1>
+
+<p>Merci d'avoir effectué votre achat sur notre site. Voici les informations sur votre commande :</p>
+
+<table>
+    <tr>
+        <th>Nom du produit</th>
+        <td>{{ commande.nomProduit }}</td>
+    </tr>
+    <tr>
+        <th>Montant total</th>
+        <td>{{ commande.montantTotal }} €</td>
+    </tr>
+    <tr>
+        <th>Référence du produit</th>
+        <td>{{ commande.referenceProduit }}</td>
+    </tr>
+</table>
+
+<p><a href="{{ path('pdf', {id: commande.id}) }}">Télécharger la facture au format PDF</a></p>
+
+Ce lien vers le contrôleur PdfController inclut l'ID de la commande en tant que paramètre dans l'URL. Lorsque l'utilisateur clique sur le lien, le contrôleur PdfController est appelé et génère le fichier PDF pour la facture.
+
+Notez que dans cet exemple, le contenu HTML pour la facture est généré en utilisant un modèle Twig. Si vous souhaitez personnaliser davantage la mise en page de la facture, vous pouvez modifier le fichier de modèle Twig et les styles CSS associés pour répondre à vos besoins.-->

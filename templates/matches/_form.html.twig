@@ -1,0 +1,65 @@
+{{ form_start(form,{'attr': {'class': 'form-sample', 'novalidate': 'novalidate'}} ) }} 
+       <br><br><br><br><br><br>
+        <div class="row">
+        <div class="col-md-6">
+            <div class="form-group row">
+                <label class="col-sm-3 col-form-label"> {{ form_label(form.idTournoi,"Tournoi") }}</label>
+                <div class="col-sm-9">
+                {{ form_widget(form.idTournoi,{'attr': {'class': 'form-control'}})}}
+                {{ form_errors(form.idTournoi) }} 
+                </div>
+            </div>
+        </div>
+               <div class="col-md-6">
+            <div class="form-group row">
+                <label class="col-sm-3 col-form-label"> {{ form_label(form.tourActuel,"Tour Actuel") }}</label>
+                <div class="col-sm-9">
+                {{ form_widget(form.tourActuel,{'attr': {'class': 'form-control'}})}}
+                {{ form_errors(form.tourActuel) }} 
+                </div>
+            </div>
+        </div>
+      
+
+     <div class="col-md-6">
+            <div class="form-group row">
+                <label class="col-sm-3 col-form-label"> {{ form_label(form.scoreEquipeA,"Score Equipe Home") }}</label>
+                <div class="col-sm-9">
+                {{ form_widget(form.scoreEquipeA,{'attr': {'class': 'form-control'}})}}
+                {{ form_errors(form.scoreEquipeA) }} 
+                </div>
+            </div>
+        </div>  
+        <div class="col-md-6">
+            <div class="form-group row">
+                <label class="col-sm-3 col-form-label"> {{ form_label(form.scoreEquipeB,"Score Equipe Away") }}</label>
+                <div class="col-sm-9">
+                {{ form_widget(form.scoreEquipeB,{'attr': {'class': 'form-control'}})}}
+                {{ form_errors(form.scoreEquipeB) }} 
+                </div>
+            </div>
+        </div>
+  <div class="col-md-6">
+            <div class="form-group row">
+                <label class="col-sm-3 col-form-label"> {{ form_label(form.equipe1,"Equipe Home") }}</label>
+                <div class="col-sm-9">
+                {{ form_widget(form.equipe1,{'attr': {'class': 'form-control'}})}}
+                {{ form_errors(form.equipe1) }} 
+                </div>
+            </div>
+        </div>
+  <div class="col-md-6">
+            <div class="form-group row">
+                <label class="col-sm-3 col-form-label"> {{ form_label(form.equipe2,"Equipe Away") }}</label>
+                <div class="col-sm-9">
+                {{ form_widget(form.equipe2,{'attr': {'class': 'form-control'}})}}
+                {{ form_errors(form.equipe2) }} 
+                </div>
+            </div>
+        </div>
+    </div>
+    <button class="btn btn-primary mr-2">{{ button_label|default('Sauvegarder') }}</button>
+    <a href="{{ path('app_matches_index') }}">Retour</a>
+
+{{ form_end(form) }}
+

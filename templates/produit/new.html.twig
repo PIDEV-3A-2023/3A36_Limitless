@@ -1,0 +1,11 @@
+{% extends 'back.html.twig' %}
+
+{% block title %}Produit{% endblock %}
+
+{% block body %}
+  
+
+    {{ include('produit/_form.html.twig') }}
+
+    <a href="{{ path('app_produit_index') }}"><button class="btn btn-success>Retour</button></a>
+{% endblock %}

@@ -1,0 +1,60 @@
+{% extends 'base.html.twig' %}
+{% block title %}Table Tournoi{% endblock %}
+
+{% block body %}
+   <section class="image-header">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="info">
+                        <div class="wrap">
+                            <ul class="breadcrumbs">
+                                <li><a href="index-2.html">Accueil</a>/</li>
+                                <li>TOURNOI</li>
+                            </ul>
+                            <h1>Les Tournois</h1>
+                        </div>
+                    </div>
+                </div>	
+            </div>
+        </div>
+    </section>
+    <!--BREADCRUMBS END-->
+<!--Tournaments PART WRAP Begin -->
+<div class="esport_championship_participants">
+    <div class="container">
+        <div class="row no-guters">
+
+            <!--SERCH WRAPPER BEGIN-->
+         <h5>les tournois</h5>
+                {{ include('tournoi/tournoi_search.html.twig',{'button_label': 'Effectuer'}) }}
+                <div>
+                {{ include('tournoi/tournoi_tri.html.twig',{'button_label': 'Trier'}) }}
+                </div>
+    <!--Tournaments PART WRAP END -->
+
+                {% for flash_message in app.session.flashbag.get('warning') %}
+    <div class="alert alert-success">{{ flash_message }}</div>
+                {% endfor %}
+            {% for tournoi in tournoi %}
+            <div class="col-md-3 col-sm-4 col-xs-6">
+                <a href="{{ path('app_tournoi_evenement', {'slug': tournoi.slug}) }}">
+                    <img src="{{asset("images/common/esport-participants-background.jpg") }}" class="background-team" alt="background">
+                        <span class="logo"><img src="{{asset('uploads/images/'~tournoi.imageTournoi)}}" width="80" height="80" alt="team-logo"></span>
+                        <span>{{tournoi.nomTournoi}}</span>
+                        <span>{{tournoi.jeu}}</span>
+                        <span>{{tournoi.typeTournoi }}</span>
+                        <span>{{ tournoi.dateDebut ? tournoi.dateDebut|date('Y-m-d') : '' }} à {{ tournoi.dateDebut ? tournoi.dateDebut|date(' H:i') : '' }}</span>
+                        <span>Participants:  {{tournoi.participantTotal}}</span>                        
+                </a>
+            </div>
+            {% endfor %}
+            <div class="pagination-wrap">
+      {{ knp_pagination_render(tournoi,'tournoi/pagination.html.twig')}}
+  </div>
+        </div>
+ </div>
+</div>
+</div></div></div></div></div>
+
+{% endblock %}

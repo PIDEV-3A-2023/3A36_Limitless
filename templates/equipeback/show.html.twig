@@ -1,0 +1,53 @@
+{% extends 'back.html.twig' %}
+
+{% block title %}Equipe{% endblock %}
+
+{% block body %}
+<div class="col-12 grid-margin stretch-card">
+    <div class="card">
+        <div class="card-body">
+        <h4 class="card-title"></h4>
+        <p class="card-description"> <br></p>
+    <h1>Détails Equipe</h1>
+<div> <p> </p> </div>
+<div> <p> </p> </div>
+    <table class="table">
+        <tbody>
+            
+            <tr>
+                <th>Logo_equipe</th>
+                <td><a  class="custom-logo-link"><img src="{{asset('equipeImages/'~equipe.logoEquipe)}}" alt="logo" class="custom-logo"></a></td>
+            </tr>
+            <tr>
+                <th>Nom_equipe</th>
+                <td>{{ equipe.nomEquipe }}</td>
+            </tr>
+            <tr>
+                <th>Description_equipe</th>
+                <td>{{ equipe.descriptionEquipe }}</td>
+                
+            </tr>
+            
+            <tr>
+                <th>Nb_joueurs</th>
+                <td>{{ equipe.nbJoueurs }}</td>
+            </tr>
+            <tr>
+                <th>Site_web</th>
+                 <td><a href="{{ equipe.siteWeb }}">{{ equipe.siteWeb }}</a></td>
+            </tr>
+            <tr>
+                <th>Date_creation</th>
+                <td>{{ equipe.dateCreation|date('Y-m-d ') }}</td>
+            </tr>
+        </tbody>
+    </table>
+    <div> <p> </p> </div>
+    <div> <p> </p> </div>
+    <a class="btn btn-primary mr-2" href="{{ path('app_equipeback_index') }}">Retour </a>
+
+ </div>
+    </div>
+</div>
+    
+{% endblock %}

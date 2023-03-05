@@ -1,0 +1,87 @@
+{{ form_start(form,{'attr': {'class': 'form-sample', 'novalidate': 'novalidate'}} ) }}
+       <br><br><br><br><br><br>
+        <div class="row">
+        <div class="col-md-6">
+            <div class="form-group row">
+                <label class="col-sm-3 col-form-label"> {{ form_label(form.nomTournoi,"Nom du Tournoi") }}</label>
+                <div class="col-sm-9">
+                {{ form_widget(form.nomTournoi,{'attr': {'class': 'form-control'}})}}
+                {{ form_errors(form.nomTournoi) }} 
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="form-group row">
+                <label class="col-sm-3 col-form-label"> {{ form_label(form.jeu,"Jeu") }}</label>
+                <div class="col-sm-9">
+                {{ form_widget(form.jeu,{'attr': {'class': 'form-control'}})}}
+                {{ form_errors(form.jeu) }} 
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6">
+            <div class="form-group row">
+                <label class="col-sm-3 col-form-label"> {{ form_label(form.participantTotal,"Nombre de Participants") }}</label>
+                <div class="col-sm-9">
+                {{ form_widget(form.participantTotal,{'attr': {'class': 'form-control'}})}}
+                {{ form_errors(form.participantTotal) }} 
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6">
+            <div class="form-group row">
+                <label class="col-sm-3 col-form-label"> {{ form_label(form.nomHote,"Organisateur") }}</label>
+                <div class="col-sm-9">
+                {{ form_widget(form.nomHote,{'attr': {'class': 'form-control'}})}}
+                {{ form_errors(form.nomHote) }} 
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6">
+            <div class="form-group row">
+                <label class="col-sm-3 col-form-label"> {{ form_label(form.dateDebut,"Date de Debut") }}</label>
+                <div class="col-sm-9">
+                {{ form_widget(form.dateDebut)}}
+                {{ form_errors(form.dateDebut) }} 
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-6">
+            <div class="form-group row">
+                <label class="col-sm-3 col-form-label"> {{ form_label(form.prix,"Cagnotte") }}</label>
+                <div class="col-sm-9">
+                {{ form_widget(form.prix,{'attr': {'class': 'form-control'}})}}
+                {{ form_errors(form.prix) }} 
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6">
+            <div class="form-group row">
+                <label class="col-sm-3 col-form-label"> {{ form_label(form.typeTournoi,"Type de Tournoi") }}</label>
+                <div class="col-sm-9">
+                {{ form_widget(form.typeTournoi,{'attr': {'class': 'form-control'}})}}
+                {{ form_errors(form.typeTournoi) }} 
+                </div>
+            </div>
+        </div>    
+ 
+        <div class="col-md-6">
+            <div class="form-group row">
+                <label class="col-sm-3 col-form-label"> {{ form_label(form.imageTournoi,"Image") }}</label>
+                <div class="col-sm-9">
+                {{ form_widget(form.imageTournoi,{'attr': {'class': 'form-control'}})}}
+                {{ form_errors(form.imageTournoi) }} 
+                </div>
+            </div>
+        </div>
+    </div>
+    <button class="btn btn-primary mr-2">{{ button_label|default('Sauvegarder') }}</button>
+        <a href="{{ path('app_tournoi_index') }}">Retour</a>
+
+{{ form_end(form) }}
+

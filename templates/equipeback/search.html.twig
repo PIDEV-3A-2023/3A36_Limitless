@@ -1,0 +1,28 @@
+<form id="search-form">
+    <input type="text" name="query">
+    <button type="submit">Search</button>
+</form>
+
+<div id="search-results"></div>
+
+<script>
+    $(document).ready(function() {
+        $('#search-form').submit(function(event) {
+            // Prevent the form from submitting normally
+            event.preventDefault();
+            
+            // Get the search query from the form input
+            var query = $('input[name="query"]').val();
+            
+            // Send an AJAX request to the search route
+            $.get('/search', {query: query}, function(data) {
+                // Format the search results as HTML and display them on the page
+                var html = '';
+                $.each(data, function(index, entity) {
+                    html += '<div>' + entity.name + '</div>';
+                });
+                $('#search-results').html(html);
+            });
+        });
+    });
+</script>

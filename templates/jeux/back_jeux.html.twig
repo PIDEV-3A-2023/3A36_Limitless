@@ -1,0 +1,134 @@
+ {% extends 'back.html.twig' %} 
+{% block title  %}  Jeux {% endblock %}
+        
+        {% block body %}
+        <!-- partial -->
+        <div class="main-panel">
+          <div class="content-wrapper">
+            <div class="page-header">
+              <h3 class="page-title"> Jeux </h3>
+              <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                  <li class="breadcrumb-item"><a href="#">Tables</a></li>
+                </ol>
+              </nav>
+            </div>
+            
+              <div class="col-lg-12 grid-margin stretch-card">
+                <div class="card">
+                  <div class="card-body">
+                    <h4 class="card-title">Table de Jeux</h4>
+                    <div class="d-flex justify-content-end mt-3 mb-3">
+                        <a href="{{ path('app_jeux_new') }}" class="btn btn-success">Ajout</a>
+                        </div>
+                    <div class="table-responsive">
+                      <table class="table table-striped">
+                        <thead>
+                          <tr>
+                            <th> Logo </th>
+                            <th> Reference </th>
+                            <th> Nom </th>
+                            <th> Evaluation du jeux </th>
+                            <th> Catgories </th>
+                            <th> Type </th>
+                            <th> Date de Creation</th>
+                            <th> Actions </th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                        {% for jeux in jeuxes %}
+                          <tr>
+                            <td class="py-1">
+                              <img src="{{asset('JeuxImages/'~jeux.LogoJeux)}}" />
+                            </td>
+                            <td>{{ jeux.ref }}</td>
+                            <td>{{ jeux.libelle }}</td>
+                            <td>{{ jeux.noteMyonne }}</td>
+                            <td>
+                            {% for categorie in jeux.categories %}
+                            {{ categorie.NomCat }}{% if not loop.last %}, {% endif %}
+                            {% endfor %}</td>
+                            <td>
+                            {% for type in jeux.types %}
+                            {{ type.NomType }}{% if not loop.last %}, {% endif %}
+                            {% endfor %}</td>
+                            {{ knp_pagination_render( jeuxes )}}
+                            <td>{{ jeux.dateCreation|date("m/d/Y") }}</td>
+                              <td>
+                              
+                              <a href="{{ path('app_jeux_edit', {'id': jeux.id}) }}" class="btn btn-primary">
+                                  <i class="mdi mdi-pencil"></i>
+                              </a>
+                              <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#deleteModal{{ loop.index }}">
+                                <i class="mdi mdi-delete"></i>
+                              </button>
+<!-- Delete Modal -->
+<div class="modal fade" id="deleteModal{{ loop.index }}" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="deleteModalLabel">Confirmation du supprission</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                Êtes-vous sûr de vouloir supprimer cet élément?
+            </div>
+            <div class="modal-footer">
+                <form method="post" action="{{ path('app_jeux_delete', {'id': jeux.id}) }}">
+                    <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ jeux.id) }}">
+                    <button type="submit" class="btn btn-danger">oui</button>
+                </form>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Non</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+                            </td>
+                          </tr>
+                          {% else %}
+                              <tr>
+                              <td colspan="5">no records found</td>
+                            </tr>
+                          {% endfor %}
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+        </div>
+        <!-- content-wrapper ends -->
+        <!-- partial:../../partials/_footer.html -->
+        <!-- partial -->
+        <script src="{{asset('assets/vendors/js/vendor.bundle.base.js')}}"> </script>
+	<!-- endinject -->
+	<!-- Plugin js for this page -->
+	<!-- End plugin js for this page -->
+	<!-- inject:js --><script src="{{asset('js/off-canvas.js')}}"> </script>
+	<script src="{{asset('js/hoverable-collapse.js')}}"></script>
+<script src="{{asset('js/misc.js')}}"></script>
+	<script src="{{asset('js/settings.js')}}"></script>
+	<script src="{{asset('js/todolist.js')}}"></script>
+    <script src="{{asset('assets/vendorsassets/js/vendor.bundle.base.js')}}"></script>
+			<!-- endinject -->
+			<!-- Plugin js for this page -->
+			<script src="{{asset('assets/vendors/chart.js/Chart.min.js')}}"></script>
+			<script src="{{asset('assets/vendors/progressbar.js/progressbar.min.js')}}"></script>
+			<script src="{{asset('assets/vendors/jvectormap/jquery-jvectormap.min.js')}}"></script>
+			<script src="{{asset('assets/vendors/jvectormap/jquery-jvectormap-world-mill-en.js')}}"></script>
+			<script src="{{asset('assets/vendors/owl-carousel-2/owl.carousel.min.js')}}"></script>
+			<!-- End plugin js for this page -->
+			<!-- inject:js -->
+			<script src="{{asset('assets/js/off-canvas.js')}}"></script>
+			<script src="{{asset('assets/js/hoverable-collapse.js')}}"></script>
+			<script src="{{asset('assets/js/misc.js')}}"></script>
+			<script src="{{asset('assets/js/settings.js')}}"></script>
+			<script src="{{asset('assets/js/todolist.js')}}"></script>
+			<!-- endinject -->
+			<!-- Custom js for this page -->
+			<script src="{{asset('assets/js/dashboard.js')}}"></script>
+          {% endblock %} 

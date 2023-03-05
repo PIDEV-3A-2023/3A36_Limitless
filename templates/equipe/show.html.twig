@@ -1,0 +1,48 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Equipe{% endblock %}
+
+{% block body %}
+   <section class="club-wrap club-champ">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-9">
+                    <h4>Détails de l'equipe </h4>
+                    
+                </div>
+                <div class="col-md-3">
+                    <a href="{{ path('app_equipe_index') }}" class="btn small club-top-btn">retour</a>
+                </div>
+            </div>
+        </div>
+        
+<div class="championship-header-wrapper">
+    <div class="container">
+        <div class="row">
+           
+            <div class="col-md-3">
+                <div class="club-info">
+                    <div class="item"><span>Nom de l'equipe: </span>{{ equipe.nomEquipe }}</div>
+                    <div class="item"><span>Nombre de joueurs: </span>{{ equipe.nbJoueurs }}</div>
+                    <div class="item"><span>Site web: </span><a href="{{ equipe.siteWeb }}">{{ equipe.siteWeb }}</a></div>
+                    <div class="item"><span>Date de creation: </span>{{ equipe.dateCreation|date("m/d/y") }}</div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="club-info">
+                    <div class="item">Description de l'equipe: </div>
+                    <p>{{ equipe.descriptionEquipe }}</p>
+                </div>	
+            </div>
+        </div>	
+    </div>	
+</div>
+    </section>
+
+  
+
+   
+
+   
+{% endblock %}
+

@@ -1,0 +1,58 @@
+
+{{ form_start(form,{'attr': {'class': 'form-sample', 'novalidate': 'novalidate'}} ) }}
+    <div class="row">
+        <div class="col-md-6">
+            <div class="form-group row">
+                <label class="col-sm-3 col-form-label">{{ form_label(form.libelle,"Nom") }}</label>
+                <div class="col-sm-9">
+                    {{ form_widget(form.libelle, {'attr': {'class': 'form-control'}}) }}
+                    {{ form_errors(form.libelle) }}
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="form-group row">
+                <label class="col-sm-3 col-form-label">{{ form_label(form.LogoJeux,"Logo Jeux") }}</label>
+                <div class="col-sm-9">
+                    {{ form_widget(form.LogoJeux, {'attr': {'class': 'form-control'}}) }}
+                    {{ form_errors(form.LogoJeux) }}
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-6">
+            <div class="form-group row">
+                <label class="col-sm-3 col-form-label">{{ form_label(form.Categories,"Categorie") }}</label>
+                <div class="col-sm-9">
+                    {{ form_widget(form.Categories, {'attr': {'class': 'form-control'}}) }}
+                    {{ form_errors(form.Categories) }}
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="form-group row">
+                <label class="col-sm-3 col-form-label">{{ form_label(form.types,"Type") }}</label>
+                <div class="col-sm-9">
+                    {{ form_widget(form.types, {'attr': {'class': 'form-control'}}) }}
+                    {{ form_errors(form.types) }}
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-6">
+            <div class="form-group row">
+                <label class="col-sm-3 col-form-label">{{ form_label(form.ImageJeux,"Image Jeux") }}</label>
+                <div class="col-sm-9">
+                    {{ form_widget(form.ImageJeux, {'attr': {'class': 'form-control'}}) }}
+                    {{ form_errors(form.ImageJeux) }}
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="d-flex justify-content-end mt-3 mb-3">
+        <button type="submit" class="btn btn-success">{{ button_label|default('Save') }}</button>
+    </div>
+{{ form_end(form) }}
+

@@ -1,0 +1,99 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}New Equipe{% endblock %}
+
+{% block body %}
+    <h1>Ajouter une equipe</h1>
+<center><div class="leave-comment-wrap">
+{{ form_start(form) }}
+<div class="row">
+								<div class="col-md-12">
+									<div class="item">
+<label>
+											<span>Nom equipe
+												<i>*</i>
+											</span>
+											{{ form_widget(form.nom_equipe) }}
+                                  {{ form_errors(form.nom_equipe) }}
+
+										</label>
+	</div>
+								</div>
+
+							<div class="col-md-12">
+									<div class="item">	
+										<label>
+											<span>description de l'equipe
+												<i>*</i>
+											</span>
+											{{ form_widget(form.description_equipe) }}
+											{{ form_errors(form.description_equipe) }}
+										</label>
+											</div>
+								</div>
+
+							<div class="col-md-12">
+									<div class="item">	
+<label>
+											<span>nombres de joueurs
+                                            <i>*</i>
+                                            </span>
+											{{ form_widget(form.nb_joueurs) }}
+											{{ form_errors(form.nb_joueurs) }}
+										</label>
+	</div>
+								</div>
+<div class="col-md-12">
+									<div class="item">
+
+										<label>
+											<span>logo de l'equipe
+												<i>*</i>
+											</span>
+											{{ form_widget(form.logo_equipe) }}
+											{{ form_errors(form.logo_equipe) }}
+										</label>
+
+							</div>
+								</div>
+
+						<div class="col-md-12">
+									<div class="item">						
+<label>
+											<span>SITE WEB
+												<i>*</i>
+											</span>
+											{{ form_widget(form.site_web) }}
+											 {{ form_errors(form.site_web) }}
+										</label>
+</div>
+								</div>
+
+								<div class="col-md-12">
+									<div class="item">						
+ {#
+<label>
+											<span>date de creation
+												<i>*</i>
+											</span>
+											{{ form_widget(form.date_creation) }}
+											 {{ form_errors(form.date_creation) }}
+										</label>
+										#}
+</div>
+								</div>
+
+<div class="col-md-12">
+									<div class="item">
+
+</div>
+								</div>
+										
+
+    {{ include('equipe/_form.html.twig') }}
+    <a class="btn" href="{{ path('app_equipe_index') }}">Retour à la liste</a>
+{{form_end(form)}}
+
+		
+{% endblock %}
+
