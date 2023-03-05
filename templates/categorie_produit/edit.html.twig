@@ -1,0 +1,60 @@
+{% extends 'back.html.twig' %}
+
+{% block title %}Edit CategorieProduit{% endblock %}
+
+{% block body %}
+    <h1>Modifier CategorieProduit</h1>
+
+    {{ include('categorie_produit/_form.html.twig', {'button_label': 'Modifier'}) }}
+
+    <a href="{{ path('app_categorie_showCategorieProduit') }}">back to list</a>
+
+    {{ include('categorie_produit/_delete_form.html.twig') }}
+{% endblock %}
+
+///a supprimer 
+{% if error is defined %}
+<div class="alert alert-danger">{{ error }}</div>
+{% endif %}
+
+{{ form_start(form) }}
+{{ form_row(form.cardholderName, {'attr': {'placeholder': 'Nom sur la carte'}}) }}
+{{ form_row(form.cardNumber, {'attr': {'placeholder': 'Numéro de carte'}}) }}
+{{ form_row(form.expirationDate, {'attr': {'placeholder': 'MM/AAAA'}}) }}
+{{ form_row(form.cvc, {'attr': {'placeholder': 'CVC'}}) }}
+{{ form_rest(form) }}
+   <script src="https://checkout.stripe.com/checkout.js"></script>
+
+<button id="checkout-button" class="btn btn-primary">Payer</button>
+{{ form_end(form) }}
+   <script>
+       var stripe = Stripe('{{ stripePublishableKey   }}');
+   var elements = stripe.elements();
+   var cardElement = elements.create('card');
+   cardElement.mount('#card-element');
+
+   var cardholderName = document.getElementById('form_cardholderName');
+   var cardButton = document.getElementById('checkout-button');
+
+   cardButton.addEventListener('click', function(ev) {
+       ev.preventDefault();
+
+       stripe.createToken(cardElement, {name: cardholderName.value}).then(function(result) {
+           if (result.error) {
+               // Gérez les erreurs de carte bancaire
+               var errorElement = document.getElementById('card-errors');
+               errorElement.textContent = result.error.message;
+           } else {
+               // Ajoutez le jeton à la soumission du formulaire
+               var form = document.getElementById('payment-form');
+               var tokenInput = document.createElement('input');
+               tokenInput.setAttribute('type', 'hidden');
+               tokenInput.setAttribute('name', 'stripeToken');
+               tokenInput.setAttribute('value', result.token.id);
+               form.appendChild(tokenInput);
+               form.submit();
+           }
+       });
+   });
+
+   </script>

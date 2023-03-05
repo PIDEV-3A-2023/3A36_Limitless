@@ -1,0 +1,80 @@
+{% extends 'base.html.twig' %}
+{% block title  %} Edit Blog {% endblock %}
+{% block body %}
+<link href="{{asset('css-min/soccer.min.css')}}" rel="stylesheet" type="text/css" />
+
+
+
+
+
+    <div class="content">
+        <div class="container">
+            <div class="row row-offcanvas row-offcanvas-left">
+
+                <!--SIEDBAR BEGIN-->
+
+
+                <!--NEWS SINGLE BEGIN-->
+
+                <section class="news-single col-xs-12 col-sm-12 col-md-9">
+                    <p class="hidden-md hidden-lg">
+                        <button type="button" class="btn sidebar-btn" data-toggle="offcanvas" title="Toggle sidebar">sidebar</button>
+                    </p>
+                    <div class="item">
+                    {{ form_start(form, {'attr': {'novalidate': 'novalidate'}}) }}
+                        <div class="top-info">
+                            <div class="date"><a >{{ blog.dateCreation|date("m/d/Y") }} </a> </div>
+                            <div class="comment-quantity">0 Commentaires</div>
+                        </div>
+
+                        
+                        <h1>Titre</h1>
+                        <h1>{{ form_widget(form.titre)}}</h1>
+                            <div  class="text-danger">{{ form_errors(form.titre)}}</div>
+
+                        <div class="post-text">
+                            <h1>Contenue</h1>
+                            <p>{{ form_widget(form.contenu) }}</p>
+                            <div  class="text-danger"> {{ form_errors(form.contenu)}}</div>
+                            <br>
+                            Ajouter image {{ form_widget(form.imageBlog) }}
+                            <br>
+                            <div class="text-danger" > {{ form_errors(form.imageBlog)}}</div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="tags">
+                                        <a> <button style="background:none; boarder:none; color: inherit;
+                                                            border: none;
+                                                            padding: 0;
+                                                            font: inherit;
+                                                            cursor: pointer;
+                                                            outline: inherit;">{{ button_label|default('Editer') }}</button></a>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <ul class="share-bar">
+                                        <li class="facebook"><a ><i class="fa fa-facebook-square" aria-hidden="true"></i></a></li>
+                                        <li class="twitter"><a ><i class="fa fa-twitter" aria-hidden="true"></i></a></li>
+                                        <li class="google"><a ><i class="fa fa-google" aria-hidden="true"></i></a></li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        {{ form_end(form) }}
+                        
+                    </div>
+                </section>
+
+                <!--NEWS SINGLE END-->
+
+            </div>
+    </div>
+    <br><br><br><br><br>
+
+
+
+
+
+
+
+{% endblock %}

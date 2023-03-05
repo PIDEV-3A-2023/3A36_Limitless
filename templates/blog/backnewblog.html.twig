@@ -1,0 +1,56 @@
+ {% extends 'back.html.twig' %} 
+{% block title  %} Blogs Backend Ajout {% endblock %}
+{% block body %}
+<div class="content-wrapper">
+            <div class="page-header">
+              <h3 class="page-title"> Blogs </h3>
+              <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                  <li class="breadcrumb-item"><a href="#">Blogs</a></li>
+                  <li class="breadcrumb-item active" aria-current="page">Blogs</li>
+                </ol>
+              </nav>
+            </div>
+            
+    <div class="row">
+        <div class="col-md-6 grid-margin stretch-card">
+            <div class="card">
+                <div class="card-body">
+                    <h4 class="card-title">Ajout blog</h4>
+                    <p class="card-description">Veuillez Ajouter un Blog </p>
+                    
+                    {{ form_start(form, {'attr': {'novalidate': 'novalidate'}}) }}
+                    
+                    <div class="form-group row">
+                        <label for="exampleInputUsername2" class="col-sm-3 col-form-label">Titre</label>
+                        <div class="col-sm-9">
+                        {{ form_widget(form.titre)}}
+                        </div>
+                    </div>
+                    <div  class="text-danger">{{ form_errors(form.titre)}}</div>
+
+                    <div class="form-group row">
+                        <label for="exampleInputEmail2" class="col-sm-3 col-form-label">Contenu</label>
+                        <div class="col-sm-9">
+                            {{ form_widget(form.contenu) }}
+                        </div>
+                    </div>
+                    <div  class="text-danger"> {{ form_errors(form.contenu)}}</div>
+
+                    <br>Ajouter image {{ form_widget(form.imageBlog) }}<br>
+                    <div class="text-danger" > {{ form_errors(form.imageBlog)}}</div>
+
+                    <br><br>
+                    <button type="submit" class="btn btn-primary mr-2">Ajouter</button>
+                    <a href="{{ path('app_blog_backend')}}" class="btn btn-dark">Retour</a>
+                    {{ form_end(form) }}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+              
+             
+              
+              
+{% endblock %}

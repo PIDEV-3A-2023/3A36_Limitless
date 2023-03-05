@@ -1,0 +1,216 @@
+{% extends 'base.html.twig' %}
+{% block title  %} Blog {% endblock %}
+{% block body %}
+<link href="{{asset('css-min/soccer.min.css')}}" rel="stylesheet" type="text/css" />
+
+<!--************************************************************************************************************************************************** -->
+<!--************************************************************************************************************************************************** -->
+<!--************************************************************************************************************************************************** -->
+<!--************************************************************************************************************************************************** -->
+    <!--CONTENT BEGIN-->
+    <div class="content">
+        <div class="container">
+            <div class="row row-offcanvas row-offcanvas-left">
+
+                <!--SIEDBAR BEGIN-->
+
+<section class="sidebar col-xs-6 col-sm-6 col-md-3 sidebar-offcanvas" id="sidebar">
+<br><br>
+
+    <div class="sidebar-menu-wrap">
+        <h6>Meilleurs blogs</h6>
+
+        {% set number = 0 %}
+        {% for hotblogs in hotblogs %}
+        {% if hotblogs.etat == 2 %}
+        {% set number = number + 1 %}
+        <ul class="categories-list">
+            <li>
+                <a href="#"><span class="count">{{ number }}</span>{{ hotblogs.titre|slice(0, 25) }}</a>
+            </li>
+        </ul>
+        {% endif %}
+        {% endfor %}
+
+    </div>
+
+    <br><br>
+
+    <div class="sidebar-tags-wrap">
+        <div class="tags">
+        {% if app.user %}
+            <a href="{{path('app_blog_create')}}" class="booking">Creer un Blog</a>
+            {% else %}
+            <a href="{{path('app_login')}}" class="booking">Creer un Blog</a>
+            {% endif %}
+        </div>
+    </div>
+
+<h6>Blogs récents</h6>
+{% for blogrecent in blogrecent %}
+{% if blogrecent.etat == 2 %}
+    <div class="recent-news">
+        <div class="item">
+            <div class="date"><a >{{ blogrecent.dateCreation|date("m/d/Y") }}</a></div>
+            <a class="name">{{ blogrecent.titre }}</a>
+        </div>
+    </div>
+    <br>
+{% endif %}
+{% endfor %}
+
+
+</section>
+
+                <!--NEWS SINGLE BEGIN-->
+
+                <section class="news-single col-xs-12 col-sm-12 col-md-9">
+                    <p class="hidden-md hidden-lg">
+                        <button type="button" class="btn sidebar-btn" data-toggle="offcanvas" title="Toggle sidebar">sidebar</button>
+                    </p>
+                    <div class="item">
+                        <div class="top-info">
+                            <div class="date"><a>{{ blog.dateCreation|date("m/d/Y") }}</a> Par <a >{{ blog.Joueur.nom }}</a></div>
+                            <div class="comment-quantity">{{ number }} Commentaires</div>
+                        </div>
+
+                        <h1>{{ blog.titre }}</h1>
+                        <div class="img-wrap">
+                            <img src="{{ asset('blogImages/' ~ blog.imageBlog) }}">
+                        </div>
+
+
+                        <div class="post-text">
+                            <p>{{ blog.contenu }}</p>
+                            <br>
+                            <br>
+
+                            {% if app.user %}
+                            <a href="{{ path('app_blog_like', { 'id': blog.id }) }}" method="post" >
+                            <i class="fa fa-regular fa-thumbs-up" style="font-size: 2em;"></i> 
+                            </a> {{ numberLikes }}
+                            {% else %}
+<a href="{{ path('app_login') }}" method="post" >
+                            <i class="fa fa-regular fa-thumbs-up" style="font-size: 2em;"></i> 
+                            </a> {{ numberLikes }}
+                            {% endif %}
+
+
+
+                             {% if app.user %}
+                            <a href="{{ path('app_blog_dislike', { 'id': blog.id }) }}" method="post">
+                            <i class="fa fa-regular fa-thumbs-down" style="font-size: 2em;"></i> 
+                            </a>{{ numberDislikes }}
+                            {% else %}
+                            <a href="{{ path('app_login') }}" method="post">
+                            <i class="fa fa-regular fa-thumbs-down" style="font-size: 2em;"></i> 
+                            </a>{{ numberDislikes }}
+                            {% endif %}
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="top-info">
+                                    <div class="date">
+                                        Modifié à <a> {{ blog.dateModification|date("m/d/Y") }}</a> Par <a >{{ blog.Joueur.nom }}</a>
+                                    </div>
+                                    </div>
+                                    <div class="tags">
+                                        <a href="{{path('app_blog')}}" >Retour</a>
+
+                                        {% if app.user is defined and blog.joueur == app.user %}
+                                        <a href="{{path('app_blog_edit', {'id': blog.id} )}}" >Editer</a>
+                                        <a href="{{path('app_blog_delete', {'id': blog.id} ) }}" >Supprimer</a>
+                                        {% endif %}
+
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <ul class="share-bar">
+                                        <li class="facebook"><a href={{"https://www.facebook.com/sharer/sharer.php?u=127.0.0.1:8000/blog/" ~ blog.id}} target="_blank">
+                                        <i class="fa fa-facebook-square" aria-hidden="true"></i></a></li>
+                                        <li class="twitter"><a href={{"https://twitter.com/intent/tweet?u=127.0.0.1:8000/blog/" ~ blog.id}} target="_blank" >
+                                        <i class="fa fa-twitter" aria-hidden="true"></i></a></li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <div class="comments-wrap">
+                            <h4>Commentaires</h4>
+                            {% for comment in comment %}
+                            <div class="comment-item">
+                                <div hidden class="avatar"><img src="{{ asset('blogImages/user.png') }}"></div>
+                                <div class="avatar"><img src="{{ asset('userImages/' ~ comment.Joueur.pprofile) }}"></div>
+                                <div class="info">
+                                    <div class="date">
+                                        <a>{{ comment.dateCreation|date("m/d/Y") }}</a> Par <a>{{ comment.Joueur.nom }} </a>
+                                          Modifié à <a>{{ comment.dateModification|date("m/d/Y") }}</a>
+                                    </div>
+                                    
+
+                                    <p>{{ comment.contenu }}
+                                    {% if comment.joueur != app.user %}
+                                    <a href="{{ path('app_comment_report', {'id': comment.id}) }}" onclick="return confirm('Vous etes sur de signaler ce commentaire ?')" title="Signaler">
+                                    <i class="fa fa-sharp fa-regular fa-flag text-danger" aria-hidden="true"></i></a>
+                                    {% endif %}
+                                    </p>
+                                    
+
+                                </div>
+                                <div>
+
+                                {% if app.user is defined and comment.joueur == app.user %}
+                                <a href="{{path('app_comment_delete', {'id': comment.id} ) }}" >Supprimer</a>
+                                <a>   </a> 
+                                <a href="{{path('app_comment_edit', {'id': comment.id} ) }}" >Editer</a>
+                                {% endif %}
+
+                                </div>
+                            </div>
+                            {% endfor %}
+                            <br>
+                            <br>
+                            <br>
+                             {% if app.user %}
+                            <div class="leave-comment-wrap">
+                                <h4>Laissez un commentaire</h4>	
+                                {{ form_start(form, {'attr': {'novalidate': 'novalidate'}}) }}
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <div class="item">
+                                                <label>
+                                                    <span>Votre commentaire</span>
+                                                    {{ form_widget(form.contenu) }}
+                                                    <div class="text-danger" > {{ form_errors(form.contenu) }} </div>
+                                                </label>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-12">
+                                            <button type='submit' class="comment-submit">Poster un commentaire</button>
+                                        </div>
+                                    </div>
+                                {{ form_end(form) }}
+                            </div>
+                            {% else %}
+                            <div class="leave-comment-wrap">
+                                <h4>Connectez-vous pour pouvoir commenter. :)</h4>	
+                            </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                </section>
+
+                <!--NEWS SINGLE END-->
+
+            </div>
+        </div>
+    </div>
+
+<!--************************************************************************************************************************************************** -->
+<!--************************************************************************************************************************************************** -->
+<!--************************************************************************************************************************************************** -->
+<!--************************************************************************************************************************************************** -->
+<!--************************************************************************************************************************************************** -->
+
+
+{% endblock %}

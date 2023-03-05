@@ -1,0 +1,50 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Modify
+{% endblock %}
+
+{% block body %}
+	<section class="player-single-wrap">
+		<div class="container">
+			<div class="row">
+				<div class="col-md-12">
+					<div class="captain-bage">Utilisateur</div>
+					<h4 class="player-name">Modifier votre mot de passe</h4>
+				</div>
+				
+				<div class="col-md-12">
+					<div class="player-info">
+						
+						<div class="summary">
+							<div class="row">
+								{{ form_start(form) }}
+								<div class="col-md-3">
+									<div class="item">mot de passe actuel:</div>
+								</div>
+								<div class="col-md-9">{{ form_widget(form.oldPassword) }}</div>
+								<b><span style="color: red;">{{ form_errors(form.oldPassword) }}</span></b>
+								<div class="col-md-3">
+									<div class="item">nouveau mot de passe:</div>
+								</div>
+								<div class="col-md-9">{{ form_widget(form.newPassword) }}</div>
+								<b><span style="color: red;">{{ form_errors(form.newPassword) }}</span></b>
+								<button type="submit" class="btn btn-warning">Modifier votre mot de passe</button>
+                                <br>
+                                {{ form_end(form) }}
+								<div class="col-md-12">
+									
+								</div></center>	
+							</div>
+						</div>
+
+
+					</div>
+				</div>
+				<br>
+				
+			</div>
+		</section>
+
+
+	{% endblock %}
+{% block javascript %}{% endblock %}

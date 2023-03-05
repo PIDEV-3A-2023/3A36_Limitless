@@ -1,0 +1,141 @@
+{% extends 'back.html.twig' %}
+{% block title %}Utilisateurs
+{% endblock %}
+
+
+{% block body %}
+	<div class="main-panel">
+		<div class="content-wrapper">
+			<div class="page-header">
+				<h3 class="page-title">
+					Section Joueurs
+				</h3>
+				<nav aria-label="breadcrumb">
+					<ol class="breadcrumb">
+						<li class="breadcrumb-item">
+							<a href="#">Forms</a>
+						</li>
+						<li class="breadcrumb-item active" aria-current="page">Joueurs</li>
+					</ol>
+				</nav>
+			</div>
+
+
+			<div class="col-12 grid-margin">
+				<div class="card">
+					<div class="card-body">
+						<h4 class="card-title">Modifier un joueur</h4>
+						{{ form_start(form,{'attr': {'class': 'form-sample', 'novalidate': 'novalidate'}} ) }}
+    <div class="row">
+        <div class="col-md-6">
+            <div class="form-group row">
+                <label class="col-sm-3 col-form-label">Nom</label>
+                <div class="col-sm-9">
+                    {{ form_widget(form.nom, {'attr': {'class': 'form-control'}}) }}
+                    {{ form_errors(form.nom) }}
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="form-group row">
+                <label class="col-sm-3 col-form-label">Prenom</label>
+                <div class="col-sm-9">
+                    {{ form_widget(form.prenom, {'attr': {'class': 'form-control'}}) }}
+                    {{ form_errors(form.prenom) }}
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-6">
+            <div class="form-group row">
+                <label class="col-sm-3 col-form-label">Email</label>
+                <div class="col-sm-9">
+                    {{ form_widget(form.email, {'attr': {'class': 'form-control'}}) }}
+                    {{ form_errors(form.email) }}
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="form-group row">
+                <label class="col-sm-3 col-form-label">Date de naissance</label>
+                <div class="col-sm-9">
+                    {{ form_widget(form.datenai, {'attr': {'class': 'form-control'}}) }}
+                    {{ form_errors(form.datenai) }}
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-6">
+            <div class="form-group row">
+                <label class="col-sm-3 col-form-label">Photo de profile</label>
+                <div class="col-sm-9">
+                    {{ form_widget(form.pprofile, {'attr': {'class': 'form-control  file-upload-info'}}) }}
+                    {{ form_errors(form.pprofile) }}
+                </div>
+            </div>
+        </div>
+		<div class="col-md-6">
+            <div class="form-group row">
+                <label class="col-sm-3 col-form-label">In game name</label>
+                <div class="col-sm-9">
+                    {{ form_widget(form.ign, {'attr': {'class': 'form-control  file-upload-info'}}) }}
+                    {{ form_errors(form.ign) }}
+                </div>
+            </div>
+        </div>
+    </div>
+	<div class="row">
+        <div class="col-md-6">
+            <div class="form-group row">
+                <label class="col-sm-3 col-form-label">Victoires</label>
+                <div class="col-sm-9">
+                    {{ form_widget(form.wins, {'attr': {'class': 'form-control  file-upload-info'}}) }}
+                    {{ form_errors(form.wins) }}
+                </div>
+            </div>
+        </div>
+		<div class="col-md-6">
+            <div class="form-group row">
+                <label class="col-sm-3 col-form-label">Défaites</label>
+                <div class="col-sm-9">
+                    {{ form_widget(form.loses, {'attr': {'class': 'form-control  file-upload-info'}}) }}
+                    {{ form_errors(form.loses) }}
+                </div>
+            </div>
+        </div>
+    </div>
+	
+    <div class="d-flex justify-content-end mt-3 mb-3">
+        <button type="submit" class="btn btn-success">{{ button_label|default('Save') }}</button>
+    </div>
+{{ form_end(form) }}
+
+						
+					</div>
+				</div>
+			</div>
+
+			<div class="col-md-6 grid-margin stretch-card"></div>
+			<div class="col-md-6 grid-margin stretch-card"></div>
+			<div class="col-md-6 grid-margin stretch-card"></div>
+			<div class="col-12 grid-margin stretch-card"></div>
+			<div class="col-12 grid-margin"></div>
+			<div class="col-md-6 grid-margin stretch-card"></div>
+			<div class="col-md-6 grid-margin stretch-card"></div>
+		</div>
+	</div>
+	<!-- content-wrapper ends -->
+	<!-- partial:../../partials/_footer.html -->
+
+	<!-- partial --><script src="{{asset('assets/vendors/js/vendor.bundle.base.js')}}"> </script>
+	<!-- endinject -->
+	<!-- Plugin js for this page -->
+	<!-- End plugin js for this page -->
+	<!-- inject:js --><script src="{{asset('js/off-canvas.js')}}"> </script>
+	<script src="{{asset('js/hoverable-collapse.js')}}"></script>
+	<script src="{{asset('js/misc.js')}}"></script>
+	<script src="{{asset('js/settings.js')}}"></script>
+	<script src="{{asset('js/todolist.js')}}"></script>
+{% endblock %}

@@ -1,0 +1,109 @@
+{% extends 'base.html.twig' %}
+{% block title  %} Blogs {% endblock %}
+{% block body %}
+<link href="{{asset('css-min/soccer.min.css')}}" rel="stylesheet" type="text/css" />
+
+
+
+<!--BREADCRUMBS END-->
+
+    <!--CONTENT BEGIN-->
+
+    <div class="content">
+        <div class="container">
+            <div class="row row-offcanvas row-offcanvas-left">
+
+<!--SIDEBAR BEGIN-->
+<section class="sidebar col-xs-6 col-sm-6 col-md-3 sidebar-offcanvas" id="sidebar">
+
+    <br><br>
+    <div class="sidebar-menu-wrap">
+        <h6>Meilleurs blogs</h6>
+
+        {% set number = 0 %}
+        {% for hotblogs in hotblogs %}
+        {% if hotblogs.etat == 2 %}
+        {% set number = number + 1 %}
+        <ul class="categories-list">
+            <li>
+                <a href="{{ path('app_blog_show', {'slug': hotblogs.slug }) }}"><span class="count">{{ number }}</span>{{ hotblogs.titre|slice(0, 25) }}</a>
+            </li>
+        </ul>
+        {% endif %}
+        {% endfor %}
+
+    </div>
+
+    <div class="sidebar-menu-wrap">
+    <div class="sidebar-search-wrap">
+        <h6>Rechercher</h6>
+        {{ form_start(form,{'attr': {'novalidate':'novalidate'}}) }}
+        
+        <div class="wrap">
+            {{ form_widget(form.Recherche,{'attr' : {'class' : 'form-control'}} ) }}
+            <button type="submit"><i class="fa fa-search" aria-hidden="true"></i></button>
+        </div>
+        {{ form_end(form) }}
+    </div>
+    <br><br>
+    <div class="sidebar-tags-wrap">
+        <div class="tags">
+        {% if app.user %}
+            <a href="{{path('app_blog_create')}}" class="booking">Creer un Blog</a>
+            {% else %}
+            <a href="{{path('app_login')}}" class="booking">Creer un Blog</a>
+            {% endif %}
+        </div>
+    </div>
+
+<h6>Blogs récents</h6>
+{% for blogrecent in blogrecent %}
+{% if blogrecent.etat == 2 %}
+    <div class="recent-news">
+        <div class="item">
+            <div class="date"><a >{{ blogrecent.dateCreation|date("m/d/Y") }}</a></div>
+            <a href="{{ path('app_blog_show', {'slug': blogrecent.slug }) }}" class="name">{{ blogrecent.titre }}</a>
+        </div>
+    </div>
+    <br>
+{% endif %}
+{% endfor %}
+
+</section>
+
+<!--SIEDBAR END-->
+
+
+<!--NEWS LIST BEGIN-->
+
+<div class="news-list col-xs-12 col-md-9">
+
+{% for blog in blog %}
+{% if blog.etat == 2 %}
+    <div class="item img-top">
+        <div class="img-wrap">
+            <a href="{{ path('app_blog_show', {'slug': blog.slug}) }}"><img src="{{asset('/blogImages/' ~ blog.imageBlog ) | imagine_filter('OnetoOne') }}" ></a>
+        </div>
+        <div class="info">
+            <a href="{{ path('app_blog_show', {'slug': blog.slug}) }}" class="name">{{ blog.titre }}</a>
+            <div class="wrap">
+                <a>{{ blog.dateCreation|date("m/d/Y") }}</a> Par <a href="news-single.html">{{ blog.Joueur.nom }}</a>
+            </div>
+            <div class="clear"></div>
+        </div>
+    </div>
+{% endif %}
+{% endfor %}
+<div class="pagination-wrap">
+    {{ knp_pagination_render(blog, 'blog/pagination.html.twig') }}
+</div>
+
+    
+</div>
+<!--NEWS LIST END-->
+            </div>
+        </div>
+    </div>
+    <!--CONTENT END-->
+
+{% endblock %}

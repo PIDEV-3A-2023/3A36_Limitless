@@ -1,0 +1,50 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Reset your password
+{% endblock %}
+
+
+{% block body %}
+	
+
+	<section class="contacts-wrap">
+		<div class="container d-flex align-items-center h-100">
+			<div class="row ">
+
+				<div class="col-md-6">
+					<h4>Mot de passe oublier</h4>
+					
+						<div class="leave-comment-wrap">
+							{{ form_start(requestForm) }}
+							<div class="row">
+								<div class="col-md-6">
+									<div class="item">
+										<label>
+											<span>Email:
+												<i></i>
+											</span>
+											{{ form_widget(requestForm.email) }}
+										</label>
+									</div>
+									<b>
+										<span style="color: red;">{{ form_errors(requestForm.email) }}</span>
+									</b>
+								</div>
+
+
+								<div class="col-md-12">
+									<button class="comment-submit">{{ button_label|default('Réinitialiser le mot de passe') }}</button>
+								</div>
+							</div>
+							{{ form_end(requestForm) }}
+
+							<!--</form>-->
+						</div>
+					
+					
+				</div>
+
+			</div>
+		</div>
+	</section>
+{% endblock %}

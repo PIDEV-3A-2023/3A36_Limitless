@@ -1,0 +1,85 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Modify
+{% endblock %}
+
+{% block body %}
+	<section class="player-single-wrap">
+		<div class="container">
+			<div class="row">
+				<div class="col-md-12">
+					<div class="captain-bage">Utilisateur</div>
+					<h4 class="player-name">Modifier votre profil</h4>
+				</div>
+				<div class="col-md-6">
+
+					<div class="player-photo">
+						<div class="number">16</div>
+						<img class="img-responsive" src="{{ asset('userImages/' ~ user.pprofile) }}" alt="player">
+					</div>
+				</div>
+				<div class="col-md-6">
+					<div class="player-info">
+						<h6 class="player-info-title">Profil de
+							{{ user.nom }}</h6>
+						<div class="summary">
+							<div class="row">
+								{{ form_start(form) }}
+								<div class="col-md-3">
+									<div class="item">Nom:</div>
+								</div>
+								<div class="col-md-9 ">{{ form_widget(form.nom, { 'value': user.nom }) }}</div>
+								<b><span style="color: red;">{{ form_errors(form.nom) }}</span></b>
+								<div class="col-md-3">
+									<div class="item">Prenom:</div>
+								</div>
+								<div class="col-md-9">{{ form_widget(form.prenom, { 'value': user.prenom }) }}</div>
+								<b><span style="color: red;">{{ form_errors(form.prenom) }}</span></b>
+								
+                                <br>
+								<div class="col-md-3">
+									<div class="item">PDP:</div>
+								</div>
+								<div class="col-md-9">{{ form_widget(form.pprofile, { 'value': user.pprofile }) }}</div>
+                                <b><span style="color: red;">{{ form_errors(form.pprofile) }}</span></b>
+								
+								<div class="col-md-3">
+									<div class="item">Email:</div>
+								</div>
+								<div class="col-md-9">{{ form_widget(form.email, { 'value': user.email }) }}</div>
+								<b><span style="color: red;">{{ form_errors(form.email) }}</span></b>
+
+								<div class="col-md-3">
+									<div class="item">IGN:</div>
+								</div>
+								<div class="col-md-9">{{ form_widget(form.ign, { 'value': user.ign }) }}</div>
+								<b><span style="color: red;">{{ form_errors(form.ign) }}</span></b>
+								
+								<div class="col-md-3">
+									<div class="item">Âge:</div>
+								</div>
+								<div class="col-md-9">{{ form_widget(form.datenai)}}</div>
+								<b><span style="color: red;">{{ form_errors(form.datenai) }}</span></b>
+                                <center><div class="col-md-12">
+									<button class="btn btn-warning" type="submit">Modifier</button>
+								</div>
+								<br>
+                                {{ form_end(form) }}
+								<div class="col-md-12">
+									<button type="submit" class="btn btn-warning"><a href="{{ path('app_joueur_passchange', {'id' : app.user.id}) }}">Modifier votre mot de passe</a></button>
+								</div></center>	
+							</div>	
+						</div>
+
+
+					</div>
+					
+				</div>
+				<br>
+				
+			</div>
+		</section>
+
+
+	{% endblock %}
+{% block javascript %}{% endblock %}
