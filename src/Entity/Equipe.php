@@ -69,10 +69,21 @@ class Equipe
     #[Groups("equipe")]
     private ?int $rating = null;
 
+    #[ORM\OneToMany(mappedBy: 'equipe', targetEntity: Jaime::class)]
+    private Collection $jaimes;
+
+    #[ORM\OneToMany(mappedBy: 'equipe', targetEntity: Jaimepas::class)]
+    private Collection $jaimepas;
+
+    #[ORM\ManyToOne(inversedBy: 'equipes')]
+    private ?Joueur $joueur = null;
+
     public function __construct()
     {
         $this->sponsors = new ArrayCollection();
         $this->likeseqs = new ArrayCollection();
+        $this->jaimes = new ArrayCollection();
+        $this->jaimepas = new ArrayCollection();
        
     }
 
@@ -254,5 +265,132 @@ class Equipe
  
      return round($starss * 5);
    }
+
+    /**
+     * @return Collection<int, Jaime>
+     */
+    public function getJaimes(): Collection
+    {
+        return $this->jaimes;
+    }
+
+    public function addJaime(Jaime $jaime): self
+    {
+        if (!$this->jaimes->contains($jaime)) {
+            $this->jaimes->add($jaime);
+            $jaime->setEquipe($this);
+        }
+
+        return $this;
+    }
+
+    public function removeJaime(Jaime $jaime): self
+    {
+        if ($this->jaimes->removeElement($jaime)) {
+            // set the owning side to null (unless already changed)
+            if ($jaime->getEquipe() === $this) {
+                $jaime->setEquipe(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Jaimepas>
+     */
+    public function getJaimepas(): Collection
+    {
+        return $this->jaimepas;
+    }
+
+    public function addJaimepa(Jaimepas $jaimepa): self
+    {
+        if (!$this->jaimepas->contains($jaimepa)) {
+            $this->jaimepas->add($jaimepa);
+            $jaimepa->setEquipe($this);
+        }
+
+        return $this;
+    }
+
+    public function removeJaimepa(Jaimepas $jaimepa): self
+    {
+        if ($this->jaimepas->removeElement($jaimepa)) {
+            // set the owning side to null (unless already changed)
+            if ($jaimepa->getEquipe() === $this) {
+                $jaimepa->setEquipe(null);
+            }
+        }
+
+        return $this;
+    }
+
+    public function getJoueur(): ?Joueur
+    {
+        return $this->joueur;
+    }
+
+    public function setJoueur(?Joueur $joueur): self
+    {
+        $this->joueur = $joueur;
+
+        return $this;
+    }
+
+    public function getTotalJaimes(): int
+    {
+        return count($this->jaime);
+    }
+ 
+    public function getTotaljaimepas(): int
+    {
+        return count($this->jaimepas);
+    }
+
+    public function isLikedByJoueur(Joueur $joueur): bool
+    {
+        foreach ($this->jaime as $jaime) {
+            if ($jaime->getJoueur() === $joueur) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    public function isDislikedByJoueur(Joueur $joueur): bool
+    {
+        foreach ($this->jaimepa as $dislikeBlogs) {
+            if ($jaimepa->getJoueur() === $joueur) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+
+    public function like(Joueur $joueur): void
+    {
+        if (!$this->isLikedByJoueur($joueur)) {
+            $jaime = new Jaime();
+            $jaime->setEquipe($this);
+            $jaime->setJoueur($joueur);
+            $this->jaime[] = $jaime;
+        }
+    }
+
+
+    public function dislike(Joueur $joueur): void
+    {
+        if (!$this->isDislikedByJoueur($joueur)) {
+            $Jaimepa = new Jaimepas();
+            $Jaimepa->setBlog($this);
+            $Jaimepa->setJoueur($joueur);
+
+            $this->jaimepa[] = $Jaimepa;
+        }
+    }
     
 }

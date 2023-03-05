@@ -8,6 +8,8 @@ use App\Form\DateType;
 use App\Form\SearchEquipeType;
 use App\Form\SearchJoueurType;
 use App\Entity\Likeseq;
+use App\Entity\Jaime;
+use App\Entity\Jaimepas;
 use App\Repository\EquipeRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -17,6 +19,7 @@ use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Doctrine\ORM\EntityManagerInterface;    
+use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 
 #[Route('/equipe')]
 class EquipeController extends AbstractController
@@ -31,6 +34,16 @@ class EquipeController extends AbstractController
         EntityManagerInterface $em
         ): Response
     {
+/*
+        //number dislikes
+        $jaimepa = $em->getRepository(Jaimepas::class);
+        $numberDislikes= $jaimepa->numberDislikesByEquipe($id);
+
+        //number likes
+        $jaime = $em->getRepository(Jaime::class);
+        $numberLikes= $jaime->numberLikesByEquipe($id);
+*/
+
         //search form
         $form = $this->createForm(SearchEquipeType::class);
         $form->handleRequest($request);
@@ -78,8 +91,74 @@ class EquipeController extends AbstractController
             'sort_order' => $sortOrder,
             'sort_by' => $sortBy,
         ]);
+
+
     }
 
+    #[Route('/equipelike/{id}', name: 'app_equipe_like', methods: ['POST', 'GET', 'DELETE'])]
+    public function likeEquipe(Request $request, Equipe $equipe, EntityManagerInterface $entityManager,$id): Response{
+        
+        $joueur = $this->getUser();
+        if (!$joueur) {
+            throw new AccessDeniedHttpException();
+        }
+        //Check if the user has already liked this blog
+        $jaime = $entityManager->getRepository(Jaime::class)->findOneBy(['equipe' => $equipe, 'joueur' => $joueur]);
+
+        if ($jaime) {
+            //If the user has already liked the blog remove the like
+            $entityManager->remove($jaime);
+        } else {
+            //Create a new Like entity with the value llike in the type column
+            $equipe->like($joueur);
+        }
+
+        //Check if the user has already disliked this blog
+        $jaimepa = $entityManager->getRepository(Jaimepas::class)->findOneBy(['equipe' => $equipe, 'joueur' => $joueur]);
+
+        if ($jaimepa) {
+            //If the user has already disliked the blog, remove the dislike
+            $entityManager->remove($jaimepa);
+            $equipe->like($joueur);
+        }
+        $entityManager->flush();
+
+        $equipe = $entityManager->getRepository(Equipe::class)->find($id);
+        
+
+        return $this->redirectToRoute('app_equipe_index');
+    }
+
+    #[Route('/equipedislike/{id}', name: 'app_equipe_dislike', methods: ['POST', 'GET', 'DELETE'])]
+    public function dislikeequipe(Request $request,$id,Equipe $equipe, EntityManagerInterface $entityManager): Response
+    {
+        $joueur = $this->getUser();
+        if (!$joueur) {
+            throw new AccessDeniedHttpException();
+        }
+
+        $jaimepa = $entityManager->getRepository(Jaimepas::class)->findOneBy(['equipe' => $equipe, 'joueur' => $joueur]);
+
+        if ($jaimepa) {
+            $entityManager->remove($jaimepa);
+        } else {
+            $equipe->dislike($joueur);
+        }
+
+        $jaime = $entityManager->getRepository(Jaime::class)->findOneBy(['equipe' => $equipe, 'joueur' => $joueur]);
+
+        if ($jaime) {
+            $entityManager->remove($jaime);
+            $equipe->dislike($joueur);
+        }
+        $entityManager->flush();
+
+        $equipe = $entityManager->getRepository(Equipe::class)->find($id);
+        
+
+        return $this->redirectToRoute('app_equipe_index');
+    }
+  /*
     #[Route('/addlikeq/{equipeId}', name: 'app_addlikeq', methods: ['GET'])]
     public function addLikeq(Request $request, $equipeId, EquipeRepository $equipeRepository)
     {
@@ -151,7 +230,7 @@ class EquipeController extends AbstractController
 
     
    }
-   
+   */
 
     #[Route('/search', name: 'search', methods: ['GET'])]
     public function search(Request $request, EquipeRepository $equipeRepository): JsonResponse
@@ -256,10 +335,26 @@ class EquipeController extends AbstractController
     }
 
     #[Route('/{id}', name: 'app_equipe_show', methods: ['GET'])]
-     public function show(Equipe $equipe): Response
+     public function show(Equipe $equipe , $id): Response
     {
+        $entityManager=$this->getDoctrine()->getManager();
+
+        $equipe = $entityManager->getRepository(Equipe::class)->find($id);
+          //number dislikes
+          $jaimepa = $entityManager->getRepository(Jaimepas::class);
+          $numberDislikes= $jaimepa->numberDislikesByEquipe($id);
+  
+          //number likes
+          $jaime = $entityManager->getRepository(Jaime::class);
+          $numberLikes= $jaime->numberLikesByEquipe($id);
+
+          $hotequipes= $entityManager->getRepository(Jaime::class)->findTopLikedEquipes();
+
         return $this->render('equipe/show.html.twig', [
             'equipe' => $equipe,
+            'hotequipes' => $hotequipes,
+            'numberLikes' => $numberLikes,
+            'numberDislikes' => $numberDislikes,
         ]);
     }
 
