@@ -10,6 +10,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Validator\Constraints\NotBlank;
+use Symfony\Component\Serializer\Annotation\Groups;
 #[ORM\Entity(repositoryClass: EquipeRepository::class)]
 #[UniqueEntity(fields: ['nom_equipe'], message: 'nom d equipe déja utilisé')]
 class Equipe
@@ -33,7 +34,6 @@ class Equipe
      
      * @Assert\NotBlank(message="Le nombre de joueurs est obligatoire")
      */
-    #[Groups("equipe")]
     private ?int $nb_joueurs = null;
 
     #[ORM\Column(length: 255)]
@@ -53,20 +53,26 @@ class Equipe
      */
     private ?\DateTimeInterface $date_creation = null;
 
-    #[ORM\OneToMany(mappedBy: 'equipe', targetEntity: Likeseq::class,cascade:['remove'],orphanRemoval: true)]
-    private Collection $likeseqs;
+    #[ORM\ManyToOne(inversedBy: 'equipes')]
+    private ?Joueur $joueur = null; 
+
+    #[ORM\OneToMany(mappedBy: 'equipe', targetEntity: Jaime::class, cascade:["persist","remove","merge"], orphanRemoval:true)]
+    private Collection $jaimes;
+
+    #[ORM\OneToMany(mappedBy: 'equipe', targetEntity: Jaimepas::class, cascade:["persist","remove","merge"], orphanRemoval:true)]
+    private Collection $jaimepas;
 
     #[ORM\OneToMany(mappedBy: 'equipe1', targetEntity: Matches::class,cascade:['remove'],orphanRemoval: true)]
     private Collection $nomEquipe1;
+
     #[ORM\OneToMany(mappedBy: 'equipe2', targetEntity: Matches::class,cascade:['remove'],orphanRemoval: true)]
     private Collection $nomEquipe2;
 
     public function __construct()
     {
         $this->sponsors = new ArrayCollection();
-        $this->likeseqs = new ArrayCollection();
-        $this->matches = new ArrayCollection();
-       
+        $this->jaimes = new ArrayCollection();
+        $this->jaimepas = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -184,29 +190,29 @@ class Equipe
     }
 
     /**
-     * @return Collection<int, Likeseq>
+     * @return Collection<int, Jaime>
      */
-    public function getLikeseqs(): Collection
+    public function getJaimes(): Collection
     {
-        return $this->likeseqs;
+        return $this->jaimes;
     }
 
-    public function addLikeseq(Likeseq $likeseq): self
+    public function addJaime(Jaime $jaime): self
     {
-        if (!$this->likeseqs->contains($likeseq)) {
-            $this->likeseqs->add($likeseq);
-            $likeseq->setEquipe($this);
+        if (!$this->jaimes->contains($jaime)) {
+            $this->jaimes->add($jaime);
+            $jaime->setEquipe($this);
         }
 
         return $this;
     }
 
-    public function removeLikeseq(Likeseq $likeseq): self
+    public function removeJaime(Jaime $jaime): self
     {
-        if ($this->likeseqs->removeElement($likeseq)) {
+        if ($this->jaimes->removeElement($jaime)) {
             // set the owning side to null (unless already changed)
-            if ($likeseq->getEquipe() === $this) {
-                $likeseq->setEquipe(null);
+            if ($jaime->getEquipe() === $this) {
+                $jaime->setEquipe(null);
             }
         }
 
@@ -214,32 +220,99 @@ class Equipe
     }
 
     /**
-     * @return Collection<int, Matches>
+     * @return Collection<int, Jaimepas>
      */
-    public function getMatches(): Collection
+    public function getJaimepas(): Collection
     {
-        return $this->matches;
+        return $this->jaimepas;
     }
 
-    public function addMatch(Matches $match): self
+    public function addJaimepa(Jaimepas $jaimepas): self
     {
-        if (!$this->matches->contains($match)) {
-            $this->matches->add($match);
-            $match->setEquipe1($this);
+        if (!$this->jaimepas->contains($jaimepas)) {
+            $this->jaimepas->add($jaimepas);
+            $jaimepas->setEquipe($this);
         }
 
         return $this;
     }
 
-    public function removeMatch(Matches $match): self
+    public function removeJaimepa(Jaimepas $jaimepas): self
     {
-        if ($this->matches->removeElement($match)) {
+        if ($this->jaimepas->removeElement($jaimepas)) {
             // set the owning side to null (unless already changed)
-            if ($match->getEquipe1() === $this) {
-                $match->setEquipe1(null);
+            if ($jaimepas->getEquipe() === $this) {
+                $jaimepas->setEquipe(null);
             }
         }
 
         return $this;
+    }
+
+    public function getJoueur(): ?Joueur
+    {
+        return $this->joueur;
+    }
+
+    public function setJoueur(?Joueur $joueur): self
+    {
+        $this->joueur = $joueur;
+
+        return $this;
+    }
+
+    public function getTotalJaimes(): int
+    {
+        return count($this->jaimes);
+    }
+ 
+    public function getTotaljaimepas(): int
+    {
+        return count($this->jaimepas);
+    }
+
+    public function isLikedByJoueur(Joueur $joueur): bool
+    {
+        foreach ($this->jaimes as $jaimes) {
+            if ($jaimes->getJoueur() === $joueur) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    public function isDislikedByJoueur(Joueur $joueur): bool
+    {
+        foreach ($this->jaimepas as $jaimepas) {
+            if ($jaimepas->getJoueur() === $joueur) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+
+    public function like(Joueur $joueur): void
+    {
+        if (!$this->isLikedByJoueur($joueur)) {
+            $jaimes = new Jaime();
+            $jaimes->setEquipe($this);
+            $jaimes->setJoueur($joueur);
+            $this->jaimes[] = $jaimes;
+        }
+    }
+
+
+    public function dislike(Joueur $joueur): void
+    {
+        if (!$this->isDislikedByJoueur($joueur)) {
+            $Jaimepas = new Jaimepas();
+            $Jaimepas->setEquipe($this);
+            $Jaimepas->setJoueur($joueur);
+
+            $this->jaimepas[] = $Jaimepas;
+        }
     }
 }

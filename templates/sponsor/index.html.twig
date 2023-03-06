@@ -14,10 +14,18 @@
             </div>
             </div>
             </section>
+            {{form_start(form)}}
+                    {{form_widget(form.query)}}
+                    <button class="btn"  type="submit" >chercher</button>
+                {{form_end(form)}}
                 <div class="champ-tab-wrap tab-content">
                 <div class="tab-item part-wrap tab-pane active" id="participants">
     <div class="part-list">
         <div class="container">
+           <div class="tags">
+                  <th><a href="{{ path('app_sponsor_index', {'sort_by': 'nom_sponsor', 'sort_order': sort_order == 'asc' ? 'desc' : 'asc' }) }}" >trier par nom</a></th>
+                  
+             </div>
             <div class="row">
            {% for sponsor in sponsors %}
 

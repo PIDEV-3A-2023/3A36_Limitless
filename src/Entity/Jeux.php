@@ -57,6 +57,9 @@ class Jeux
     #[ORM\Column]
     private ?float $noteMyonne = null;
 
+    #[ORM\Column]
+    private ?int $views = null;
+
     public function __construct()
     {
         $this->Categories = new ArrayCollection();
@@ -235,6 +238,7 @@ class Jeux
     public function setNoteBack(): self
     {
         $this->note = 0;
+        $this->views = 0;
         $this->noteCount = 0;
         $this->noteMyonne = 0;
         $this->totalNote = 0;
@@ -297,5 +301,21 @@ class Jeux
         }
 
         return $this;
+    }
+
+    public function getViews(): ?int
+    {
+        return $this->views;
+    }
+
+    public function setViews(int $views): self
+    {
+        $this->views = $views;
+
+        return $this;
+    }
+    public function incrementViews(): void
+    {
+        $this->views++;
     }
 }

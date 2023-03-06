@@ -20,6 +20,7 @@ use Doctrine\ORM\EntityManagerInterface;
 class SearchType extends AbstractType
 {
     private $entityManager;
+
     public function __construct(EntityManagerInterface $entityManager)
     {
         $this->entityManager = $entityManager;
@@ -28,24 +29,38 @@ class SearchType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-        ->add('nom',TextType::class)
-
-        ->add('cat', ChoiceType::class, [
-            'choices' => $this->getCategories(),
-        ]);
+            ->add('nom', TextType::class, [
+                'label' => 'Nom du jeux',
+                'attr' => [
+                    'class' => 'form-control',
+                    'placeholder' => 'entrer le nom du jeux'
+                ]
+            ])
+            ->add('cat', ChoiceType::class, [
+                'label' => 'Categorie',
+                'choices' => $this->getCategories(),
+                'attr' => [
+                    'class' => 'form-control'
+                ]
+            ])
+            ->add('search', SubmitType::class, [
+                'label' => 'Recherche',
+                'attr' => [
+                    'class' => 'btn btn-primary'
+                ]
+            ]);
     }
+
     private function getCategories()   
     {      
-          $query = $this->entityManager->createQuery('SELECT c.NomCat FROM App\Entity\CategorieJeux c');
-           $categories = $query->getArrayResult();
-            $choices = [];
-    
-            foreach ($categories as $category) {
-                $choices[$category['NomCat']] = $category['NomCat'];
-            }
-    
-            return $choices;
-// return $categories;
-    }
+        $query = $this->entityManager->createQuery('SELECT c.NomCat FROM App\Entity\CategorieJeux c');
+        $categories = $query->getArrayResult();
+        $choices = [];
 
+        foreach ($categories as $category) {
+            $choices[$category['NomCat']] = $category['NomCat'];
+        }
+
+        return $choices;
+    }
 }

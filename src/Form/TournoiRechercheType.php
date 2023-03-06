@@ -68,12 +68,12 @@ class TournoiRechercheType extends AbstractType
     }
     private function getJeu()   
     {      
-          $query = $this->entityManager->createQuery('SELECT j.ref FROM App\Entity\Jeux j');
+          $query = $this->entityManager->createQuery('SELECT j.libelle FROM App\Entity\Jeux j');
            $categories = $query->getArrayResult();
             $choices = [];
     
             foreach ($categories as $category) {
-                $choices[$category['ref']] = $category['ref'];
+                $choices[$category['libelle']] = $category['libelle'];
             }       
     
             return $choices;

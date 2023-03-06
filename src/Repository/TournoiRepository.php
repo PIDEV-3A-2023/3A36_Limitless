@@ -66,7 +66,7 @@ class TournoiRepository extends ServiceEntityRepository
         {
         $jeuExists= $this->createQueryBuilder('t')
         ->join('t.jeu', 'j')
-        ->andWhere('j.ref LIKE :jeu')
+        ->andWhere('j.libelle LIKE :jeu')
         ->setParameter('jeu', '%'.$jeu.'%')  
         ->getQuery()
         ->getResult()
@@ -171,7 +171,7 @@ class TournoiRepository extends ServiceEntityRepository
              return $this->createQueryBuilder('t')
         ->join('t.jeu', 'j')
         ->where('t.nomTournoi LIKE :nom')
-        ->andWhere('j.ref LIKE :jeu')
+        ->andWhere('j.libelle LIKE :jeu')
         ->andWhere('t.dateDebut BETWEEN :startDate AND :endDate')
         ->setParameter('nom', '%'.$nom.'%')  
         ->setParameter('jeu', '%'.$jeu.'%')  

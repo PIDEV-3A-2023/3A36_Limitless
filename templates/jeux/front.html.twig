@@ -83,7 +83,7 @@
 				<nav class="navbar">
 					<div class="collapse navbar-collapse" id="team-menu">
 						<ul class="main-menu nav">
-							<li class="active">
+							<li class="">
 								<a href="{{path('app_index')}}">
 									<span>Acceuil</span>
 								</a>
@@ -109,7 +109,7 @@
 									<span>Jeux</span>
 								</a>
 							</li>
-							<li class="active">
+							<li class="">
 								<a href="{{path('app_produit_index')}}">
 									<span>Boutique</span>
 								</a>
@@ -212,20 +212,7 @@
 <!--MAIN MENU WRAP END-->
 
 
-    <!--BREADCRUMBS BEGIN-->
-<section class="image-header">
-    <div class="container">
-        <div class="row">
-            <div class="col-md-6">
-                <div class="info">
-                    <div class="wrap">
-                        <h1>Jeux</h1>
-                    </div>
-                </div>
-            </div>	
-        </div>
-    </div>
-</section>
+
 <!--BREADCRUMBS END-->
 
     <!--STORE WRAP BEGIN-->
@@ -234,13 +221,18 @@
         <div class="container">
                 {{ include('jeux/jeuxSearch.html.twig',{'button_label': 'Effectuer'}) }}
                 <div class="col-xs-12 col-sm-12 col-md-12">
-            
+                    <p class="hidden-md hidden-lg">
+                        <button type="button" class="btn sidebar-btn" data-toggle="offcanvas" title="Toggle sidebar">sidebar</button>
+                    </p>
                     <div class="row">
-                    {% for jeux in jeuxes %}
+                    {% if message is not empty %}
+    <p>{{ message }}</p>
+{% else %}
+                    {% for jeux in jeuxAll %}
                         <div class="col-md-4 col-sm-6">
                             <div class="store-list-item">
                                 <div>
-                                    <a href="product.html">
+                                    <a href="{{ path('app_jeux_show', { 'id': jeux.id }) }}">
                                         <img src="{{asset('JeuxImages/'~jeux.ImageJeux)}}" width="60" height="350"/>
                                     </a>
                                     <div class="info">
@@ -250,7 +242,6 @@
                                         <div class="btn-wrap">
                                             
                                             <a href="{{ path('app_jeux_show', { 'id': jeux.id }) }}" class="btn small">Consulter</a>
-                                            <!-- ,'slug': jeux.getSlug(slugify) -->
                                         </div>
                                     </div>
 
@@ -258,18 +249,10 @@
                             </div>
                         </div>
                         {% endfor %}
+                        {% endif %}
                         <div class="col-md-12">
                             <div class="pagination-wrap">
-                                <ul class="pagination">
-                                    <li><a href="#"><i class="fa fa-chevron-left" aria-hidden="true"></i></a></li>
-                                    <li><a href="#">1</a></li>
-                                    <li class="active"><a href="#">2</a></li>
-                                    <li><a href="#">3</a></li>
-                                    <li><a href="#">4</a></li>
-                                    <li><a href="#">5</a></li>
-                                    <li><a href="#"><i class="fa fa-chevron-right" aria-hidden="true"></i></a></li>
-                                </ul>
-                            </div>
+</div>
                         </div>
                     </div>
                 </div>
@@ -279,53 +262,25 @@
 <section class="review-section review-dark spad set-bg" data-setbg="img/review-bg-2.jpg">
 		<div class="container">
 			<div class="section-title text-white">
-				<h2>Recent Reviews</h2>
+				<h2>Les Mieux Evaluer</h2>
 			</div>
 			<div class="row text-white">
-				<div class="col-lg-3 col-md-6">
-					<div class="review-item">
-						<div class="review-cover set-bg" data-setbg="img/review/1.jpg">
-							<div class="score yellow">9.3</div>
-						</div>
-						<div class="review-text">
-							<h5>Assasin’’s Creed</h5>
-						</div>
-					</div>
-				</div>
-				<div class="col-lg-3 col-md-6">
-					<div class="review-item">
-						<div class="review-cover set-bg" data-setbg="img/review/2.jpg">
-							<div class="score purple">9.5</div>
-						</div>
-						<div class="review-text">
-							<h5>Doom</h5>
-							
-						</div>
-					</div>
-				</div>
-				<div class="col-lg-3 col-md-6">
-					<div class="review-item">
-						<div class="review-cover set-bg" data-setbg="img/review/3.jpg">
-							<div class="score green">9.1</div>
-						</div>
-						<div class="review-text">
-							<h5>Overwatch</h5>
-							
-						</div>
-					</div>
-				</div>
-				<div class="col-lg-3 col-md-6">
-					<div class="review-item">
-						<div class="review-cover set-bg" data-setbg="img/review/4.jpg">
-							<div class="score pink">9.7</div>
-						</div>
-						<div class="review-text">
-							<h5>GTA</h5>
-							
-						</div>
-					</div>
-				</div>
-			</div>
+   {% for jeux in top3Jeux|slice(0,3) %}
+    <div class="col-lg-4 col-md-6">
+        <div class="review-item">
+            <a href="{{ path('app_jeux_show', { 'id': jeux.id }) }}">
+    <div class="review-cover set-bg" data-setbg="{{ asset('JeuxImages/'~jeux.ImageJeux) }}">
+        <div class="score yellow">{{ jeux.noteMyonne }}</div>
+    </div>
+</a>
+
+            <div class="review-text">
+                <h5>{{ jeux.libelle }}</h5>
+            </div>
+        </div>
+    </div>
+{% endfor %}
+
 		</div>
 	</section>
     
@@ -372,7 +327,7 @@
                 <i class="fa fa-angle-right" aria-hidden="true"></i>
                 <span class="sr-only">Next</span>
         </a>
-    </div>	
+    </div>
 </div>
 </div>
 {% endblock %}

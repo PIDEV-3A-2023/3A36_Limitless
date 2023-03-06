@@ -32,33 +32,40 @@ class JeuxController extends AbstractController
         $form = $this->createForm(SearchType::class);
         $form->handleRequest($req);
     
+        // Get all games
+        $jeuxAll = 
+            $jeuxRepository->findBy([], ['dateCreation' => 'DESC']);
+        $message = '';
+        // Get games ordered by noteMyonne in descending order
+        $top3jeux = $jeuxRepository->findByNoteMyonneDesc(3);
+    
         if ($form->isSubmitted() && $form->isValid()) {
-            $donnees = $jeuxRepository->rechercherJeux($form->get('nom')->getData());
-    
-            if (is_countable($donnees) && count($donnees) === 0) {
-                $this->addFlash('warning', 'Pas de jeux Trouvés');
-            } else {
-                $jeuxRechercher = $paginator->paginate(
-                    $donnees,
-                    $req->query->getInt('page', 1),
-                    8
-                );
-    
+            $nom = $form->get('nom')->getData();
+            $categorie = $form->get('cat')->getData();
+            $donnees = $jeuxRepository->rechercherJeux($nom, $categorie);
+            
+            if (count($donnees) === 0) {
+                $message = 'Rien trouve';
                 return $this->renderForm('jeux/front.html.twig', [
-                    'jeuxes' => $jeuxRechercher,
-                   /* 'slugify' => $slugify,*/
+                    'jeuxAll' => [],
+                    'top3Jeux' => $top3jeux,
+                    'message' => $message,
+                    'form' => $form,
+                ]);
+            } else {
+                return $this->renderForm('jeux/front.html.twig', [
+                    'jeuxAll' => $donnees,
+                    'top3Jeux' => $top3jeux,
+                    'message' => $message,
                     'form' => $form,
                 ]);
             }
         }
     
         return $this->renderForm('jeux/front.html.twig', [
-            'jeuxes' => $paginator->paginate(
-                $jeuxRepository->findAll(),
-                $req->query->getInt('page', 1),
-                8
-            ),
-           /* 'slugify' => $slugify,*/
+            'jeuxAll' => $jeuxAll,
+            'top3Jeux' => $top3jeux,
+            'message' => $message,
             'form' => $form,
         ]);
     }
@@ -67,7 +74,13 @@ class JeuxController extends AbstractController
     #[Route('/backend', name: 'app_backend_jeux', methods: ['GET'])]
     public function table(Request $request ,JeuxRepository $jeuxRepository, PaginatorInterface $paginator): Response
     {
-        $jeuxes = $paginator->paginate($jeuxRepository->findAll(),$request->query->getInt('page',1),5);
+        // Retrieve games sorted by dateCreation field
+        $jeuxes = $paginator->paginate(
+            $jeuxRepository->findBy([], ['dateCreation' => 'DESC']),
+            $request->query->getInt('page', 1),
+            5
+        );
+    
         return $this->render('jeux/back_jeux.html.twig', [
             'jeuxes' => $jeuxes,
         ]);
@@ -150,24 +163,40 @@ public function new(Request $request, JeuxRepository $jeuxRepository): Response
 
 
 
-#[Route('/{id}', name: 'app_jeux_show', methods: ['GET','POST'])]
-public function show(Jeux $jeux, /*SlugifyInterface $slugify,*/ Request $request): Response
-{
-    $form = $this->createForm(NoteType::class, $jeux);
-    $form->handleRequest($request);
-
-    if ($form->isSubmitted() && $form->isValid()) {
-        $jeux = $form->getData();
+    #[Route('/{id}', name: 'app_jeux_show', methods: ['GET','POST'])]
+    public function show(Jeux $jeux, /*SlugifyInterface $slugify,*/ Request $request, JeuxRepository $jeuxRepository): Response
+    {
+        $views = $jeux->getViews() + 1;
+        $jeux->setViews($views);
         $em = $this->getDoctrine()->getManager();
         $em->persist($jeux);
         $em->flush();
-    }
+        $form = $this->createForm(NoteType::class, $jeux);
+        $form->handleRequest($request);
 
-    return $this->render('jeux/show.html.twig', [
-        'jeux' => $jeux,
-        'note_form' => $form->createView(),
-    ]);
-}
+        if ($form->isSubmitted() && $form->isValid()) {
+            $jeux = $form->getData();
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($jeux);
+            $em->flush();
+        }
+
+        // Get similar games
+        $similarJeux = $jeuxRepository->getJeuxSimilaires($jeux->getCategories()[0], $jeux);
+
+        // Check if there are similar games or not
+        $message = '';
+        if (empty($similarJeux)) {
+            $message = 'Pas encore des jeux de meme categorie.';
+        }
+
+        return $this->render('jeux/show.html.twig', [
+            'jeux' => $jeux,
+            'note_form' => $form->createView(),
+            'similarJeux' => $similarJeux,
+            'message' => $message,
+        ]);
+    }
 
 
     /**

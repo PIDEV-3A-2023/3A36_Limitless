@@ -60,9 +60,10 @@ class CategorieJeux
         foreach ($this->Jeux as $jeu) {
             foreach ($jeu->getCategories() as $categorie) {
                 if (!array_key_exists($categorie->getNomCat(), $numberOfJeuxByCategorie)) {
-                    $numberOfJeuxByCategorie[$categorie->getNomCat()] = 0;
+                    $numberOfJeuxByCategorie[$categorie->getNomCat()] = 1;
+                } else {
+                    $numberOfJeuxByCategorie[$categorie->getNomCat()]++;
                 }
-                $numberOfJeuxByCategorie[$categorie->getNomCat()]++;
             }
         }
 

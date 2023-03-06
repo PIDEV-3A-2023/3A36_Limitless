@@ -26,6 +26,14 @@
                     <div class="item"><span>Nombre de joueurs: </span>{{ equipe.nbJoueurs }}</div>
                     <div class="item"><span>Site web: </span><a href="{{ equipe.siteWeb }}">{{ equipe.siteWeb }}</a></div>
                     <div class="item"><span>Date de creation: </span>{{ equipe.dateCreation|date("m/d/y") }}</div>
+                     <a href="{{ path('app_equipe_like', { 'id': equipe.id }) }}" method="post" >
+                            <i class="fa fa-regular fa-thumbs-up" style="font-size: 2em;"></i> 
+                            </a> {{ numberLikes }}
+                            
+
+                            <a href="{{ path('app_equipe_dislike', { 'id': equipe.id }) }}" method="post">
+                            <i class="fa fa-regular fa-thumbs-down" style="font-size: 2em;"></i> 
+                            </a>{{ numberDislikes }}
                 </div>
             </div>
             <div class="col-md-4">
@@ -45,4 +53,3 @@
 
    
 {% endblock %}
-

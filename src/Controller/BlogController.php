@@ -45,7 +45,7 @@ class BlogController extends AbstractController
             ]);
         }
 
-        $blog = $paginator->paginate($em->getRepository(Blog::class)->findDESC(), $request->query->getInt('page', 1),4);
+        $blog = $paginator->paginate($em->getRepository(Blog::class)->findDESC(), $request->query->getInt('page', 1),3);
 
         return $this->renderForm('blog/index.html.twig', [
             'hotblogs' => $hotblogs,

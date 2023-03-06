@@ -109,6 +109,14 @@ class Joueur implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(type: Types::DATE_MUTABLE)]
     private ?\DateTimeInterface $created_at;
 
+    #[ORM\OneToMany(mappedBy: 'joueur', targetEntity: Equipe::class)]
+    private Collection $equipes;
+
+    #[ORM\OneToMany(mappedBy: 'joueur', targetEntity: Jaime::class)]
+    private Collection $jaimes;
+
+    #[ORM\OneToMany(mappedBy: 'joueur', targetEntity: Jaimepas::class)]
+    private Collection $jaimepas;
 
     #[ORM\OneToMany(mappedBy: 'Joueur', targetEntity: Blog::class)]
     private Collection $blogs;
@@ -133,6 +141,9 @@ class Joueur implements UserInterface, PasswordAuthenticatedUserInterface
         $this->dislikeBlogs = new ArrayCollection();
         $this->likeBlogs = new ArrayCollection();
         $this->reports = new ArrayCollection();
+        $this->jaimes = new ArrayCollection();
+        $this->jaimepas = new ArrayCollection();
+        $this->equipes = new ArrayCollection();
     }
 
     
@@ -503,5 +514,93 @@ class Joueur implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    
+    /**
+     * @return Collection<int, Jaime>
+     */
+    public function getJaimes(): Collection
+    {
+        return $this->jaimes;
+    }
+
+    public function addJaime(Jaime $jaime): self
+    {
+        if (!$this->jaimes->contains($jaime)) {
+            $this->jaimes->add($jaime);
+            $jaime->setJoueur($this);
+        }
+
+        return $this;
+    }
+
+    public function removeJaime(Jaime $jaime): self
+    {
+        if ($this->jaimes->removeElement($jaime)) {
+            // set the owning side to null (unless already changed)
+            if ($jaime->getJoueur() === $this) {
+                $jaime->setJoueur(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Jaimepas>
+     */
+    public function getJaimepas(): Collection
+    {
+        return $this->jaimepas;
+    }
+
+    public function addJaimepa(Jaimepas $jaimepa): self
+    {
+        if (!$this->jaimepas->contains($jaimepa)) {
+            $this->jaimepas->add($jaimepa);
+            $jaimepa->setJoueur($this);
+        }
+
+        return $this;
+    }
+
+    public function removeJaimepa(Jaimepas $jaimepa): self
+    {
+        if ($this->jaimepas->removeElement($jaimepa)) {
+            // set the owning side to null (unless already changed)
+            if ($jaimepa->getJoueur() === $this) {
+                $jaimepa->setJoueur(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Equipe>
+     */
+    public function getEquipes(): Collection
+    {
+        return $this->equipes;
+    }
+
+    public function addEquipe(Equipe $equipe): self
+    {
+        if (!$this->equipes->contains($equipe)) {
+            $this->equipes->add($equipe);
+            $equipe->setJoueur($this);
+        }
+
+        return $this;
+    }
+
+    public function removeEquipe(Equipe $equipe): self
+    {
+        if ($this->equipes->removeElement($equipe)) {
+            // set the owning side to null (unless already changed)
+            if ($equipe->getJoueur() === $this) {
+                $equipe->setJoueur(null);
+            }
+        }
+
+        return $this;
+    }
 }

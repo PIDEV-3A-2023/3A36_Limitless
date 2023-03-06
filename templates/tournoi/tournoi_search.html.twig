@@ -4,8 +4,9 @@
     <div class="col-md-6">
         <div class="item">
             <label>
-                <span>{{ form_widget(form)}}</span>
-                
+                <span> {{ form_widget(form.nom)}}</span>
+                <span> {{ form_widget(form.jeu)}} </span>
+                <span>{{ form_widget(form.dateFrom)}} to {{ form_widget(form.dateTo)}}</span>
                 <span><button class="btn btn-primary mr-2">{{ button_label|default('Save') }}</button></span>
             </label>
             </div>	

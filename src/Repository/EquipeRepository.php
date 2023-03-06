@@ -39,6 +39,15 @@ class EquipeRepository extends ServiceEntityRepository
         }
     }
 
+    public function findEntitiesByString(string $str)
+    {
+        return $this->createQueryBuilder('e')
+            ->where('e.title LIKE :str')
+            ->setParameter('str', '%'.$str.'%')
+            ->getQuery()
+            ->getResult();
+    }
+/*
     public function search($query)
 {
     $qb = $this->createQueryBuilder('e')
@@ -49,16 +58,16 @@ class EquipeRepository extends ServiceEntityRepository
 
     return $qb->getQuery()->getResult();
 }
+*/
+    public function findAllOrderByNom(): array
+    {
+        return $this->createQueryBuilder('u')
+            ->orderBy('u.nom_equipe', 'ASC')
+            ->getQuery()
+            ->getResult();
+    }
 
-public function findAllOrderByNom(): array
-{
-    return $this->createQueryBuilder('u')
-        ->orderBy('u.nom_equipe', 'ASC')
-        ->getQuery()
-        ->getResult();
-}
-
-public function statnbjoueurs($equipe)
+    public function statnbjoueurs($equipe)
     {
          
             return $this->createQueryBuilder('e')
@@ -68,6 +77,8 @@ public function statnbjoueurs($equipe)
         ->getResult();
 
     }
+
+
 
 //    /**
 //     * @return Equipe[] Returns an array of Equipe objects

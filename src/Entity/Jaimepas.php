@@ -16,10 +16,8 @@ class Jaimepas
     #[ORM\ManyToOne(inversedBy: 'jaimepas')]
     private ?Equipe $equipe = null;
 
-   
-
     #[ORM\ManyToOne(inversedBy: 'jaimepas')]
-    private ?Joueur $user = null;
+    private ?Joueur $joueur = null;
 
     
 
@@ -42,14 +40,14 @@ class Jaimepas
 
     
 
-    public function getUser(): ?Joueur
+    public function getJoueur(): ?Joueur
     {
-        return $this->user;
+        return $this->joueur;
     }
 
-    public function setUser(?Joueur $user): self
+    public function setJoueur(?Joueur $joueur): self
     {
-        $this->user = $user;
+        $this->joueur = $joueur;
 
         return $this;
     }

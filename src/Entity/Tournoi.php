@@ -56,7 +56,7 @@ class Tournoi
     #[Groups("tournoi")]
     private ?string $imageTournoi = null;
 
-    #[ORM\OneToMany(mappedBy: 'idTournoi', targetEntity: Matches::class, orphanRemoval: true)]
+    #[ORM\OneToMany(mappedBy: 'idTournoi', targetEntity: Matches::class, cascade:["persist","remove","merge"], orphanRemoval: true)]
     private Collection $matches;
 
   /*  #[ORM\ManyToOne(inversedBy: 'tournois')]

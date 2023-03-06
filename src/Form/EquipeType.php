@@ -64,9 +64,6 @@ class EquipeType extends AbstractType
                 'mapped' => false,
                 'required' => false,
                 'constraints' => [
-                    new NotBlank([
-                        'message' => 'Le logo est obligatoire',
-                    ]),
                     new File([
                         'mimeTypes' => [
                             'image/jpeg',

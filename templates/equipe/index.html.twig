@@ -5,29 +5,130 @@
 {% block body %}
      <section class="club-wrap club-champ">
         <div class="container">
+       
             <div class="row">
                 <div class="col-md-9">
                     <h4>Les équipes</h4>
 
                 </div>
+                {#
+             <div class="sidebar-search">
+
+                <div class="input-group custom-search-form">
+
+                    <input type="text" id="search" class="form-control" placeholder="Search here">
+                </div>
+                <!-- /input-group -->
+            </div>
+            <ul class="nav" id="side-menu">
+                <li>
+                    <a href="#">search results<span class="fa arrow"></span></a>
+                    <ul class="nav nav-second-level" id="entitiesNav">
+                    </ul>
+                </li>
+            </ul><br><br><br><br>
+                 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+
+<script type="text/javascript">
+    jQuery(document).ready(function() {
+        var searchRequest = null;
+        $("#search").keyup(function() {
+            var minlength = 1;
+            var that = this;
+            var value = $(this).val();
+            var entitySelector = $("#entitiesNav").html('');
+            if (value.length >= minlength ) {
+                if (searchRequest != null)
+                    searchRequest.abort();
+                searchRequest = $.ajax({
+                    type: "GET",
+                    url: "{{ path('app_equipe_recherche') }}",
+                    data: {
+                        'q' : value
+                    },
+                    dataType: "json",
+                    success: function(result){
+                        //we need to check if the value is the same
+                        if (value===$(that).val()) {
+                            $.each(result, function(key, arr) {
+                                $.each(arr, function(id, value) {
+                                    if (key === 'equipe') {
+                                        if (id !== 'error') {
+                                            console.log(value[1]);
+                                            entitySelector.append('<li><b>'+value[1]+'</b><a href="/equipe/recherche/'+id+'">'+' <img src="/public/equipeImages/'+value[0]+'" style="width: 50px; height: 50px"/>'+'</a></li>');
+                                        } else {
+                                            entitySelector.append('<li class="errorLi">'+value+'</li>');
+                                        }
+                                    }
+                                });
+                            });
+                        }
+                    }
+                });
+            }
+        });
+    });
+</script>
+#}
             </div>
             </div>
             </section>
+                {{form_start(form)}}
+                    {{form_widget(form.query)}}
+                    <button class="btn"  type="submit" >chercher</button>
+                {{form_end(form)}}
+              <div class="sidebar-menu-wrap">
+        <h6>Meilleurs equipes par likes</h6>
+
+        {% set number = 0 %}
+        {% for hotequipes in hotequipes %}
+       
+        {% set number = number + 1 %}
+        <ul class="categories-list">
+            <li>
+                <a href="{{path('app_equipe_show', {'id': hotequipes.id}) }}"><span class="count">{{ number }}</span>{{ hotequipes.nom_equipe}}</a>
+            </li>
+        </ul>
+       
+        {% endfor %}
+          </div>
                 <div class="champ-tab-wrap tab-content">
                 <div class="tab-item part-wrap tab-pane active" id="participants">
+                <div class="col-md-3">
+                
+              </div>
     <div class="part-list">
         <div class="container">
+                        <div class="tags">
+                  <th><a href="{{ path('app_equipe_index', {'sort_by': 'nom_equipe', 'sort_order': sort_order == 'asc' ? 'desc' : 'asc' }) }}" >trier par nom</a></th>
+                    <th><a href="{{ path('app_equipe_index', {'sort_by': 'nb_joueurs', 'sort_order': sort_order == 'asc' ? 'desc' : 'asc' }) }}" >trier par Nombre de joueurs</a></th>
+             </div>
             <div class="row">
+              <div class="rating-wrap">
+                           
+                        
+                        </div>
            {% for equipe in equipes %}
 
+                     
             <!--CHAMPIONSHIP PART WRAP BEGIN -->
 
                 <div class="col-md-3">
+                
                     <a href="{{ path('app_equipe_show', {'id': equipe.id}) }}" class="item">
                         <span class="logo"><img src="{{asset('equipeImages/'~equipe.logoEquipe)}}" width="80" height="80" alt="team-logo"></span>
                         <span class="name">{{equipe.nomEquipe}}</span>
-     <a href="{{path('app_addlikeq',{'equipeId':equipe.id})}}"><button class="btn-like" onclick="likeButtoneq()" id="like"><i class="fa fa-thumbs-up"></i></button></a>
-        <button class="btn-dislike" onclick="dislikeButtoneq()" id="dislike"><i class="fa fa-thumbs-down"></i></button>
+                {#      
+      <a href="{{ path('app_equipe_like', { 'id': equipe.id }) }}" method="post" >
+                            <i class="fa fa-regular fa-thumbs-up" style="font-size: 2em;"></i> 
+                            </a> {{ numberLikes }}
+                            
+
+                            <a href="{{ path('app_equipe_dislike', { 'id': blog.id }) }}" method="post">
+                            <i class="fa fa-regular fa-thumbs-down" style="font-size: 2em;"></i> 
+                            </a>{{ numberDislikes }}
+#}
+
                     </a>
                 </div>
                
@@ -39,7 +140,7 @@
     </div>
 </div>
  <div class="moved">
- {% do equipes.setPageRange(2) %}
+ {% do equipes.setPageRange(5) %}
  {{knp_pagination_render(equipes , 'equipe/pagination.html.twig')}}
  </div>
 
