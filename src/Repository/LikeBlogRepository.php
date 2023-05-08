@@ -48,9 +48,8 @@ class LikeBlogRepository extends ServiceEntityRepository
 
     public function findTopLikedBlogs()
     {
-        
         return $this->createQueryBuilder('l')
-            ->select('b.id, b.titre, b.etat ,b.slug , COUNT(l.id) as likeCount')
+            ->select('b.id, b.titre, b.etat ,b.slug ,b.contenu , COUNT(l.id) as likeCount')
             ->join('l.blog', 'b')
             ->groupBy('b.id')
             ->orderBy('likeCount', 'DESC')

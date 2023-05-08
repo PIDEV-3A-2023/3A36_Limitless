@@ -10,6 +10,7 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\String\Slugger\SluggerInterface;
 use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: BlogRepository::class)]
 class Blog
@@ -17,22 +18,27 @@ class Blog
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups("blogs")]
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
     #[Assert\NotBlank(message:"Il faut Ajouter un titre")]
     #[Assert\Length(min:5)]
+    #[Groups("blogs")]
     private ?string $titre = null;
 
     #[ORM\Column(length: 9999999)]
     #[Assert\NotBlank(message:"Il faut Ajouter un contenu")]
     #[Assert\Length(min:10)]
+    #[Groups("blogs")]
     private ?string $contenu = null;
 
     #[ORM\Column(type: Types::DATE_MUTABLE)]
+    #[Groups("blogs")]
     private ?\DateTimeInterface $date_creation;
 
     #[ORM\Column(type: Types::DATE_MUTABLE)]
+    #[Groups("blogs")]
     private ?\DateTimeInterface $date_modification;
 
     #[ORM\OneToMany(mappedBy: 'blog', targetEntity: Commentaire::class, cascade:["persist","remove","merge"], orphanRemoval:true)]
@@ -42,6 +48,7 @@ class Blog
     private ?string $imageBlog = null;
 
     #[ORM\Column]
+    #[Groups("blogs")]
     private ?int $etat = null;
 
     #[ORM\ManyToOne(inversedBy: 'blogs')]
@@ -298,6 +305,14 @@ class Blog
 
             $this->likeBlogs[] = $like;
         }
+    }
+
+    public function likejson(): void
+    {
+        $like = new LikeBlog();
+        $like->setBlog($this);
+
+        $this->likeBlogs[] = $like;
     }
 
     public function dislike(User $user): void

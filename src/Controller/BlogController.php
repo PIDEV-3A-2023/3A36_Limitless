@@ -27,6 +27,7 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Knp\Component\Pager\PaginatorInterface;
+use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 
 class BlogController extends AbstractController
 {
@@ -45,12 +46,13 @@ class BlogController extends AbstractController
 
             return $this->renderForm('blog/index.html.twig', [
                 'blog' => $blog,
+                'hotblogs' => $hotblogs,
                 'blogrecent' => $blogrecent,
                 'form' => $form
             ]);
         }
 
-        $blog = $paginator->paginate($em->getRepository(Blog::class)->findDESC(), $request->query->getInt('page', 1),6);
+        $blog = $paginator->paginate($em->getRepository(Blog::class)->findDESC(), $request->query->getInt('page', 1),3);
 
         return $this->renderForm('blog/index.html.twig', [
             'hotblogs' => $hotblogs,
@@ -190,7 +192,7 @@ class BlogController extends AbstractController
             $em->persist($blog);
             $em->flush();
 
-            return $this->redirectToRoute('app_blog_show', ['slug'=>$blogSlug]);
+            return $this->redirectToRoute('app_blog');
             
         }
 
@@ -278,4 +280,136 @@ class BlogController extends AbstractController
 
         return $this->redirectToRoute('app_blog_show', ['slug' => $slug]);
     }
+
+
+    /*************************************************************************************************** */
+    /*************************************************************************************************** */
+    /*************************************************************************************************** */
+    /*************************************************************************************************** */
+    /*************************************************************************************************** */
+
+    /*************************************************************************************************** */
+    /*************************************************************************************************** */
+    /*************************************************************************************************** */
+    /*************************************************************************************************** */
+    /*** JSON functions */
+
+
+    #[Route('/ShowAllBlogsJson', name: 'ListBlogsJson')]
+    public function getBlogs(BlogRepository $repo, NormalizerInterface $normalizerInterface){
+        $blogs=$repo->findAll();
+        $blogsNormalises = $normalizerInterface->normalize($blogs, 'json', ['groups' => "blogs"]);
+
+        $json =json_encode($blogsNormalises);
+
+        return new Response($json);
+    }
+
+    #[Route('/ShowOneBlogJson/{id}', name: 'ShowOneBlogJson')]
+    public function ShowOneBlog($id, NormalizerInterface $normalizerInterface,BlogRepository $repo){
+        
+        $blog = $repo ->find($id);
+        $blogNormalises = $normalizerInterface ->normalize($blog, 'json', ['groups' => "blogs"]);
+        return new Response(json_encode($blogNormalises));
+    }
+
+
+    // AddBlogJson/new?titre=hello&contenu=heloooo
+    #[Route('/AddBlogJson/new', name: 'AddBlogJson')]
+    public function addBlogJson(Request $request, NormalizerInterface $normalizerInterface){
+        $em=$this->getDoctrine()->getManager();
+        $blog = new Blog();
+        $blog ->setTitre($request->get('titre'));
+        $blog-> setContenu($request->get('contenu'));
+        $blog->setImageBlog(' ');
+        $blog->setEtat(0);
+        $em->persist($blog);
+
+        $em->flush();
+
+        $jsoncontent = $normalizerInterface->normalize($blog, 'json', ['groups' => "blogs"]);
+        return new Response(json_encode($jsoncontent));
+    }
+
+    #[Route('/EditBlogJson/{id}', name: 'EditBlogJson')]
+    public function updateBlogJson(Request $request,$id, NormalizerInterface $normalizerInterface){
+        $em=$this->getDoctrine()->getManager();
+        $blog =$em->getRepository(Blog::class)->find($id);
+        $blog ->setTitre($request->get('titre'));
+        $blog-> setContenu($request->get('contenu'));
+        $blog->setImageBlog($request->get('imageblog'));
+        $blog->setEtat(2);
+
+        $em->flush();
+
+        $jsoncontent = $normalizerInterface->normalize($blog, 'json', ['groups' => "blogs"]);
+        return new Response("Blog updated successfully" . json_encode($jsoncontent));
+    }
+
+    #[Route('/DeleteBlogJson/{id}', name: 'DeleteBlogJson')]
+    public function deleteBlogJson($id, Request $request, NormalizerInterface $normalizerInterface){
+        $em = $this->getDoctrine()->getManager();
+        $blog =$em->getRepository(Blog::class)->find($id);
+        $em->remove($blog);
+        $em->flush();
+
+        $jsoncontent = $normalizerInterface->normalize($blog, 'json', ['groups' => "blogs"]);
+        return new Response("Blog deleted successfully" . json_encode($jsoncontent));
+    }
+
+
+    #[Route('/ShowAllLikesJson/{id}', name: 'LikesJson')]
+    public function LikesJson($id,BlogRepository $repo, NormalizerInterface $normalizerInterface){
+        $em=$this->getDoctrine()->getManager();
+        $likeblog = $em->getRepository(LikeBlog::class);
+        $blog = $em->getRepository(Blog::class)->find($id);
+        $numberLikess= $likeblog->numberLikesByBlog($blog);
+
+        $likesNormalises = $normalizerInterface->normalize($numberLikess, 'json', ['groups' => "likes"]);
+
+        $lol= '[{"number":';
+        $number = $likesNormalises;
+        $loll= '}]';
+        $full= $lol . $number . $loll;
+
+        $json =json_encode([['nbr'=> $likesNormalises]]);
+
+        return new Response($json);
+    }
+
+    #[Route('/addLikesJson/{id}', name: 'addLikesJson')]
+    public function addLikesJson($id,Blog $blog, NormalizerInterface $normalizerInterface, EntityManagerInterface $entityManager){
+        $user = $this->getUser();
+        $like = $entityManager->getRepository(LikeBlog::class)->findOneBy(['blog' => $blog, 'user' => $user]);
+
+        if ($like) {
+            $entityManager->remove($like);
+        } else {
+            $blog->likejson();
+        }
+        $entityManager->flush();
+
+        $blog = $entityManager->getRepository(Blog::class)->find($id);
+        $likeblog = $entityManager->getRepository(LikeBlog::class);
+        $numberLikess= $likeblog->numberLikesByBlog($blog);
+
+        $likesNormalized = $normalizerInterface->normalize($numberLikess, 'json', ['groups' => "likes"]);
+
+        $json = json_encode($likesNormalized);
+
+        return new Response($json);
+    }
+
+    #[Route('/hotblogsJSON', name: 'hotblogsJSON', methods: ['GET', 'POST'])]
+    public function hotblogsJSON(NormalizerInterface $normalizerInterface): Response{
+        $em=$this->getDoctrine()->getManager();
+        $hotblogs= $em->getRepository(LikeBlog::class)->findTopLikedBlogs();
+        
+        $blogsNormalises = $normalizerInterface->normalize($hotblogs, 'json', ['groups' => "blogs"]);
+
+        $json =json_encode($blogsNormalises);
+
+        return new Response($json);
+    }
+
 }

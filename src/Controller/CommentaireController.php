@@ -2,19 +2,21 @@
 
 namespace App\Controller;
 
+use App\Entity\Blog;
+use App\Entity\User;
+use App\Entity\Report;
 use App\Entity\Commentaire;
 use App\Form\CommentaireType;
 use App\Repository\BlogRepository;
-use App\Repository\CommentaireRepository;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use App\Repository\CommentaireRepository;
+use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use Doctrine\Persistence\ManagerRegistry;
+use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-use App\Entity\User;
-use App\Entity\Report;
 
 class CommentaireController extends AbstractController
 {
@@ -110,4 +112,73 @@ class CommentaireController extends AbstractController
 
         return $this->redirectToRoute('app_blog_show', ['slug' => $getSLUGofblog]);
     }
+
+
+    /*************************************************************************************************** */
+    /*************************************************************************************************** */
+    /*************************************************************************************************** */
+    /*************************************************************************************************** */
+    /*************************************************************************************************** */
+
+    /*************************************************************************************************** */
+    /*************************************************************************************************** */
+    /*************************************************************************************************** */
+    /*************************************************************************************************** */
+    /*** JSON functions */
+
+
+    #[Route('/SowCommentsJson/{id}', name: 'ListCommentsJson')]
+    public function getCommentaires($id,CommentaireRepository $repo, NormalizerInterface $normalizerInterface){
+        $comments=$repo->findBy(['blog' => $id]);
+        $commentaireNormalises = $normalizerInterface->normalize($comments, 'json', ['groups' => "commentaires"]);
+
+        $json =json_encode($commentaireNormalises);
+
+        return new Response($json);
+    }
+
+    // addCommentaireJson/id?contenu=hello
+    #[Route('/addCommentaireJson/{id}', name: 'addCommentaireJson')]
+    public function addCommentaireJson($id,Request $request, NormalizerInterface $normalizerInterface,EntityManagerInterface $entityManager){
+        $em=$this->getDoctrine()->getManager();
+
+        $blog = $entityManager->getRepository(Blog::class)->find($id);
+
+        $comment = new Commentaire();
+        $comment-> setContenu($request->get('contenu'));
+        $comment->setBlog($blog);
+        $comment->setNbSignaler(0);
+        $em->persist($comment);
+
+        $em->flush();
+
+        $jsoncontent = $normalizerInterface->normalize($comment, 'json', ['groups' => "commentaires"]);
+        return new Response(json_encode($jsoncontent));
+    }
+
+    #[Route('/DeleteCommentaireJson/{id}', name: 'DeleteCommentaireJson')]
+    public function DeleteCommentaireJson($id, Request $request, NormalizerInterface $normalizerInterface){
+        $em = $this->getDoctrine()->getManager();
+        $comment =$em->getRepository(Commentaire::class)->find($id);
+        $em->remove($comment);
+        $em->flush();
+
+        $jsoncontent = $normalizerInterface->normalize($comment, 'json', ['groups' => "commentaires"]);
+        return new Response("Blog deleted successfully" . json_encode($jsoncontent));
+    }
+
+    // EditCommentaireJson/id?contenu=hello
+    #[Route('/EditCommentaireJson/{id}', name: 'EditCommentaireJson')]
+    public function EditCommentaireJson(Request $request,$id, NormalizerInterface $normalizerInterface){
+        $em=$this->getDoctrine()->getManager();
+        $comment =$em->getRepository(Commentaire::class)->find($id);
+        $comment-> setContenu($request->get('contenu'));
+        $comment->setNbSignaler(0);
+
+        $em->flush();
+
+        $jsoncontent = $normalizerInterface->normalize($comment, 'json', ['groups' => "commentaires"]);
+        return new Response("Blog updated successfully" . json_encode($jsoncontent));
+    }
+
 }

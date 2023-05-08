@@ -9,6 +9,7 @@ use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 use Gedmo\Mapping\Annotation as Gedmo;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: CommentaireRepository::class)]
 class Commentaire
@@ -16,19 +17,24 @@ class Commentaire
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups("commentaires")]
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
     #[Assert\NotBlank(message:"Il faut Ajouter un contenu")]
+    #[Groups("commentaires")]
     private ?string $contenu = null;
 
     #[ORM\Column(type: Types::DATE_MUTABLE)]
+    #[Groups("commentaires")]
     private ?\DateTimeInterface $date_creation;
 
     #[ORM\Column(type: Types::DATE_MUTABLE)]
+    #[Groups("commentaires")]
     private ?\DateTimeInterface $date_modification;
 
     #[ORM\ManyToOne(inversedBy: 'commentaires')]
+    #[Groups("commentaires")]
     private ?Blog $blog = null;
 
     #[ORM\ManyToOne(inversedBy: 'commentaires')]
